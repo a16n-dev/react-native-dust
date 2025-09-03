@@ -1,4 +1,4 @@
-# Duck CLI Development Tasks
+# Dust CLI Development Tasks
 
 ## In Progress
 
@@ -32,8 +32,8 @@
 - Fixed path resolution to generate files in package directory
 
 ### Type System ✅
-- Created DuckTheme and Config types
-- Updated Config type: `theme: Record<string, DuckTheme>` (supports multiple themes)
+- Created DustTheme and Config types
+- Updated Config type: `theme: Record<string, DustTheme>` (supports multiple themes)
 - Export types from main package for user consumption
 
 ## Planned

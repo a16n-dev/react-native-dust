@@ -1,11 +1,11 @@
 {
-  "name": "duck",
+  "name": "dust",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "duck": "dist/cli/index.js"
+    "dust": "dist/cli/index.js"
   },
   "exports": {
     ".": {
@@ -19,6 +19,10 @@
     "./unistyles": {
       "types": "./ui/unistyles.d.ts",
       "default": "./ui/unistyles.js"
+    },
+    "./tokens": {
+      "types": "./ui/tokens.d.ts",
+      "default": "./ui/tokens.js"
     }
   },
   "scripts": {

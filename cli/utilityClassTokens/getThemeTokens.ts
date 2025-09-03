@@ -1,12 +1,14 @@
-import { DuckTheme } from "../../types";
+import { DustTheme } from "../../types";
 
 /**
  * Generates utility style tokens for the provided theme.
  */
 export function getThemeTokens(
-  theme: DuckTheme,
+  themes: Record<string, DustTheme>,
   whitelist?: string[],
 ): { key: string; values: string[] }[] {
+  const theme = themes[Object.keys(themes)[0]];
+
   // define a data structure to hold structured information about the tokens
   const tokens: { key: string; values: string[] }[] = [];
 
@@ -31,6 +33,7 @@ export function getThemeTokens(
   }
   // Process theme spacing
   for (const sizeName of Object.keys(theme.spacing)) {
+    // Margin
     addToken(`m_${sizeName}`, [`margin: theme.spacing.${sizeName}`]);
     addToken(`mt_${sizeName}`, [`marginTop: theme.spacing.${sizeName}`]);
     addToken(`mb_${sizeName}`, [`marginBottom: theme.spacing.${sizeName}`]);
@@ -38,7 +41,7 @@ export function getThemeTokens(
     addToken(`mr_${sizeName}`, [`marginRight: theme.spacing.${sizeName}`]);
     addToken(`mx_${sizeName}`, [`marginHorizontal: theme.spacing.${sizeName}`]);
     addToken(`my_${sizeName}`, [`marginVertical: theme.spacing.${sizeName}`]);
-
+    // Padding
     addToken(`p_${sizeName}`, [`padding: theme.spacing.${sizeName}`]);
     addToken(`pt_${sizeName}`, [`paddingTop: theme.spacing.${sizeName}`]);
     addToken(`pb_${sizeName}`, [`paddingBottom: theme.spacing.${sizeName}`]);
@@ -48,6 +51,8 @@ export function getThemeTokens(
       `paddingHorizontal: theme.spacing.${sizeName}`,
     ]);
     addToken(`py_${sizeName}`, [`paddingVertical: theme.spacing.${sizeName}`]);
+    // Gap
+    addToken(`gap_${sizeName}`, [`gap: theme.spacing.${sizeName}`]);
   }
 
   // Process theme radius

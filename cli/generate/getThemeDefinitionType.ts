@@ -1,7 +1,3 @@
-import { debug } from "../debug";
-
-const DEFAULT_THEME_KEYS = ["colors", "spacing", "radius", "shadow"];
-
 /**
  * This takes in a theme object and generates a TypeScript type to account for any
  * custom properties the user may have defined in their theme.
@@ -9,16 +5,12 @@ const DEFAULT_THEME_KEYS = ["colors", "spacing", "radius", "shadow"];
 export async function getThemeDefinition(
   themes: Record<string, any>,
 ): Promise<string> {
-  // Get custom properties (not in default DuckTheme)
+  // Get custom properties (not in default DustTheme)
   const themeNames = Object.keys(themes);
   const firstTheme = themes[themeNames[0]];
 
   // Extract only custom properties
-  const customProperties = Object.keys(firstTheme).filter(
-    (key) => !DEFAULT_THEME_KEYS.includes(key),
-  );
-
-  debug("Theme has custom properties:", customProperties);
+  const customProperties = Object.keys(firstTheme);
 
   // Generate type definitions for custom properties only
   function generateCustomPropertyType(value: any): string {
@@ -57,7 +49,7 @@ export async function getThemeDefinition(
     .join("\n");
 
   return `
-    export interface AppTheme extends DuckTheme {
+    export interface AppTheme {
 ${appThemeContent}
 }
 

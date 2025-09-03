@@ -2,17 +2,17 @@ import { writeFileSync, existsSync } from "fs";
 import { resolve } from "path";
 
 export function init(): void {
-  const configPath = resolve(process.cwd(), "duck.config.js");
+  const configPath = resolve(process.cwd(), "dust.config.js");
 
   if (existsSync(configPath)) {
-    console.log("duck.config.js already exists");
+    console.log("dust.config.js already exists");
     return;
   }
 
-  const configContent = `// Duck configuration file
+  const configContent = `// Dust configuration file
 // @ts-check
 
-/** @type {import('duck').DuckConfig} */
+/** @type {import('dust').Config} */
 export default {
   theme: {
     light: {
@@ -26,5 +26,5 @@ export default {
 `;
 
   writeFileSync(configPath, configContent);
-  console.log("Created duck.config.js");
+  console.log("Created dust.config.js");
 }

@@ -1,1 +1,1 @@
-export type { DuckTheme, Config } from './types';
+export type { DustTheme, Config } from "./types";

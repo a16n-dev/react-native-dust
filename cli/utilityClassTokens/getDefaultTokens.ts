@@ -66,8 +66,8 @@ const defaultTokens: { key: string; values: string[] }[] = [
   // Flexbox tokens
   { key: "flex_row", values: ['flexDirection: "row"'] },
   { key: "flex_row_reverse", values: ['flexDirection: "row-reverse"'] },
-  { key: "flex_column", values: ['flexDirection: "column"'] },
-  { key: "flex_column_reverse", values: ['flexDirection: "column-reverse"'] },
+  { key: "flex_col", values: ['flexDirection: "column"'] },
+  { key: "flex_col_reverse", values: ['flexDirection: "column-reverse"'] },
   { key: "items_start", values: ['alignItems: "flex-start"'] },
   { key: "items_center", values: ['alignItems: "center"'] },
   { key: "items_end", values: ['alignItems: "flex-end"'] },
