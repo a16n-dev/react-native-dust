@@ -1,0 +1,1 @@
+export type { DuckTheme, Config } from './types';
