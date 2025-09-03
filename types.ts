@@ -3,9 +3,10 @@ export type DuckTheme = {
     spacing: Record<string, number>;
     radius: Record<string, number>;
     shadow: Record<string, string>;
+    [key: string]: any
 };
 
 export type Config = {
     include: string[];
-    theme: DuckTheme;
+    theme: Record<string, DuckTheme>;
 };

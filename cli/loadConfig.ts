@@ -3,6 +3,9 @@ import { resolve } from 'path';
 import { createJiti } from 'jiti';
 import {Config} from "../types";
 
+/**
+ * These are the locations where we expect to find a config file by default, relative to the root of the project.
+ */
 const DEFAULT_CONFIG_FILES = ['duck.config.ts', 'duck.config.js', 'duck.config.json'];
 
 function findConfigFile(configPath?: string): string | null {
@@ -22,6 +25,10 @@ function findConfigFile(configPath?: string): string | null {
   return null;
 }
 
+/**
+ * This loads the config for the duck CLI. If no config path is provided, this function will attempt to read a config
+ * file at the default locations - duck.config.(json|js|ts)
+ */
 export function loadConfig(configPath?: string): Config {
   const resolvedPath = findConfigFile(configPath);
   
