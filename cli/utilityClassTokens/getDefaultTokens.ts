@@ -3,59 +3,59 @@ const defaultTokens: { key: string; values: string[] }[] = [
   {
     key: "p_safe",
     values: [
-      "paddingTop: runtime.spacing.safeAreaTop",
-      "paddingBottom: runtime.spacing.safeAreaBottom",
-      "paddingLeft: runtime.spacing.safeAreaLeft",
-      "paddingRight: runtime.spacing.safeAreaRight",
+      "paddingTop: runtime.insets.top",
+      "paddingBottom: runtime.insets.bottom",
+      "paddingLeft: runtime.insets.left",
+      "paddingRight: runtime.insets.right",
     ],
   },
   {
     key: "px_safe",
     values: [
-      "paddingLeft: runtime.spacing.safeAreaLeft",
-      "paddingRight: runtime.spacing.safeAreaRight",
+      "paddingLeft: runtime.insets.left",
+      "paddingRight: runtime.insets.right",
     ],
   },
   {
     key: "py_safe",
     values: [
-      "paddingTop: runtime.spacing.safeAreaTop",
-      "paddingBottom: runtime.spacing.safeAreaBottom",
+      "paddingTop: runtime.insets.top",
+      "paddingBottom: runtime.insets.bottom",
     ],
   },
-  { key: "pt_safe", values: ["paddingTop: runtime.spacing.safeAreaTop"] },
-  { key: "pb_safe", values: ["paddingBottom: runtime.spacing.safeAreaBottom"] },
-  { key: "pl_safe", values: ["paddingLeft: runtime.spacing.safeAreaLeft"] },
-  { key: "pr_safe", values: ["paddingRight: runtime.spacing.safeAreaRight"] },
+  { key: "pt_safe", values: ["paddingTop: runtime.insets.top"] },
+  { key: "pb_safe", values: ["paddingBottom: runtime.insets.bottom"] },
+  { key: "pl_safe", values: ["paddingLeft: runtime.insets.left"] },
+  { key: "pr_safe", values: ["paddingRight: runtime.insets.right"] },
 
   // Safe area margin tokens
   {
     key: "m_safe",
     values: [
-      "marginTop: runtime.spacing.safeAreaTop",
-      "marginBottom: runtime.spacing.safeAreaBottom",
-      "marginLeft: runtime.spacing.safeAreaLeft",
-      "marginRight: runtime.spacing.safeAreaRight",
+      "marginTop: runtime.insets.top",
+      "marginBottom: runtime.insets.bottom",
+      "marginLeft: runtime.insets.left",
+      "marginRight: runtime.insets.right",
     ],
   },
   {
     key: "mx_safe",
     values: [
-      "marginLeft: runtime.spacing.safeAreaLeft",
-      "marginRight: runtime.spacing.safeAreaRight",
+      "marginLeft: runtime.insets.left",
+      "marginRight: runtime.insets.right",
     ],
   },
   {
     key: "my_safe",
     values: [
-      "marginTop: runtime.spacing.safeAreaTop",
-      "marginBottom: runtime.spacing.safeAreaBottom",
+      "marginTop: runtime.insets.top",
+      "marginBottom: runtime.insets.bottom",
     ],
   },
-  { key: "mt_safe", values: ["marginTop: runtime.spacing.safeAreaTop"] },
-  { key: "mb_safe", values: ["marginBottom: runtime.spacing.safeAreaBottom"] },
-  { key: "ml_safe", values: ["marginLeft: runtime.spacing.safeAreaLeft"] },
-  { key: "mr_safe", values: ["marginRight: runtime.spacing.safeAreaRight"] },
+  { key: "mt_safe", values: ["marginTop: runtime.insets.top"] },
+  { key: "mb_safe", values: ["marginBottom: runtime.insets.bottom"] },
+  { key: "ml_safe", values: ["marginLeft: runtime.insets.left"] },
+  { key: "mr_safe", values: ["marginRight: runtime.insets.right"] },
 
   // Default sizing tokens
   { key: "w_full", values: ['width: "100%"'] },

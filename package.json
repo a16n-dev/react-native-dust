@@ -4,6 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "sideEffects": false,
   "bin": {
     "dust": "dist/cli/index.js"
   },
@@ -36,5 +37,8 @@
     "commander": "^14.0.0",
     "jiti": "^2.5.1",
     "quicktype-core": "^23.2.6"
+  },
+  "peerDependencies": {
+    "react-native-unistyles": "^3"
   }
 }

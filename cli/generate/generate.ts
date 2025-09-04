@@ -4,6 +4,7 @@ import { loadConfig } from "../loadConfig";
 import { Config } from "../../types";
 import { getDefaultTokens } from "../utilityClassTokens/getDefaultTokens";
 import { getThemeTokens } from "../utilityClassTokens/getThemeTokens";
+import * as babel from "@babel/core";
 
 async function generateUnistylesConfigFile(config: Config) {
   // Generate Unistyles configuration file
@@ -11,7 +12,7 @@ async function generateUnistylesConfigFile(config: Config) {
 
 const themes = ${JSON.stringify(config.themes, null, 2)};
 
-const breakpoints = ${JSON.stringify(config.breakpoints, null, 2)};
+const breakpoints = ${JSON.stringify(config.breakpoints ?? {}, null, 2)};
 
 export { themes, breakpoints };
 `;
