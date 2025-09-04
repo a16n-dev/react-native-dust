@@ -19,7 +19,7 @@ export function getThemeTokens(
   };
 
   // 1. Process theme colors
-  // Colors map to bg_*, text_
+  // Colors map to bg_*, text_, border_*
   const colorGroups = Object.entries(theme.colors);
   for (const [groupName, group] of colorGroups) {
     for (const shade of Object.keys(group)) {
@@ -28,6 +28,9 @@ export function getThemeTokens(
       ]);
       addToken(`text_${groupName}_${shade}`, [
         `color: theme.colors.${groupName}["${shade}"]`,
+      ]);
+      addToken(`border_${groupName}_${shade}`, [
+        `borderColor: theme.colors.${groupName}["${shade}"]`,
       ]);
     }
   }
@@ -56,8 +59,46 @@ export function getThemeTokens(
   }
 
   // Process theme radius
+  for (const radiusName of Object.keys(theme.radius)) {
+    addToken(`rounded_${radiusName}`, [
+      `borderRadius: theme.radius["${radiusName}"]`,
+    ]);
+    addToken(`rounded_t_${radiusName}`, [
+      `borderTopLeftRadius: theme.radius["${radiusName}"]`,
+      `borderTopRightRadius: theme.radius["${radiusName}"]`,
+    ]);
+    addToken(`rounded_b_${radiusName}`, [
+      `borderBottomLeftRadius: theme.radius["${radiusName}"]`,
+      `borderBottomRightRadius: theme.radius["${radiusName}"]`,
+    ]);
+    addToken(`rounded_l_${radiusName}`, [
+      `borderTopLeftRadius: theme.radius["${radiusName}"]`,
+      `borderBottomLeftRadius: theme.radius["${radiusName}"]`,
+    ]);
+    addToken(`rounded_r_${radiusName}`, [
+      `borderTopRightRadius: theme.radius["${radiusName}"]`,
+      `borderBottomRightRadius: theme.radius["${radiusName}"]`,
+    ]);
+    addToken(`rounded_tl_${radiusName}`, [
+      `borderTopLeftRadius: theme.radius["${radiusName}"]`,
+    ]);
+    addToken(`rounded_tr_${radiusName}`, [
+      `borderTopRightRadius: theme.radius["${radiusName}"]`,
+    ]);
+    addToken(`rounded_bl_${radiusName}`, [
+      `borderBottomLeftRadius: theme.radius["${radiusName}"]`,
+    ]);
+    addToken(`rounded_br_${radiusName}`, [
+      `borderBottomRightRadius: theme.radius["${radiusName}"]`,
+    ]);
+  }
 
   // Process theme shadow
+  for (const shadowName of Object.keys(theme.shadow)) {
+    addToken(`shadow_${shadowName}`, [
+      `boxShadow: theme.shadow["${shadowName}"]`,
+    ]);
+  }
 
   // Convert the structured data into TypeScript code
 
