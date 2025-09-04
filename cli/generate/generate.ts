@@ -4,7 +4,6 @@ import { loadConfig } from "../loadConfig";
 import { Config } from "../../types";
 import { getDefaultTokens } from "../utilityClassTokens/getDefaultTokens";
 import { getThemeTokens } from "../utilityClassTokens/getThemeTokens";
-import * as babel from "@babel/core";
 
 async function generateUnistylesConfigFile(config: Config) {
   // Generate Unistyles configuration file

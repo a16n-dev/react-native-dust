@@ -12,14 +12,35 @@ export function init(): void {
   const configContent = `// Dust configuration file
 // @ts-check
 
-/** @type {import('dust').Config} */
+/** @type {import('react-native-dust').Config} */
 export default {
   theme: {
     light: {
-      colors: {},
-      spacing: {},
+      colors: {
+        primary: {
+          100: '#1D3208',
+          200: '#38691E',
+          300: '#577E34',
+          400: '#7FBF5F',
+          500: '#AFE67F',
+        },
+        neutral: {
+          100: '#131218',
+          200: '#2A292F',
+          300: '#49484F',
+          400: '#8A8C88',
+          500: '#FFFFFF',
+        }
+      },
+      spacing: {
+        xs: 4,
+        s: 8,
+        m: 16,
+        l: 24,
+        xl: 32,
+      },
       borderRadius: {},
-      fontSize: {},
+      shadow: {},
     },
   },
 };

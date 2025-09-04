@@ -1,12 +1,12 @@
 {
   "name": "react-native-dust",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Utility stylesheet generator for React Native with unistyles",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/alexn400/react-native-dust.git"
+    "url": "https://github.com/a16n-dev/react-native-dust.git"
   },
   "license": "MIT",
   "sideEffects": false,

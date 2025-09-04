@@ -12,8 +12,10 @@ program.name("dust").description("Dust CLI - Ready to quack!").version("1.0.0");
 program
   .command("init")
   .description("Create a basic dust.config.js file")
-  .action(() => {
+  .action(async () => {
     init();
+
+    await generate();
   });
 
 program
