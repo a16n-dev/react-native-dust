@@ -4,6 +4,11 @@
   "description": "Utility stylesheet generator for React Native with unistyles",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexn400/react-native-dust.git"
+  },
+  "license": "MIT",
   "sideEffects": false,
   "bin": {
     "dust": "dist/cli/index.js"
@@ -24,8 +29,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsc --watch"
   },
   "devDependencies": {
     "typescript": "^5.9.2"
