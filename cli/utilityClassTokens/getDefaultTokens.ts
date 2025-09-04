@@ -91,6 +91,14 @@ const defaultTokens: { key: string; values: string[] }[] = [
   { key: "absolute", values: ['position: "absolute"'] },
   { key: "relative", values: ['position: "relative"'] },
   { key: "inset_0", values: ["top: 0", "right: 0", "bottom: 0", "left: 0"] },
+
+  // Border tokens
+  { key: "border", values: ["borderWidth: 1"] },
+  { key: "border_0", values: ["borderWidth: 0"] },
+  { key: "border_t", values: ["borderTopWidth: 1"] },
+  { key: "border_b", values: ["borderBottomWidth: 1"] },
+  { key: "border_l", values: ["borderLeftWidth: 1"] },
+  { key: "border_r", values: ["borderRightWidth: 1"] },
 ];
 
 /**
