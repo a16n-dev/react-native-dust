@@ -12,13 +12,9 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
-    "./ui": {
-      "types": "./ui/index.d.ts",
-      "default": "./ui/index.js"
-    },
-    "./unistyles": {
-      "types": "./ui/unistyles.d.ts",
-      "default": "./ui/unistyles.js"
+    "./theme": {
+      "types": "./ui/theme.d.ts",
+      "default": "./ui/theme.js"
     },
     "./tokens": {
       "types": "./ui/tokens.d.ts",

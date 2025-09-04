@@ -1,60 +1,67 @@
+import {
+  quicktype,
+  InputData,
+  jsonInputForTargetLanguage,
+} from "quicktype-core";
+
+async function generateTypeInterfaceFromObjects(
+  objs: any[],
+  interfaceName: string,
+): Promise<string> {
+  const jsonInput = jsonInputForTargetLanguage("typescript");
+  await jsonInput.addSource({
+    name: interfaceName,
+    samples: objs.map((v) => JSON.stringify(v)),
+  });
+
+  const inputData = new InputData();
+  inputData.addInput(jsonInput);
+
+  const { lines } = await quicktype({
+    inputData,
+    lang: "typescript",
+    inferMaps: false,
+    rendererOptions: {
+      "just-types": true,
+      "explicit-unions": true,
+      "prefer-unions": false,
+    },
+  });
+
+  return lines.join("\n");
+}
+
 /**
  * This takes in a theme object and generates a TypeScript type to account for any
  * custom properties the user may have defined in their theme.
+ *
+ * If the user has defined multiple themes, any properties that are not defined in all themes
+ * will be marked as optional in the generated types
  */
 export async function getThemeDefinition(
   themes: Record<string, any>,
 ): Promise<string> {
-  // Get custom properties (not in default DustTheme)
+  const allThemeObjects = Object.values(themes);
+
+  const appThemeInterface = await generateTypeInterfaceFromObjects(
+    allThemeObjects,
+    "AppTheme",
+  );
+
   const themeNames = Object.keys(themes);
-  const firstTheme = themes[themeNames[0]];
 
-  // Extract only custom properties
-  const customProperties = Object.keys(firstTheme);
-
-  // Generate type definitions for custom properties only
-  function generateCustomPropertyType(value: any): string {
-    if (typeof value === "string") return "string";
-    if (typeof value === "number") return "number";
-    if (typeof value === "boolean") return "boolean";
-    if (Array.isArray(value)) {
-      if (value.length === 0) return "any[]";
-      const firstType = typeof value[0];
-      return value.every((item) => typeof item === firstType)
-        ? `${firstType}[]`
-        : "any[]";
-    }
-    if (typeof value === "object" && value !== null) {
-      const entries = Object.keys(value).map((key) => {
-        const propType = generateCustomPropertyType(value[key]);
-        return `    ${key}: ${propType};`;
-      });
-      return `{\n${entries.join("\n")}\n  }`;
-    }
-    return "any";
-  }
-
-  const customTypeEntries = customProperties.map((key) => {
-    const value = firstTheme[key];
-    const type = generateCustomPropertyType(value);
-    return `  ${key}: ${type};`;
-  });
-
-  const appThemeContent =
-    customTypeEntries.length > 0
-      ? customTypeEntries.join("\n")
-      : "  // No custom properties found";
   const themeEntries = themeNames
     .map((name) => `  ${name}: AppTheme;`)
     .join("\n");
 
-  return `
-    export interface AppTheme {
-${appThemeContent}
-}
-
-export type AppThemes = {
+  const appThemesType = `
+export declare const themes: {
 ${themeEntries}
-};
+};`;
+
+  const appBreakpointsType = `
+export declare const breakpoints: {};
 `;
+
+  return `${appThemeInterface}${appThemesType}\n${appBreakpointsType}`;
 }

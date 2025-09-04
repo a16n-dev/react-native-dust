@@ -8,5 +8,6 @@ export type DustTheme = {
 
 export type Config = {
   include: string[];
-  theme: Record<string, DustTheme>;
+  themes: Record<string, DustTheme>;
+  breakpoints?: Record<string, number>;
 };
