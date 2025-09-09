@@ -25,6 +25,11 @@ async function getListOfSourceFiles(configPath?: string) {
 function analyzeFile(filePath: string): string[] {
   const code = readFileSync(filePath, "utf-8");
 
+  // Fast string check for import first
+  if (!code.includes('react-native-dust/tokens')) {
+    return [];
+  }
+
   let hasThemeImport = false;
   const accessedProperties = new Set<string>();
 
