@@ -56,6 +56,19 @@ export function getThemeTokens(
     addToken(`py_${sizeName}`, [`paddingVertical: theme.spacing.${sizeName}`]);
     // Gap
     addToken(`gap_${sizeName}`, [`gap: theme.spacing.${sizeName}`]);
+    // Width, Height and size
+    addToken(`w_${sizeName}`, [`width: theme.spacing.${sizeName}`]);
+    addToken(`h_${sizeName}`, [`height: theme.spacing.${sizeName}`]);
+    addToken(`size_${sizeName}`, [
+      `width: theme.spacing.${sizeName}`,
+      `height: theme.spacing.${sizeName}`,
+    ]);
+
+    // Positioning
+    addToken(`top_${sizeName}`, [`top: theme.spacing.${sizeName}`]);
+    addToken(`bottom_${sizeName}`, [`bottom: theme.spacing.${sizeName}`]);
+    addToken(`left_${sizeName}`, [`left: theme.spacing.${sizeName}`]);
+    addToken(`right_${sizeName}`, [`right: theme.spacing.${sizeName}`]);
   }
 
   // Process theme radius
@@ -99,8 +112,6 @@ export function getThemeTokens(
       `boxShadow: theme.shadow["${shadowName}"]`,
     ]);
   }
-
-  // Convert the structured data into TypeScript code
 
   return tokens;
 }

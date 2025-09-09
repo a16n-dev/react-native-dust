@@ -31,7 +31,11 @@ async function generateTokensFile(
 
   const tokens = [...defaultTokens, ...themeTokens];
 
-  console.log(`Generating complete tokens file (${tokens.length} tokens)`);
+  if (whitelist) {
+    console.log(`Generating minified tokens file (${tokens.length} tokens)`);
+  } else {
+    console.log(`Generating complete tokens file (${tokens.length} tokens)`);
+  }
 
   const styles = tokens
     .map(({ key, values }) => `${key}: {${values.join(",")}}`)
@@ -53,9 +57,12 @@ export declare const t: TokenStyles;`;
   await writeUIFile("tokens.d.ts", tokensTypesFile);
 }
 
-export async function generate(configPath?: string): Promise<void> {
+export async function generate(
+  configPath?: string,
+  whitelist?: string[],
+): Promise<void> {
   const config = loadConfig(configPath);
 
   await generateUnistylesConfigFile(config);
-  await generateTokensFile(config);
+  await generateTokensFile(config, whitelist);
 }

@@ -57,6 +57,21 @@ const defaultTokens: { key: string; values: string[] }[] = [
   { key: "ml_safe", values: ["marginLeft: runtime.insets.left"] },
   { key: "mr_safe", values: ["marginRight: runtime.insets.right"] },
 
+  // Safe area positioning tokens
+  { key: "top_safe", values: ["top: runtime.insets.top"] },
+  { key: "bottom_safe", values: ["bottom: runtime.insets.bottom"] },
+  { key: "left_safe", values: ["left: runtime.insets.left"] },
+  { key: "right_safe", values: ["right: runtime.insets.right"] },
+  {
+    key: "inset_safe",
+    values: [
+      "top: runtime.insets.top",
+      "bottom: runtime.insets.bottom",
+      "left: runtime.insets.left",
+      "right: runtime.insets.right",
+    ],
+  },
+
   // Default sizing tokens
   { key: "w_full", values: ['width: "100%"'] },
   { key: "h_full", values: ['height: "100%"'] },
@@ -115,6 +130,11 @@ const defaultTokens: { key: string; values: string[] }[] = [
   { key: "text_left", values: ['textAlign: "left"'] },
   { key: "text_right", values: ['textAlign: "right"'] },
   { key: "text_justify", values: ['textAlign: "justify"'] },
+
+  // Overflow tokens
+  { key: "overflow_hidden", values: ['overflow: "hidden"'] },
+  { key: "overflow_visible", values: ['overflow: "visible"'] },
+  { key: "overflow_scroll", values: ['overflow: "scroll"'] },
 ];
 
 /**
