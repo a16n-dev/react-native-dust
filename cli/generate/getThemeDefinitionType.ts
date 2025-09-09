@@ -3,6 +3,7 @@ import {
   InputData,
   jsonInputForTargetLanguage,
 } from "quicktype-core";
+import { Config } from "../../types";
 
 async function generateTypeInterfaceFromObjects(
   objs: any[],
@@ -38,30 +39,39 @@ async function generateTypeInterfaceFromObjects(
  * If the user has defined multiple themes, any properties that are not defined in all themes
  * will be marked as optional in the generated types
  */
-export async function getThemeDefinition(
-  themes: Record<string, any>,
-): Promise<string> {
-  const allThemeObjects = Object.values(themes);
+export async function getThemeDefinition(config: Config): Promise<string> {
+  const allThemeObjects = Object.values(config.themes);
 
   const appThemeInterface = await generateTypeInterfaceFromObjects(
     allThemeObjects,
     "AppTheme",
   );
 
-  const themeNames = Object.keys(themes);
+  if (config.options?.mode === "unistyles") {
+    const themeNames = Object.keys(config.themes);
 
-  const themeEntries = themeNames
-    .map((name) => `  ${name}: AppTheme;`)
-    .join("\n");
+    const themeEntries = themeNames
+      .map((name) => `  ${name}: AppTheme;`)
+      .join("\n");
 
-  const appThemesType = `
+    const appThemesType = `
 export declare const themes: {
 ${themeEntries}
 };`;
+
+    const appBreakpointsType = `
+export declare const breakpoints: {};
+`;
+
+    return `${appThemeInterface}${appThemesType}\n${appBreakpointsType}`;
+  }
+
+  const appThemeType = `
+export declare const theme: AppTheme;`;
 
   const appBreakpointsType = `
 export declare const breakpoints: {};
 `;
 
-  return `${appThemeInterface}${appThemesType}\n${appBreakpointsType}`;
+  return `${appThemeInterface}${appThemeType}\n${appBreakpointsType}`;
 }

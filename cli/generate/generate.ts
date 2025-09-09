@@ -5,9 +5,11 @@ import { Config } from "../../types";
 import { getDefaultTokens } from "../utilityClassTokens/getDefaultTokens";
 import { getThemeTokens } from "../utilityClassTokens/getThemeTokens";
 
-async function generateUnistylesConfigFile(config: Config) {
+async function generateThemesFile(config: Config) {
   // Generate Unistyles configuration file
-  const unistylesContent = `
+
+  if (config.options?.mode === "unistyles") {
+    const unistylesContent = `
 
 const themes = ${JSON.stringify(config.themes, null, 2)};
 
@@ -15,10 +17,20 @@ const breakpoints = ${JSON.stringify(config.breakpoints ?? {}, null, 2)};
 
 export { themes, breakpoints };
 `;
+    await writeUIFile("theme.js", unistylesContent);
+  } else {
+    const themesContent = `
 
-  const unistylesDtsContent = await getThemeDefinition(config.themes);
+const theme = ${JSON.stringify(config.themes[Object.keys(config.themes)[0]], null, 2)};
 
-  await writeUIFile("theme.js", unistylesContent);
+const breakpoints = ${JSON.stringify(config.breakpoints ?? {}, null, 2)};
+
+export { theme, breakpoints };
+`;
+    await writeUIFile("theme.js", themesContent);
+  }
+
+  const unistylesDtsContent = await getThemeDefinition(config);
   await writeUIFile("theme.d.ts", unistylesDtsContent);
 }
 
@@ -26,7 +38,7 @@ async function generateTokensFile(
   config: Config,
   whitelist?: string[],
 ): Promise<void> {
-  const defaultTokens = getDefaultTokens(whitelist);
+  const defaultTokens = getDefaultTokens(config, whitelist);
   const themeTokens = getThemeTokens(config.themes, whitelist);
 
   const tokens = [...defaultTokens, ...themeTokens];
@@ -41,12 +53,23 @@ async function generateTokensFile(
     .map(({ key, values }) => `${key}: {${values.join(",")}}`)
     .join(",\n  ");
 
-  const tokensFile = `import { StyleSheet } from 'react-native-unistyles';
+  let tokensFile: string;
+
+  if (config.options?.mode === "unistyles") {
+    tokensFile = `import { StyleSheet } from 'react-native-unistyles';
 
 export const t = StyleSheet.create((theme, runtime) => ({
   ${styles}
 }));`;
+  } else {
+    tokensFile = `import { StyleSheet } from 'react-native';
+import { theme } from './theme';
 
+export const t = StyleSheet.create({
+  ${styles}
+})
+    `;
+  }
   const tokensTypesFile = `export type TokenStyles = {
   ${tokens.map(({ key }) => `${key}: any`).join(";\n  ")};
 };
@@ -63,6 +86,6 @@ export async function generate(
 ): Promise<void> {
   const config = loadConfig(configPath);
 
-  await generateUnistylesConfigFile(config);
+  await generateThemesFile(config);
   await generateTokensFile(config, whitelist);
 }

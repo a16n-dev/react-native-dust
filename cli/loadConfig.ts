@@ -51,7 +51,22 @@ export function loadConfig(configPath?: string): Config {
     const jiti = createJiti(__filename);
     const config = jiti(resolvedPath);
 
-    return config.default || config;
+    const configJson: Config = config.default || config;
+
+    // Validate the config
+
+    // Multiple themes are only supported when mode: 'unistyles' is set
+    if (
+      Object.keys(configJson.themes).length > 1 &&
+      configJson.options?.mode !== "unistyles"
+    ) {
+      console.error(
+        "Error: Multiple themes are only supported when options.mode is set to 'unistyles'.",
+      );
+      process.exit(1);
+    }
+
+    return configJson;
   } catch (error) {
     console.error(`Error loading config file: ${error}`);
     process.exit(1);
