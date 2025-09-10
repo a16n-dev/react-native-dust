@@ -50,7 +50,10 @@ async function generateTokensFile(
   }
 
   const styles = tokens
-    .map(({ key, values }) => `${key}: {${values.join(",")}}`)
+    .map(
+      ({ key, values }) =>
+        `${key}: {${values.map(([prop, val]) => `${prop}: ${val}`).join(",")}}`,
+    )
     .join(",\n  ");
 
   let tokensFile: string;
@@ -71,7 +74,7 @@ export const t = StyleSheet.create({
     `;
   }
   const tokensTypesFile = `export type TokenStyles = {
-  ${tokens.map(({ key }) => `${key}: any`).join(";\n  ")};
+  ${tokens.map(({ key, values }) => `${key}: { ${values.map((v) => `${v[0]}: any`).join(";")} }`).join(";\n  ")};
 };
 
 export declare const t: TokenStyles;`;

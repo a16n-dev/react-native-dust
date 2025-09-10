@@ -3,6 +3,15 @@ export type DustTheme = {
   spacing: Record<string, number>;
   radius: Record<string, number>;
   shadow: Record<string, string>;
+  text: Record<
+    string,
+    {
+      fontSize: number;
+      lineHeight?: number;
+      letterSpacing?: number;
+      fontWeight?: string | number;
+    }
+  >;
   [key: string]: any;
 };
 
