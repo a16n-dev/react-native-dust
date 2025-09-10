@@ -60,8 +60,11 @@ ${themeEntries}
 };`;
 
     const appBreakpointsType = `
-export declare const breakpoints: {};
-`;
+export declare const breakpoints: {
+${Object.entries(config.breakpoints ?? {})
+  .map(([key, value]) => `  ${key}: ${value};`)
+  .join("\n")}
+}`;
 
     return `${appThemeInterface}${appThemesType}\n${appBreakpointsType}`;
   }
@@ -70,8 +73,11 @@ export declare const breakpoints: {};
 export declare const theme: AppTheme;`;
 
   const appBreakpointsType = `
-export declare const breakpoints: {};
-`;
+export declare const breakpoints: {
+${Object.entries(config.breakpoints ?? {})
+  .map(([key, value]) => `  ${key}: ${value};`)
+  .join("\n")}
+}`;
 
   return `${appThemeInterface}${appThemeType}\n${appBreakpointsType}`;
 }
