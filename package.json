@@ -1,6 +1,6 @@
 {
   "name": "react-native-dust",
-  "version": "0.0.8",
+  "version": "0.0.10",
   "description": "Utility stylesheet generator for React Native with unistyles",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

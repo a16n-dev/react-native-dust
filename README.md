@@ -11,6 +11,11 @@ Dust is a toolkit for React Native for creating a utility class system similar t
 </View>
 ```
 
+## Features
+ - Tree-shakeable: Only bundle the styles you use into your build
+ - Type-safe: Full TypeScript support with autocompletion
+ - Deep Unistyles integration: Use all of unistyles features like themes, responsive styles, and more
+
 ### Quick start
 
 1. Follow the installation instructions for Unistyles [here](https://www.unistyl.es/v3/start/getting-started)

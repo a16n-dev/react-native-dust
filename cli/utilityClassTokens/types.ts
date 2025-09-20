@@ -1,3 +1,9 @@
+export type styleTokenValueProperty = [
+  property: string,
+  value: string,
+  type: string | null,
+];
+
 export type styleToken = {
   /**
    * the name of the token
@@ -10,6 +16,6 @@ export type styleToken = {
    * Value should be a string of the JS to use for the property value.
    * Ie. strings should be double quoted: '"value"'
    */
-  values: [property: string, value: string][];
+  values: styleTokenValueProperty[];
   web?: boolean;
 };

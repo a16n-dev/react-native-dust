@@ -74,7 +74,7 @@ export const t = StyleSheet.create({
     `;
   }
   const tokensTypesFile = `export type TokenStyles = {
-  ${tokens.map(({ key, values }) => `${key}: { ${values.map((v) => `${v[0]}: any`).join(";")} }`).join(";\n  ")};
+  ${tokens.map(({ key, values }) => `${key}: { ${values.map((v) => `${v[0]}: ${v[2] ?? "any"}`).join(";")} }`).join(";\n  ")};
 };
 
 export declare const t: TokenStyles;`;
