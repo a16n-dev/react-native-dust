@@ -5,6 +5,12 @@ import { Config } from "../../types";
 import { getDefaultTokens } from "../utilityClassTokens/getDefaultTokens";
 import { getThemeTokens } from "../utilityClassTokens/getThemeTokens";
 
+function formatFileSize(bytes: number): string {
+  if (bytes < 1024) return `${bytes}b`;
+  if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)}kb`;
+  return `${Math.round(bytes / (1024 * 1024))}mb`;
+}
+
 async function generateThemesFile(config: Config) {
   // Generate Unistyles configuration file
 
@@ -17,7 +23,7 @@ const breakpoints = ${JSON.stringify(config.breakpoints ?? {}, null, 2)};
 
 export { themes, breakpoints };
 `;
-    await writeUIFile("theme.js", unistylesContent);
+    await writeUIFile("theme.js", unistylesContent, true);
   } else {
     const themesContent = `
 
@@ -27,7 +33,7 @@ const breakpoints = ${JSON.stringify(config.breakpoints ?? {}, null, 2)};
 
 export { theme, breakpoints };
 `;
-    await writeUIFile("theme.js", themesContent);
+    await writeUIFile("theme.js", themesContent, true);
   }
 
   const unistylesDtsContent = await getThemeDefinition(config);
@@ -42,12 +48,6 @@ async function generateTokensFile(
   const themeTokens = getThemeTokens(config.themes, whitelist);
 
   const tokens = [...defaultTokens, ...themeTokens];
-
-  if (whitelist) {
-    console.log(`Generating minified tokens file (${tokens.length} tokens)`);
-  } else {
-    console.log(`Generating complete tokens file (${tokens.length} tokens)`);
-  }
 
   const styles = tokens
     .map(
@@ -79,7 +79,19 @@ export const t = StyleSheet.create({
 
 export declare const t: TokenStyles;`;
 
-  await writeUIFile("tokens.js", tokensFile);
+  const jsFileSize = Buffer.byteLength(tokensFile, "utf8");
+
+  if (whitelist) {
+    console.log(
+      `Generating minified tokens file (${tokens.length} tokens / ${formatFileSize(jsFileSize)})`,
+    );
+  } else {
+    console.log(
+      `Generating complete tokens file (${tokens.length} tokens / ${formatFileSize(jsFileSize)})`,
+    );
+  }
+
+  await writeUIFile("tokens.js", tokensFile, true);
   await writeUIFile("tokens.d.ts", tokensTypesFile);
 }
 

@@ -15,6 +15,7 @@ export function setupUIDir(): string {
 export async function writeUIFile(
   filename: string,
   content: string,
+  minify?: boolean,
 ): Promise<void> {
   const uiDir = setupUIDir();
   const filePath = resolve(uiDir, filename);
@@ -26,12 +27,19 @@ export async function writeUIFile(
 
   const contentWithHeader = header + content;
 
-  const formattedContent = await prettier.format(contentWithHeader, {
-    filepath: filePath,
-    parser: getParserForFile(filename),
-  });
+  let finalContent: string;
 
-  writeFileSync(filePath, formattedContent);
+  if (minify) {
+    // For minified output, skip prettier formatting and minimize whitespace
+    finalContent = minifyJS(contentWithHeader);
+  } else {
+    finalContent = await prettier.format(contentWithHeader, {
+      filepath: filePath,
+      parser: getParserForFile(filename),
+    });
+  }
+
+  writeFileSync(filePath, finalContent);
 }
 
 function getParserForFile(filename: string): string {
@@ -48,6 +56,27 @@ function getParserForFile(filename: string): string {
     default:
       return "babel";
   }
+}
+
+function minifyJS(code: string): string {
+  return code
+    // Remove single-line comments but preserve line breaks for multi-line context
+    .replace(/\/\/.*$/gm, "")
+    // Remove multi-line comments
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    // Remove extra whitespace but preserve necessary spaces
+    .replace(/\s+/g, " ")
+    // Clean up specific patterns
+    .replace(/;\s+/g, ";")
+    .replace(/{\s+/g, "{")
+    .replace(/\s+}/g, "}")
+    .replace(/,\s+/g, ",")
+    .replace(/\(\s+/g, "(")
+    .replace(/\s+\)/g, ")")
+    .replace(/\[\s+/g, "[")
+    .replace(/\s+]/g, "]")
+    // Remove leading/trailing whitespace
+    .trim();
 }
 
 function findPackageRoot(startDir: string): string {
