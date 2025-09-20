@@ -14,17 +14,13 @@
     "dust": "dist/cli/index.js"
   },
   "exports": {
+    "./config": {
+      "types": "./dist/config.d.ts",
+      "default": "./dist/config.js"
+    },
     ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    },
-    "./theme": {
-      "types": "./ui/theme.d.ts",
-      "default": "./ui/theme.js"
-    },
-    "./tokens": {
-      "types": "./ui/tokens.d.ts",
-      "default": "./ui/tokens.js"
+      "types": "./ui/index.d.ts",
+      "default": "./ui/index.js"
     }
   },
   "scripts": {

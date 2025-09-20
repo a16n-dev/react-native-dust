@@ -1,7 +1,7 @@
 import { getThemeDefinition } from "./getThemeDefinitionType";
 import { writeUIFile } from "../uiWriter";
 import { loadConfig } from "../loadConfig";
-import { Config } from "../../types";
+import { Config } from "../../config";
 import { getDefaultTokens } from "../utilityClassTokens/getDefaultTokens";
 import { getThemeTokens } from "../utilityClassTokens/getThemeTokens";
 
@@ -95,6 +95,15 @@ export declare const t: TokenStyles;`;
   await writeUIFile("tokens.d.ts", tokensTypesFile);
 }
 
+async function generateBarrelFile() {
+  const barrelContent = `export * from './theme';
+export * from './tokens';
+`;
+  await writeUIFile("index.js", barrelContent, true);
+  // Write a typescript declaration file for the barrel
+  await writeUIFile("index.d.ts", barrelContent);
+}
+
 export async function generate(
   configPath?: string,
   whitelist?: string[],
@@ -103,4 +112,5 @@ export async function generate(
 
   await generateThemesFile(config);
   await generateTokensFile(config, whitelist);
+  await generateBarrelFile();
 }

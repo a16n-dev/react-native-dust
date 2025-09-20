@@ -1,4 +1,4 @@
-import { DustTheme } from "../../types";
+import { DustTheme } from "../../config";
 import { styleToken, styleTokenValueProperty } from "./types";
 import { uniq } from "../util";
 
@@ -28,7 +28,9 @@ export function getThemeTokens(
     const possibleValues = uniq(Object.values(themes).map(accessor));
     if (possibleValues.length === 1) {
       const value = possibleValues[0];
-      return quoteStrings && defaultType === "string" ? `"${value}"` : `${value}`;
+      return quoteStrings && defaultType === "string"
+        ? `"${value}"`
+        : `${value}`;
     }
     return defaultType;
   };
@@ -42,7 +44,7 @@ export function getThemeTokens(
       const typeValue = getTypeValue(
         (theme) => theme.colors[groupName]?.[shade],
         "string",
-        true
+        true,
       );
 
       addToken(`bg_${groupName}_${shade}`, [
@@ -60,7 +62,7 @@ export function getThemeTokens(
   for (const sizeName of Object.keys(theme.spacing)) {
     const typeValue = getTypeValue(
       (theme) => theme.spacing[sizeName],
-      "number"
+      "number",
     );
 
     // Margin
@@ -142,7 +144,7 @@ export function getThemeTokens(
   for (const radiusName of Object.keys(theme.radius)) {
     const typeValue = getTypeValue(
       (theme) => theme.radius[radiusName],
-      "number"
+      "number",
     );
 
     addToken(`rounded_${radiusName}`, [
@@ -183,7 +185,7 @@ export function getThemeTokens(
     const typeValue = getTypeValue(
       (theme) => theme.shadow[shadowName],
       "string",
-      true
+      true,
     );
 
     addToken(`shadow_${shadowName}`, [
@@ -207,7 +209,10 @@ export function getThemeTokens(
       values.push([
         "fontWeight",
         `theme.text["${textStyleName}"].fontWeight`,
-        getTypeValue((theme) => theme.text[textStyleName]?.fontWeight, "number"),
+        getTypeValue(
+          (theme) => theme.text[textStyleName]?.fontWeight,
+          "number",
+        ),
       ]);
     }
 
@@ -215,7 +220,10 @@ export function getThemeTokens(
       values.push([
         "lineHeight",
         `theme.text["${textStyleName}"].lineHeight`,
-        getTypeValue((theme) => theme.text[textStyleName]?.lineHeight, "number"),
+        getTypeValue(
+          (theme) => theme.text[textStyleName]?.lineHeight,
+          "number",
+        ),
       ]);
     }
 
@@ -223,7 +231,10 @@ export function getThemeTokens(
       values.push([
         "letterSpacing",
         `theme.text["${textStyleName}"].letterSpacing`,
-        getTypeValue((theme) => theme.text[textStyleName]?.letterSpacing, "number"),
+        getTypeValue(
+          (theme) => theme.text[textStyleName]?.letterSpacing,
+          "number",
+        ),
       ]);
     }
 

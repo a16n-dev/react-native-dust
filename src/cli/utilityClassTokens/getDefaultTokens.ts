@@ -1,4 +1,4 @@
-import { Config } from "../../types";
+import { Config } from "../../config";
 import { styleToken } from "./types";
 
 const defaultTokens: styleToken[] = [
