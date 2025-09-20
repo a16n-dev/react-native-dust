@@ -1,7 +1,9 @@
 import { writeFileSync, existsSync } from "fs";
 import { resolve } from "path";
+import { generateStyles } from "../core/generate/generate";
+import { loadConfig } from "../core/loadConfig";
 
-export function init(): void {
+export async function init() {
   const configPath = resolve(process.cwd(), "dust.config.js");
 
   if (existsSync(configPath)) {
@@ -48,4 +50,7 @@ export default {
 
   writeFileSync(configPath, configContent);
   console.log("Created dust.config.js");
+
+  const config = await loadConfig();
+  await generateStyles(config);
 }

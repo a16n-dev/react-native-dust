@@ -1,16 +1,11 @@
-import { loadConfig } from "../loadConfig";
 import fg from "fast-glob";
 import { parse } from "@babel/parser";
 import traverse from "@babel/traverse";
 import { readFileSync } from "fs";
-import { generate } from "../generate/generate";
+import { Config } from "../../../config";
 
-async function getListOfSourceFiles(configPath?: string) {
-  const config = loadConfig(configPath);
-
-  const includes = config.include;
-
-  const paths = await fg(includes);
+async function getListOfSourceFiles(includePaths: string[]) {
+  const paths = await fg(includePaths);
 
   if (paths.length === 0) {
     console.error(
@@ -26,7 +21,7 @@ function analyzeFile(filePath: string): string[] {
   const code = readFileSync(filePath, "utf-8");
 
   // Fast string check for import first
-  if (!code.includes('react-native-dust/tokens')) {
+  if (!code.includes("react-native-dust/tokens")) {
     return [];
   }
 
@@ -73,8 +68,8 @@ function analyzeFile(filePath: string): string[] {
   return Array.from(accessedProperties);
 }
 
-export async function analyse(configPath?: string) {
-  const files = await getListOfSourceFiles(configPath);
+export async function collectUsedUtilitySyles(config: Config) {
+  const files = await getListOfSourceFiles(config.include);
 
   const allAccessedProperties = new Set<string>();
 
@@ -85,5 +80,5 @@ export async function analyse(configPath?: string) {
     }
   }
 
-  await generate(configPath, Array.from(allAccessedProperties));
+  return Array.from(allAccessedProperties);
 }

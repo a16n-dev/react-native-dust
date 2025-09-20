@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
-import { generate } from "./generate/generate";
-import { init } from "./init";
-import { analyse } from "./analyse/analyse";
+import { init } from "./commands/init";
+import { build } from "./commands/build";
+import { generate } from "./commands/generate";
 
 const program = new Command();
 
@@ -14,8 +14,6 @@ program
   .description("Create a basic dust.config.js file")
   .action(async () => {
     init();
-
-    await generate();
   });
 
 program
@@ -35,7 +33,7 @@ program
   .option("-c, --config <file>", "Specify config file (.js/.json/.ts)")
   .option("-d, --debug", "Enable debug logging")
   .action(async (options) => {
-    await analyse(options.config);
+    await build(options.config);
   });
 
 program.parse();

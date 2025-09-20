@@ -3,7 +3,7 @@ import {
   InputData,
   jsonInputForTargetLanguage,
 } from "quicktype-core";
-import { Config } from "../../config";
+import { Config } from "../../../config";
 
 async function generateTypeInterfaceFromObjects(
   objs: any[],

@@ -1,6 +1,6 @@
-import { DustTheme } from "../../config";
 import { styleToken, styleTokenValueProperty } from "./types";
 import { uniq } from "../util";
+import { DustTheme } from "../../../config";
 
 /**
  * Generates utility style tokens for the provided theme.

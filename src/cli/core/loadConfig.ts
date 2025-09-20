@@ -1,7 +1,7 @@
 import { existsSync } from "fs";
 import { resolve } from "path";
 import { createJiti } from "jiti";
-import { Config } from "../config";
+import { Config } from "../../config";
 
 /**
  * These are the locations where we expect to find a config file by default, relative to the root of the project.

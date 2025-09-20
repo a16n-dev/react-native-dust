@@ -1,5 +1,5 @@
-import { Config } from "../../config";
 import { styleToken } from "./types";
+import { Config } from "../../../config";
 
 const defaultTokens: styleToken[] = [
   // Default sizing tokens

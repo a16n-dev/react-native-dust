@@ -1,9 +1,8 @@
 import { getThemeDefinition } from "./getThemeDefinitionType";
-import { writeUIFile } from "../uiWriter";
-import { loadConfig } from "../loadConfig";
-import { Config } from "../../config";
+import { writeLibFile } from "../uiWriter";
 import { getDefaultTokens } from "../utilityClassTokens/getDefaultTokens";
 import { getThemeTokens } from "../utilityClassTokens/getThemeTokens";
+import { Config } from "../../../config";
 
 function formatFileSize(bytes: number): string {
   if (bytes < 1024) return `${bytes}b`;
@@ -23,7 +22,7 @@ const breakpoints = ${JSON.stringify(config.breakpoints ?? {}, null, 2)};
 
 export { themes, breakpoints };
 `;
-    await writeUIFile("theme.js", unistylesContent, true);
+    await writeLibFile("theme.js", unistylesContent, true);
   } else {
     const themesContent = `
 
@@ -33,11 +32,11 @@ const breakpoints = ${JSON.stringify(config.breakpoints ?? {}, null, 2)};
 
 export { theme, breakpoints };
 `;
-    await writeUIFile("theme.js", themesContent, true);
+    await writeLibFile("theme.js", themesContent, true);
   }
 
   const unistylesDtsContent = await getThemeDefinition(config);
-  await writeUIFile("theme.d.ts", unistylesDtsContent);
+  await writeLibFile("theme.d.ts", unistylesDtsContent);
 }
 
 async function generateTokensFile(
@@ -91,25 +90,23 @@ export declare const t: TokenStyles;`;
     );
   }
 
-  await writeUIFile("tokens.js", tokensFile, true);
-  await writeUIFile("tokens.d.ts", tokensTypesFile);
+  await writeLibFile("tokens.js", tokensFile, true);
+  await writeLibFile("tokens.d.ts", tokensTypesFile);
 }
 
 async function generateBarrelFile() {
   const barrelContent = `export * from './theme';
 export * from './tokens';
 `;
-  await writeUIFile("index.js", barrelContent, true);
+  await writeLibFile("index.js", barrelContent, true);
   // Write a typescript declaration file for the barrel
-  await writeUIFile("index.d.ts", barrelContent);
+  await writeLibFile("index.d.ts", barrelContent);
 }
 
-export async function generate(
-  configPath?: string,
+export async function generateStyles(
+  config: Config,
   whitelist?: string[],
 ): Promise<void> {
-  const config = loadConfig(configPath);
-
   await generateThemesFile(config);
   await generateTokensFile(config, whitelist);
   await generateBarrelFile();
