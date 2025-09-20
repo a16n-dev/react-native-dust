@@ -7,7 +7,7 @@ import { initCommand } from "./commands/init";
 
 const program = new Command();
 
-program.name("dust").description("Dust CLI - Ready to quack!").version("1.0.0");
+program.name("dust").description("Dust CLI").version("1.0.0");
 
 program
   .command("init")
