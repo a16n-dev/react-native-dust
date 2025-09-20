@@ -63,6 +63,41 @@ const defaultTokens: styleToken[] = [
   { key: "border_l", values: [["borderLeftWidth", "1"]] },
   { key: "border_r", values: [["borderRightWidth", "1"]] },
 
+  // Border radius tokens
+  { key: "rounded_0", values: [["borderRadius", "0"]] },
+  {
+    key: "rounded_t_0",
+    values: [
+      ["borderTopLeftRadius", "0"],
+      ["borderTopRightRadius", "0"],
+    ],
+  },
+  {
+    key: "rounded_b_0",
+    values: [
+      ["borderBottomLeftRadius", "0"],
+      ["borderBottomRightRadius", "0"],
+    ],
+  },
+  {
+    key: "rounded_l_0",
+    values: [
+      ["borderTopLeftRadius", "0"],
+      ["borderBottomLeftRadius", "0"],
+    ],
+  },
+  {
+    key: "rounded_r_0",
+    values: [
+      ["borderTopRightRadius", "0"],
+      ["borderBottomRightRadius", "0"],
+    ],
+  },
+  { key: "rounded_tl_0", values: [["borderTopLeftRadius", "0"]] },
+  { key: "rounded_tr_0", values: [["borderTopRightRadius", "0"]] },
+  { key: "rounded_bl_0", values: [["borderBottomLeftRadius", "0"]] },
+  { key: "rounded_br_0", values: [["borderBottomRightRadius", "0"]] },
+
   // Text tokens
   { key: "text_center", values: [["textAlign", '"center"']] },
   { key: "text_left", values: [["textAlign", '"left"']] },
@@ -87,6 +122,13 @@ const defaultTokens: styleToken[] = [
   { key: "opacity_80", values: [["opacity", "0.8"]] },
   { key: "opacity_90", values: [["opacity", "0.9"]] },
   { key: "opacity_100", values: [["opacity", "1"]] },
+
+  // Aspect ratio tokens
+  { key: "aspect_square", values: [["aspectRatio", "1"]] },
+  { key: "aspect_16_9", values: [["aspectRatio", "16 / 9"]] },
+  { key: "aspect_9_16", values: [["aspectRatio", "9 / 16"]] },
+  { key: "aspect_4_3", values: [["aspectRatio", "4 / 3"]] },
+  { key: "aspect_3_4", values: [["aspectRatio", "3 / 4"]] },
 ];
 
 const defaultUnistylesRuntimeTokens: styleToken[] = [
