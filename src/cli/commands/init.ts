@@ -3,7 +3,7 @@ import { resolve } from "path";
 import { generateStyles } from "../core/generate/generate";
 import { loadConfig } from "../core/loadConfig";
 
-export async function init() {
+export async function initCommand() {
   const configPath = resolve(process.cwd(), "dust.config.js");
 
   if (existsSync(configPath)) {
