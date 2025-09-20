@@ -3,7 +3,7 @@
 [![npm](https://img.shields.io/npm/v/react-native-dust)](https://www.npmjs.com/package/react-native-dust)
 [![Types](https://img.shields.io/npm/types/react-native-dust.svg)](https://www.npmjs.com/package/react-native-dust)
 
-Dust is a toolkit for React Native for creating a utility class system similar to TailwindCSS, but utilising StyleSheet with unistyles for better performance.
+Dust is a small toolkit for using utility classes in React Native, similar to TailwindCSS. It's built as a thin layer on top of [Unistyles](https://www.unistyl.es/v3/start/introduction).
 
 ```tsx
 <View style={[t.bg_blue_100, t.pt_safe, t.flex_row]}>
