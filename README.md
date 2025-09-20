@@ -1,7 +1,9 @@
-# Dynamic Utility Style Tokens (dust)
+# Dynamic Utility Style Tokens (dust) for React Native
 
 [![npm](https://img.shields.io/npm/v/react-native-dust)](https://www.npmjs.com/package/react-native-dust)
 [![Types](https://img.shields.io/npm/types/react-native-dust.svg)](https://www.npmjs.com/package/react-native-dust)
+
+> Note: Dust is in early alpha development, with frequent breaking changes in minor and patch versions. As such, we do not recommend using it in production yet.
 
 Dust is a small toolkit for using utility classes in React Native, similar to TailwindCSS. It's built as a thin layer on top of [Unistyles](https://www.unistyl.es/v3/start/introduction).
 

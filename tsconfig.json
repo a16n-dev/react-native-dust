@@ -3,7 +3,7 @@
     "target": "ES2022",
     "module": "CommonJS",
     "outDir": "./dist",
-    "rootDir": "./",
+    "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -15,7 +15,7 @@
     "resolveJsonModule": true
   },
   "include": [
-    "**/*.ts"
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules",
