@@ -17,5 +17,4 @@ export type styleToken = {
    * Ie. strings should be double quoted: '"value"'
    */
   values: styleTokenValueProperty[];
-  web?: boolean;
 };

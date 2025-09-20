@@ -7,7 +7,7 @@ import prettier from "prettier";
  */
 function setupLibDir(): string {
   const packageRoot = findPackageRoot(__dirname);
-  const dir = resolve(packageRoot, "lib");
+  const dir = resolve(packageRoot, "dist/lib");
 
   mkdirSync(dir, { recursive: true });
 

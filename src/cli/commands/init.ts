@@ -14,7 +14,7 @@ export async function initCommand() {
   const configContent = `// Dust configuration file
 // @ts-check
 
-/** @type {import('react-native-dust').Config} */
+/** @type {import('react-native-dust/config').Config} */
 export default {
   theme: {
     light: {

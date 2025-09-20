@@ -19,8 +19,8 @@
       "default": "./dist/config.js"
     },
     ".": {
-      "types": "./ui/index.d.ts",
-      "default": "./ui/index.js"
+      "types": "./dist/lib/index.d.ts",
+      "default": "./dist/lib/index.js"
     }
   },
   "scripts": {
