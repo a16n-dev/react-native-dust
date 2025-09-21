@@ -2,6 +2,7 @@ import { existsSync } from "fs";
 import { resolve } from "path";
 import { createJiti } from "jiti";
 import { Config } from "../../config";
+import { z } from "zod";
 
 /**
  * These are the locations where we expect to find a config file by default, relative to the root of the project.
@@ -11,23 +12,6 @@ const DEFAULT_CONFIG_FILES = [
   "dust.config.js",
   "dust.config.json",
 ];
-
-function findConfigFile(configPath?: string): string | null {
-  // If a specific path was provided, use it as-is
-  if (configPath) {
-    return resolve(configPath);
-  }
-
-  // Check for default config files in order of preference
-  for (const config of DEFAULT_CONFIG_FILES) {
-    const resolvedPath = resolve(config);
-    if (existsSync(resolvedPath)) {
-      return resolvedPath;
-    }
-  }
-
-  return null;
-}
 
 /**
  * This loads the config for the dust CLI. If no config path is provided, this function will attempt to read a config
@@ -51,9 +35,20 @@ export function loadConfig(configPath?: string): Config {
     const jiti = createJiti(__filename);
     const config = jiti(resolvedPath);
 
-    const configJson: Config = config.default || config;
+    const rawConfigJson: Config = config.default || config;
 
     // Validate the config
+    const parseResult = configSchema.safeParse(rawConfigJson);
+
+    if (parseResult.error) {
+      console.error("Invalid config file: ");
+      console.error(z.treeifyError(parseResult.error));
+      process.exit(1);
+    }
+
+    const configJson = parseResult.data;
+
+    configJson?.options?.mode;
 
     // Multiple themes are only supported when mode: 'unistyles' is set
     if (
@@ -61,7 +56,7 @@ export function loadConfig(configPath?: string): Config {
       configJson.options?.mode !== "unistyles"
     ) {
       console.error(
-        "Error: Multiple themes are only supported when options.mode is set to 'unistyles'.",
+        "Invalid config file: Multiple themes are only supported when options.mode is set to 'unistyles'.",
       );
       process.exit(1);
     }
@@ -72,3 +67,51 @@ export function loadConfig(configPath?: string): Config {
     process.exit(1);
   }
 }
+
+function findConfigFile(configPath?: string): string | null {
+  // If a specific path was provided, use it as-is
+  if (configPath) {
+    return resolve(configPath);
+  }
+
+  // Check for default config files in order of preference
+  for (const config of DEFAULT_CONFIG_FILES) {
+    const resolvedPath = resolve(config);
+    if (existsSync(resolvedPath)) {
+      return resolvedPath;
+    }
+  }
+
+  return null;
+}
+
+const configSchema = z
+  .object({
+    include: z.array(z.string()),
+    themes: z.record(
+      z.string(),
+      z.object({
+        colors: z.record(z.string(), z.record(z.string(), z.string())),
+        spacing: z.record(z.string(), z.number()),
+        radius: z.record(z.string(), z.number()),
+        shadow: z.record(z.string(), z.string()),
+        text: z.record(
+          z.string(),
+          z.object({
+            fontSize: z.number(),
+            lineHeight: z.number().optional(),
+            letterSpacing: z.number().optional(),
+            fontWeight: z.union([z.string(), z.number()]).optional(),
+          }),
+        ),
+      }),
+    ),
+    breakpoints: z.record(z.string(), z.number()).optional(),
+    options: z
+      .object({
+        targetsWeb: z.boolean().optional(),
+        mode: z.enum(["vanilla", "unistyles"]).default("vanilla"),
+      })
+      .optional(),
+  })
+  .loose();
