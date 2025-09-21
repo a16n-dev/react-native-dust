@@ -68,7 +68,7 @@ function analyzeFile(filePath: string): string[] {
   return Array.from(accessedProperties);
 }
 
-export async function collectUsedUtilitySyles(config: Config) {
+export async function collectUsedUtilityStyles(config: Config) {
   const files = await getListOfSourceFiles(config.include);
 
   const allAccessedProperties = new Set<string>();

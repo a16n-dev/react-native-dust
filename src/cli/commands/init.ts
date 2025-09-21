@@ -1,6 +1,6 @@
 import { writeFileSync, existsSync } from "fs";
 import { resolve } from "path";
-import { generateStyles } from "../core/generate/generate";
+import { generateStyles } from "../core/generate/generateStyles";
 import { loadConfig } from "../core/loadConfig";
 
 export async function initCommand() {

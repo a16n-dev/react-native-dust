@@ -1,8 +1,8 @@
 import { getThemeDefinition } from "./getThemeDefinitionType";
-import { writeLibFile } from "../uiWriter";
-import { getDefaultTokens } from "../utilityClassTokens/getDefaultTokens";
-import { getThemeTokens } from "../utilityClassTokens/getThemeTokens";
-import { Config } from "../../../config";
+import { Config } from "../../config";
+import { writeLibFile } from "./uiWriter";
+import { getDefaultTokens } from "./utilityClassTokens/getDefaultTokens";
+import { getThemeTokens } from "./utilityClassTokens/getThemeTokens";
 
 function formatFileSize(bytes: number): string {
   if (bytes < 1024) return `${bytes}b`;
