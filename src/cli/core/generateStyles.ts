@@ -1,8 +1,9 @@
-import { getThemeDefinition } from "./getThemeDefinitionType";
 import { Config } from "../../config";
 import { writeLibFile } from "./uiWriter";
-import { getDefaultTokens } from "./utilityClassTokens/getDefaultTokens";
-import { getThemeTokens } from "./utilityClassTokens/getThemeTokens";
+import { generateTheme } from "../templates/generateTheme";
+import { generateTokens, getTokensCount } from "../templates/generateTokens";
+import { generateBarrel } from "../templates/generateBarrel";
+import { getThemeDefinition } from "./getThemeDefinitionType";
 
 function formatFileSize(bytes: number): string {
   if (bytes < 1024) return `${bytes}b`;
@@ -11,96 +12,42 @@ function formatFileSize(bytes: number): string {
 }
 
 async function generateThemesFile(config: Config) {
-  // Generate Unistyles configuration file
+  const { js, dts } = generateTheme(config);
 
-  if (config.options?.mode === "unistyles") {
-    const unistylesContent = `
+  await writeLibFile("theme.js", js, true);
 
-const themes = ${JSON.stringify(config.themes, null, 2)};
-
-const breakpoints = ${JSON.stringify(config.breakpoints ?? {}, null, 2)};
-
-export { themes, breakpoints };
-`;
-    await writeLibFile("theme.js", unistylesContent, true);
-  } else {
-    const themesContent = `
-
-const theme = ${JSON.stringify(config.themes[Object.keys(config.themes)[0]], null, 2)};
-
-const breakpoints = ${JSON.stringify(config.breakpoints ?? {}, null, 2)};
-
-export { theme, breakpoints };
-`;
-    await writeLibFile("theme.js", themesContent, true);
-  }
-
-  const unistylesDtsContent = await getThemeDefinition(config);
-  await writeLibFile("theme.d.ts", unistylesDtsContent);
+  const themeDefinition = await getThemeDefinition(config);
+  await writeLibFile("theme.d.ts", themeDefinition);
 }
 
 async function generateTokensFile(
   config: Config,
   whitelist?: string[],
 ): Promise<void> {
-  const defaultTokens = getDefaultTokens(config, whitelist);
-  const themeTokens = getThemeTokens(config.themes, whitelist);
+  const { js, dts } = generateTokens(config, whitelist);
 
-  const tokens = [...defaultTokens, ...themeTokens];
-
-  const styles = tokens
-    .map(
-      ({ key, values }) =>
-        `${key}: {${values.map(([prop, val]) => `${prop}: ${val}`).join(",")}}`,
-    )
-    .join(",\n  ");
-
-  let tokensFile: string;
-
-  if (config.options?.mode === "unistyles") {
-    tokensFile = `import { StyleSheet } from 'react-native-unistyles';
-
-export const t = StyleSheet.create((theme, runtime) => ({
-  ${styles}
-}));`;
-  } else {
-    tokensFile = `import { StyleSheet } from 'react-native';
-import { theme } from './theme';
-
-export const t = StyleSheet.create({
-  ${styles}
-})
-    `;
-  }
-  const tokensTypesFile = `export type TokenStyles = {
-  ${tokens.map(({ key, values }) => `${key}: { ${values.map((v) => `${v[0]}: ${v[2] ?? "any"}`).join(";")} }`).join(";\n  ")};
-};
-
-export declare const t: TokenStyles;`;
-
-  const jsFileSize = Buffer.byteLength(tokensFile, "utf8");
+  const tokensCount = getTokensCount(config, whitelist);
+  const jsFileSize = Buffer.byteLength(js, "utf8");
 
   if (whitelist) {
     console.log(
-      `Generating minified tokens file (${tokens.length} tokens / ${formatFileSize(jsFileSize)})`,
+      `Generating minified tokens file (${tokensCount} tokens / ${formatFileSize(jsFileSize)})`,
     );
   } else {
     console.log(
-      `Generating complete tokens file (${tokens.length} tokens / ${formatFileSize(jsFileSize)})`,
+      `Generating complete tokens file (${tokensCount} tokens / ${formatFileSize(jsFileSize)})`,
     );
   }
 
-  await writeLibFile("tokens.js", tokensFile, true);
-  await writeLibFile("tokens.d.ts", tokensTypesFile);
+  await writeLibFile("tokens.js", js, true);
+  await writeLibFile("tokens.d.ts", dts);
 }
 
 async function generateBarrelFile() {
-  const barrelContent = `export * from './theme';
-export * from './tokens';
-`;
-  await writeLibFile("index.js", barrelContent, true);
-  // Write a typescript declaration file for the barrel
-  await writeLibFile("index.d.ts", barrelContent);
+  const { js, dts } = generateBarrel();
+
+  await writeLibFile("index.js", js, true);
+  await writeLibFile("index.d.ts", dts);
 }
 
 export async function generateStyles(
