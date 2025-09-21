@@ -1,7 +1,7 @@
 import { writeFileSync, existsSync } from "fs";
 import { resolve } from "path";
-import { generateStyles } from "../core/generate/generateStyles";
 import { loadConfig } from "../core/loadConfig";
+import { generateStyles } from "../core/generateStyles";
 
 export async function initCommand() {
   const configPath = resolve(process.cwd(), "dust.config.js");

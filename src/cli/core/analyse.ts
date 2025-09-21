@@ -2,7 +2,7 @@ import fg from "fast-glob";
 import { parse } from "@babel/parser";
 import traverse from "@babel/traverse";
 import { readFileSync } from "fs";
-import { Config } from "../../../config";
+import { Config } from "../../config";
 
 async function getListOfSourceFiles(includePaths: string[]) {
   const paths = await fg(includePaths);
