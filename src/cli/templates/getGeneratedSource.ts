@@ -1,6 +1,10 @@
 import { Project, SourceFile, ts } from 'ts-morph';
 import ModuleKind = ts.ModuleKind;
 import ScriptTarget = ts.ScriptTarget;
+import ModuleResolutionKind = ts.ModuleResolutionKind;
+import { getProjectRoot } from '../core/uiWriter';
+
+const ROOT_DIR = getProjectRoot();
 
 /**
  * This defines the compiler options for generating code at runtime. As a general
@@ -10,6 +14,8 @@ const COMPILER_OPTIONS: ts.CompilerOptions = {
   declaration: true,
   module: ModuleKind.ESNext,
   target: ScriptTarget.ES2022,
+  moduleResolution: ModuleResolutionKind.Node10,
+  skipLibCheck: true,
 };
 
 export interface GeneratedFile {
@@ -22,7 +28,7 @@ export class GeneratedProject {
 
   constructor() {
     this.project = new Project({
-      useInMemoryFileSystem: true,
+      // useInMemoryFileSystem: true,
       compilerOptions: COMPILER_OPTIONS,
     });
   }
@@ -57,7 +63,7 @@ export class GeneratedProject {
     const files = result.getFiles();
 
     return files.map((file) => ({
-      name: file.filePath.replace(/^[/\\]+/, ''),
+      name: file.filePath.replace(ROOT_DIR, '.'),
       content: file.text,
     }));
   }
@@ -66,8 +72,9 @@ export class GeneratedProject {
    * Gets all of the source (.ts) files for the entire project.
    */
   getSourceFiles(): GeneratedFile[] {
+    // filenames should be relative to the project root
     return this.project.getSourceFiles().map((file) => ({
-      name: file.getFilePath().replace(/^[/\\]+/, ''),
+      name: file.getFilePath().replace(ROOT_DIR, '.'),
       content: file.getFullText(),
     }));
   }

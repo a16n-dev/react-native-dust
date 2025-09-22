@@ -3,3 +3,5 @@ node_modules
 .idea
 TASKS.md
 .git
+.prettierrc
+pnpm-lock.yaml

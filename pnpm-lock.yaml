@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      get-json-type:
+        specifier: ^1.1.0
+        version: 1.1.0
       quicktype-core:
         specifier: ^23.2.6
         version: 23.2.6
@@ -1062,6 +1065,10 @@ packages:
   get-caller-file@2.0.5:
     resolution: {integrity: sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==}
     engines: {node: 6.* || 8.* || >= 10.*}
+
+  get-json-type@1.1.0:
+    resolution: {integrity: sha512-aJEeDZFjPqFCnhuawNQa9UKQOnQIfYhMwyefDyUDm3xSQR74gEelKmVLxeO5RBMJNjiGfunN8Fie8x/ZlvSd/Q==}
+    engines: {node: '>=22.19.0'}
 
   get-package-type@0.1.0:
     resolution: {integrity: sha512-pjzuKtY64GYfWizNAJ0fr9VqttZkNiK2iS430LtIHzjBEr6bX8Am2zm4sW4Ro5wjWW5cAlRL1qAMTcXbjNAO2Q==}
@@ -2953,6 +2960,8 @@ snapshots:
   gensync@1.0.0-beta.2: {}
 
   get-caller-file@2.0.5: {}
+
+  get-json-type@1.1.0: {}
 
   get-package-type@0.1.0: {}
 

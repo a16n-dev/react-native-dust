@@ -10,6 +10,7 @@ export * from "./tokens";
   },
   {
     "content": "interface AppTheme {
+    colors: any;
 }
 
 export const theme = {

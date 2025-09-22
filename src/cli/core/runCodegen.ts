@@ -6,12 +6,12 @@ import { generateBarrelFile } from '../templates/generateBarrelFile';
 import { codegenOptions } from './codegenTypes';
 import { ParsedConfig } from './loadConfig';
 
-export function constructCodegenProject(opts: codegenOptions) {
+export async function constructCodegenProject(opts: codegenOptions) {
   const project = new GeneratedProject();
 
   // Add project
   generateVanillaThemeFile(project, opts);
-  generateVanillaTokensFile(project, opts);
+  await generateVanillaTokensFile(project, opts);
   generateBarrelFile(project);
 
   return project;
@@ -21,7 +21,7 @@ export async function runCodegen(
   config: ParsedConfig,
   whitelist?: string[]
 ): Promise<void> {
-  const project = constructCodegenProject({ config, whitelist });
+  const project = await constructCodegenProject({ config, whitelist });
 
   const outputFiles = project.getGeneratedFiles();
 

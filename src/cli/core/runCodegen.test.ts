@@ -17,8 +17,10 @@ const TEST_VANILLA_CONFIG: ParsedConfig = {
 };
 
 describe('constructCodegenProject', () => {
-  test('should construct the expected output for the first sample configuration', () => {
-    const project = constructCodegenProject({ config: TEST_VANILLA_CONFIG });
+  test('should construct the expected output for the first sample configuration', async () => {
+    const project = await constructCodegenProject({
+      config: TEST_VANILLA_CONFIG,
+    });
 
     expect(project.getSourceFiles()).toMatchSnapshot();
     expect(project.getGeneratedFiles()).toMatchSnapshot();

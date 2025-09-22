@@ -5,8 +5,9 @@ import {
 } from 'quicktype-core';
 import { constructThemes } from './constructThemes';
 import { ParsedConfig } from './loadConfig';
+import { getJsonType } from 'get-json-type';
 
-async function generateTypeInterfaceFromObjects(
+export async function generateTypeInterfaceFromObjects(
   objs: any[],
   interfaceName: string
 ): Promise<string> {
@@ -25,12 +26,20 @@ async function generateTypeInterfaceFromObjects(
     inferMaps: false,
     rendererOptions: {
       'just-types': true,
+      'no-interfaces': true,
       'explicit-unions': true,
       'prefer-unions': false,
     },
   });
 
   return lines.join('\n');
+}
+
+// Converts an arbitrary JSON object to a TypeScript interface (ts morph format)
+export function getInterfaceForJson(json: any): string {
+  return getJsonType(json, {
+    multiline: true,
+  });
 }
 
 /**

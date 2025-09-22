@@ -1,6 +1,8 @@
 import { ts, VariableDeclarationKind, StructureKind } from 'ts-morph';
 import { GeneratedProject } from './getGeneratedSource';
 import { codegenOptions } from '../core/codegenTypes';
+import { getJsonType } from 'get-json-type';
+import { constructThemes } from '../core/constructThemes';
 
 export function generateVanillaThemeFile(
   project: GeneratedProject,
@@ -8,21 +10,25 @@ export function generateVanillaThemeFile(
 ) {
   const file = project.addSourceFile('theme.ts');
 
-  // get the interface for the theme
-  file.addInterface({
-    name: 'AppTheme',
-  });
+  const themeType = getJsonType(config.theme);
 
-  const firstTheme = config.theme;
+  // Add this typescript to the file
+  file.addStatements(`export type AppTheme = ${themeType};`);
 
   file.addVariableStatement({
     declarationKind: VariableDeclarationKind.Const,
     isExported: true,
     declarations: [
-      { name: 'theme', initializer: JSON.stringify(firstTheme, null, 2) },
+      {
+        name: 'theme',
+        type: 'AppTheme',
+        initializer: JSON.stringify(config.theme, null, 2),
+      },
     ],
   });
 
+  // TODO: remove this since it's only applicable for unistyles?
+  // but actually I don't know if this file needs a vanilla/unistyles distinction
   // Export a "themes" object with multiple themes
   if (config.additionalThemes) {
     const varDec = file.addVariableStatement({
@@ -30,22 +36,26 @@ export function generateVanillaThemeFile(
       declarations: [
         {
           name: 'themes',
+          type: 'Record<string, AppTheme>',
           initializer: '{}',
         },
       ],
     });
 
+    const allThemes = constructThemes(config.theme, config.additionalThemes);
+
     const initializer = varDec
       .getDeclarations()[0]
       .getInitializerIfKindOrThrow(ts.SyntaxKind.ObjectLiteralExpression);
 
-    initializer.addProperties([
-      {
-        name: 'default',
-        initializer: `theme`,
+    initializer.addProperties(
+      Object.entries(allThemes).map(([name, themeJson]) => ({
+        name,
+        initializer:
+          name === 'default' ? `theme` : JSON.stringify(themeJson, null, 2),
         kind: StructureKind.PropertyAssignment,
-      },
-    ]);
+      }))
+    );
   }
 
   if (config.breakpoints) {
@@ -55,7 +65,7 @@ export function generateVanillaThemeFile(
       declarations: [
         {
           name: 'breakpoints',
-          initializer: JSON.stringify(config.breakpoints ?? {}, null, 2),
+          initializer: JSON.stringify(config.breakpoints, null, 2),
         },
       ],
     });

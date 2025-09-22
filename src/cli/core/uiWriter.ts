@@ -1,15 +1,15 @@
-import { writeFile, mkdir } from 'fs/promises';
-import { resolve, dirname } from 'path';
+import { writeFile, mkdir, readFile } from 'fs/promises';
+import { resolve } from 'path';
 import prettier from 'prettier';
 import { GeneratedFile } from '../templates/getGeneratedSource';
 import { existsSync } from 'fs';
+import { CLI_DIR_ROOT } from '../root';
 
 /**
  * This initialises the directory that all generated code files will be written to
  */
 async function setupLibDir() {
-  const packageRoot = findPackageRoot(__dirname);
-  const dir = resolve(packageRoot, 'dist/lib');
+  const dir = resolve(CLI_DIR_ROOT, '..', 'lib');
 
   await mkdir(dir, { recursive: true });
 
@@ -31,17 +31,10 @@ export async function writeLibFile(
   const libDir = await setupLibDir();
   const filePath = resolve(libDir, filename);
 
-  let finalContent: string;
-
-  if (minify) {
-    // For minified output, skip prettier formatting and minimize whitespace
-    finalContent = minifyJS(content);
-  } else {
-    finalContent = await prettier.format(content, {
-      filepath: filePath,
-      parser: getParserForFile(filename),
-    });
-  }
+  const finalContent = await prettier.format(content, {
+    filepath: filePath,
+    parser: getParserForFile(filename),
+  });
 
   await writeFile(filePath, finalContent);
 
@@ -62,30 +55,6 @@ function getParserForFile(filename: string): string {
     default:
       return 'babel';
   }
-}
-
-function minifyJS(code: string): string {
-  // TODO: Make this more robust or find a 3rd party library to do this
-  return (
-    code
-      // Remove single-line comments but preserve line breaks for multi-line context
-      .replace(/\/\/.*$/gm, '')
-      // Remove multi-line comments
-      .replace(/\/\*[\s\S]*?\*\//g, '')
-      // Remove extra whitespace but preserve necessary spaces
-      .replace(/\s+/g, ' ')
-      // Clean up specific patterns
-      .replace(/;\s+/g, ';')
-      .replace(/{\s+/g, '{')
-      .replace(/\s+}/g, '}')
-      .replace(/,\s+/g, ',')
-      .replace(/\(\s+/g, '(')
-      .replace(/\s+\)/g, ')')
-      .replace(/\[\s+/g, '[')
-      .replace(/\s+]/g, ']')
-      // Remove leading/trailing whitespace
-      .trim()
-  );
 }
 
 /**
@@ -123,13 +92,14 @@ export async function writeExportFile(
   console.log(`Wrote export file "${filename}" to ${filePath}`);
 }
 
-function findPackageRoot(startDir: string): string {
-  let currentDir = startDir;
-  while (currentDir !== dirname(currentDir)) {
-    if (existsSync(resolve(currentDir, 'package.json'))) {
+// Find the root package.json for the project this CLI is being run in
+export function getProjectRoot() {
+  let currentDir = process.cwd();
+
+  while (true) {
+    const packageJsonPath = resolve(currentDir, 'package.json');
+    if (existsSync(packageJsonPath)) {
       return currentDir;
     }
-    currentDir = dirname(currentDir);
   }
-  throw new Error('Could not find package.json');
 }
