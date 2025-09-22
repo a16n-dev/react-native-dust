@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'vitest';
 import { constructCodegenProject } from './runCodegen';
-import { Config } from '../../config';
+import { ParsedConfig } from './loadConfig';
 
-const TEST_VANILLA_CONFIG: Config = {
+const TEST_VANILLA_CONFIG: ParsedConfig = {
   include: ['src'],
   options: {
     mode: 'vanilla',

@@ -1,11 +1,11 @@
 import { toMerged } from 'es-toolkit';
-import { DustTheme, ExtendedDustTheme } from '../../config';
+import { ParsedExtendedTheme, ParsedTheme } from './loadConfig';
 
 export function constructThemes(
-  defaultTheme: DustTheme,
-  additionalThemes?: Record<string, DustTheme | ExtendedDustTheme>
-): { default: DustTheme; [key: string]: DustTheme } {
-  const themes: { default: DustTheme; [key: string]: DustTheme } = {
+  defaultTheme: ParsedTheme,
+  additionalThemes?: Record<string, ParsedTheme | ParsedExtendedTheme>
+): { default: ParsedTheme; [key: string]: ParsedTheme } {
+  const themes: { default: ParsedTheme; [key: string]: ParsedTheme } = {
     default: defaultTheme,
   };
 
@@ -23,7 +23,7 @@ export function constructThemes(
 }
 
 function isExtendedTheme(
-  theme: DustTheme | ExtendedDustTheme
-): theme is ExtendedDustTheme {
+  theme: ParsedTheme | ParsedExtendedTheme
+): theme is ParsedExtendedTheme {
   return 'extend' in theme && Object.keys(theme).length === 1;
 }

@@ -1,11 +1,6 @@
-import { Project, VariableDeclarationKind } from 'ts-morph';
-import { Config } from '../../config';
 import { getDefaultTokens } from '../core/utilityClassTokens/getDefaultTokens';
 import { getThemeTokens } from '../core/utilityClassTokens/getThemeTokens';
-import {
-  styleToken,
-  styleTokenValueProperty,
-} from '../core/utilityClassTokens/types';
+import { styleToken } from '../core/utilityClassTokens/types';
 import { GeneratedProject } from './getGeneratedSource';
 import { constructThemes } from '../core/constructThemes';
 import { codegenOptions } from '../core/codegenTypes';

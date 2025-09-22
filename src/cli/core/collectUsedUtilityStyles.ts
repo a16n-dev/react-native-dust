@@ -2,7 +2,7 @@ import fg from 'fast-glob';
 import { parse } from '@babel/parser';
 import traverse from '@babel/traverse';
 import { readFileSync } from 'fs';
-import { Config } from '../../config';
+import { ParsedConfig } from './loadConfig';
 
 async function getListOfSourceFiles(includePaths: string[]) {
   const paths = await fg(includePaths);
@@ -68,7 +68,9 @@ function analyzeFile(filePath: string): string[] {
   return Array.from(accessedProperties);
 }
 
-export async function collectUsedUtilityStyles(config: Config) {
+export async function collectUsedUtilityStyles(
+  config: ParsedConfig
+): Promise<string[]> {
   const files = await getListOfSourceFiles(config.include);
 
   const allAccessedProperties = new Set<string>();

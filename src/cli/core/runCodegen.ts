@@ -1,10 +1,10 @@
-import { Config } from '../../config';
 import { writeGeneratedLibFiles } from './uiWriter';
 import { generateVanillaThemeFile } from '../templates/generateVanillaThemeFile';
 import { generateVanillaTokensFile } from '../templates/generateVanillaTokensFile';
 import { GeneratedProject } from '../templates/getGeneratedSource';
 import { generateBarrelFile } from '../templates/generateBarrelFile';
 import { codegenOptions } from './codegenTypes';
+import { ParsedConfig } from './loadConfig';
 
 export function constructCodegenProject(opts: codegenOptions) {
   const project = new GeneratedProject();
@@ -18,7 +18,7 @@ export function constructCodegenProject(opts: codegenOptions) {
 }
 
 export async function runCodegen(
-  config: Config,
+  config: ParsedConfig,
   whitelist?: string[]
 ): Promise<void> {
   const project = constructCodegenProject({ config, whitelist });

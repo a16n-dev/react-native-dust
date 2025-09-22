@@ -5,12 +5,12 @@ exports[`generating output of a basic file produces the intended output 1`] = `
   {
     "content": "export const example = 'Hello world';
 ",
-    "name": "/example.js",
+    "name": "example.js",
   },
   {
     "content": "export declare const example = "Hello world";
 ",
-    "name": "/example.d.ts",
+    "name": "example.d.ts",
   },
 ]
 `;

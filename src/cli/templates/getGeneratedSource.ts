@@ -57,7 +57,7 @@ export class GeneratedProject {
     const files = result.getFiles();
 
     return files.map((file) => ({
-      name: file.filePath,
+      name: file.filePath.replace(/^[/\\]+/, ''),
       content: file.text,
     }));
   }
@@ -67,7 +67,7 @@ export class GeneratedProject {
    */
   getSourceFiles(): GeneratedFile[] {
     return this.project.getSourceFiles().map((file) => ({
-      name: file.getFilePath(),
+      name: file.getFilePath().replace(/^[/\\]+/, ''),
       content: file.getFullText(),
     }));
   }

@@ -1,8 +1,7 @@
 import { existsSync } from 'fs';
 import { resolve } from 'path';
 import { createJiti } from 'jiti';
-import { Config, ExtendedDustTheme } from '../../config';
-import { z, ZodType } from 'zod';
+import { z } from 'zod';
 
 /**
  * These are the locations where we expect to find a config file by default, relative to the root of the project.
@@ -19,7 +18,7 @@ const DEFAULT_CONFIG_FILES = [
  *
  * It will also validate that the config matches the expected type,
  */
-export function loadConfig(configPath?: string): Config {
+export function loadConfig(configPath?: string): ParsedConfig {
   const resolvedPath = findConfigFile(configPath);
 
   if (!resolvedPath) {
@@ -37,7 +36,7 @@ export function loadConfig(configPath?: string): Config {
     const jiti = createJiti(__filename);
     const config = jiti(resolvedPath);
 
-    const rawConfigJson: Config = config.default || config;
+    const rawConfigJson = config.default || config;
 
     // Validate the config
     const parseResult = configSchema.safeParse(rawConfigJson);
@@ -88,7 +87,7 @@ const themeSchema = z.object({
   ),
 });
 
-const extendedThemeSchema: ZodType<ExtendedDustTheme> = z.object({
+const extendedThemeSchema = z.object({
   extend: themeSchema.partial(),
 });
 
@@ -105,13 +104,13 @@ const configSchema = z
         targetsWeb: z.boolean().optional(),
         mode: z.enum(['vanilla', 'unistyles']).default('vanilla'),
       })
-      .optional(),
+      .prefault({}),
   })
   .loose()
   .refine(
     (data) => {
       // If additionalThemes exists, mode must be "unistyles"
-      if (data.additionalThemes && data.options?.mode !== 'unistyles')
+      if (data.additionalThemes && data.options.mode !== 'unistyles')
         return false;
       return true;
     },
@@ -120,3 +119,11 @@ const configSchema = z
       path: ['additionalThemes'],
     }
   );
+
+export type ParsedConfig = z.infer<typeof configSchema>;
+export type ParsedTheme = z.infer<typeof themeSchema>;
+export type ParsedExtendedTheme = z.infer<typeof extendedThemeSchema>;
+
+export type InputConfig = z.input<typeof configSchema>;
+export type InputTheme = z.input<typeof themeSchema>;
+export type InputExtendedTheme = z.input<typeof extendedThemeSchema>;

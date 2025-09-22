@@ -1,12 +1,12 @@
 import { styleToken, styleTokenValueProperty } from './types';
-import { DustTheme } from '../../../config';
 import { uniq } from 'es-toolkit';
+import { ParsedTheme } from '../loadConfig';
 
 /**
  * Generates utility style tokens for the provided theme.
  */
 export function getThemeTokens(
-  themes: Record<string, DustTheme>,
+  themes: Record<string, ParsedTheme>,
   whitelist?: string[]
 ): styleToken[] {
   const theme = themes[Object.keys(themes)[0]];
@@ -21,7 +21,7 @@ export function getThemeTokens(
   };
 
   const getTypeValue = (
-    accessor: (theme: DustTheme) => any,
+    accessor: (theme: ParsedTheme) => any,
     defaultType: 'string' | 'number' = 'string',
     quoteStrings = false
   ) => {

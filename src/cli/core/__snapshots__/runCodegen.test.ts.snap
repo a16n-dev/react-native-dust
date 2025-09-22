@@ -6,7 +6,7 @@ exports[`constructCodegenProject > should construct the expected output for the 
     "content": "export * from "./theme";
 export * from "./tokens";
 ",
-    "name": "/index.ts",
+    "name": "index.ts",
   },
   {
     "content": "interface AppTheme {
@@ -20,13 +20,13 @@ export const theme = {
       "text": {}
     };
 ",
-    "name": "/theme.ts",
+    "name": "theme.ts",
   },
   {
     "content": "import { StyleSheet } from "react-native";
 import { theme } from "./theme";
 ",
-    "name": "/tokens.ts",
+    "name": "tokens.ts",
   },
 ]
 `;
@@ -42,7 +42,7 @@ exports[`constructCodegenProject > should construct the expected output for the 
     "text": {}
 };
 ",
-    "name": "/theme.js",
+    "name": "theme.js",
   },
   {
     "content": "export declare const theme: {
@@ -53,29 +53,29 @@ exports[`constructCodegenProject > should construct the expected output for the 
     text: {};
 };
 ",
-    "name": "/theme.d.ts",
+    "name": "theme.d.ts",
   },
   {
     "content": "export {};
 ",
-    "name": "/tokens.js",
+    "name": "tokens.js",
   },
   {
     "content": "export {};
 ",
-    "name": "/tokens.d.ts",
+    "name": "tokens.d.ts",
   },
   {
     "content": "export * from "./theme";
 export * from "./tokens";
 ",
-    "name": "/index.js",
+    "name": "index.js",
   },
   {
     "content": "export * from "./theme";
 export * from "./tokens";
 ",
-    "name": "/index.d.ts",
+    "name": "index.d.ts",
   },
 ]
 `;

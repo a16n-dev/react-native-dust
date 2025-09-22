@@ -13,6 +13,13 @@ export async function exportCommand(configPath?: string) {
 
   const result = constructCodegenProject({ config });
 
+  const errors = result.typeCheck();
+
+  if (errors) {
+    console.error(errors);
+    process.exit(1);
+  }
+
   const sourceFiles = result.getSourceFiles();
 
   await writeGeneratedExportFiles(sourceFiles);

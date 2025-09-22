@@ -3,8 +3,8 @@ import {
   InputData,
   jsonInputForTargetLanguage,
 } from 'quicktype-core';
-import { Config } from '../../config';
-import { constructThemes } from './utilityClassTokens/constructThemes';
+import { constructThemes } from './constructThemes';
+import { ParsedConfig } from './loadConfig';
 
 async function generateTypeInterfaceFromObjects(
   objs: any[],
@@ -40,7 +40,9 @@ async function generateTypeInterfaceFromObjects(
  * If the user has defined multiple themes, any properties that are not defined in all themes
  * will be marked as optional in the generated types
  */
-export async function getThemeDefinition(config: Config): Promise<string> {
+export async function getThemeDefinition(
+  config: ParsedConfig
+): Promise<string> {
   const allThemeObjects = constructThemes(
     config.theme,
     config.additionalThemes

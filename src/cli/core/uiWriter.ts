@@ -94,6 +94,7 @@ function minifyJS(code: string): string {
 async function setupExportDir() {
   const dir = resolve(process.cwd(), 'export');
 
+  console.log(dir);
   await mkdir(dir, { recursive: true });
 
   return dir;

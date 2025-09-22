@@ -1,5 +1,5 @@
 import { styleToken } from './types';
-import { Config } from '../../../config';
+import { ParsedConfig } from '../loadConfig';
 
 const defaultTokens: styleToken[] = [
   // Default sizing tokens
@@ -278,7 +278,7 @@ const defaultUnistylesRuntimeTokens: styleToken[] = [
 /**
  * Returns a collection of default utility style tokens.
  */
-export function getDefaultTokens(config: Config, whitelist?: string[]) {
+export function getDefaultTokens(config: ParsedConfig, whitelist?: string[]) {
   const allDefaultTokens = [...defaultTokens];
   if (config.options?.mode === 'unistyles') {
     allDefaultTokens.push(...defaultUnistylesRuntimeTokens);

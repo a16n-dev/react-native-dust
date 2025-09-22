@@ -6,13 +6,13 @@ exports[`generateBarrelFile > output does not change unexpectedly 1`] = `
     "content": "export * from "./theme";
 export * from "./tokens";
 ",
-    "name": "/index.js",
+    "name": "index.js",
   },
   {
     "content": "export * from "./theme";
 export * from "./tokens";
 ",
-    "name": "/index.d.ts",
+    "name": "index.d.ts",
   },
 ]
 `;

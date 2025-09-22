@@ -1,6 +1,6 @@
-import { Config } from '../../config';
+import { ParsedConfig } from './loadConfig';
 
 export interface codegenOptions {
-  config: Config;
+  config: ParsedConfig;
   whitelist?: string[];
 }
