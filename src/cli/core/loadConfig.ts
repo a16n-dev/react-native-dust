@@ -82,7 +82,6 @@ const themeSchema = z.object({
       fontSize: z.number(),
       lineHeight: z.number().optional(),
       letterSpacing: z.number().optional(),
-      fontWeight: z.union([z.string(), z.number()]).optional(),
     })
   ),
 });

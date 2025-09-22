@@ -205,17 +205,6 @@ export function getThemeTokens(
       ],
     ];
 
-    if (textStyle.fontWeight) {
-      values.push([
-        'fontWeight',
-        `theme.text["${textStyleName}"].fontWeight`,
-        getTypeValue(
-          (theme) => theme.text[textStyleName]?.fontWeight,
-          'number'
-        ),
-      ]);
-    }
-
     if (textStyle.lineHeight) {
       values.push([
         'lineHeight',

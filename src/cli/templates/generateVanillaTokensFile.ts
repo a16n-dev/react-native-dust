@@ -27,9 +27,17 @@ export async function generateVanillaTokensFile(
     namedImports: ['theme'],
   });
 
+  const styleObjectEntries = tokens.map(token => {
+    const properties = token.values.map(([property, value]) => `${property}: ${value}`).join(', ');
+    return `${token.key}: { ${properties} }`;
+  });
+
   file.addVariableStatement({
     declarationKind: VariableDeclarationKind.Const,
     isExported: true,
-    declarations: [{ name: 't', initializer: 'StyleSheet.create({})' }],
+    declarations: [{
+      name: 't',
+      initializer: `StyleSheet.create({\n  ${styleObjectEntries.join(',\n  ')}\n})`
+    }],
   });
 }

@@ -9,7 +9,6 @@ export type DustTheme = {
       fontSize: number;
       lineHeight?: number;
       letterSpacing?: number;
-      fontWeight?: string | number;
     }
   >;
   [key: string]: any;

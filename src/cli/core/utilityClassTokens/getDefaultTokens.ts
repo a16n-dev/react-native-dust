@@ -280,7 +280,7 @@ const defaultUnistylesRuntimeTokens: styleToken[] = [
  */
 export function getDefaultTokens(config: ParsedConfig, whitelist?: string[]) {
   const allDefaultTokens = [...defaultTokens];
-  if (config.options?.mode === 'unistyles') {
+  if (config.options.mode === 'unistyles') {
     allDefaultTokens.push(...defaultUnistylesRuntimeTokens);
   }
 
