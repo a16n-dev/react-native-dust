@@ -4,16 +4,26 @@ import { codegenOptions } from '../core/codegenTypes';
 import { getJsonType } from 'get-json-type';
 import { constructThemes } from '../core/constructThemes';
 
-export function generateVanillaThemeFile(
+export function generateThemeFile(
   project: GeneratedProject,
   { config }: codegenOptions
 ) {
   const file = project.addSourceFile('theme.ts');
 
-  const themeType = getJsonType(config.theme);
+  if (config.options.mode === 'vanilla') {
+    const themeType = getJsonType(config.theme, {
+      useLiteralTypes: true,
+    });
 
-  // Add this typescript to the file
-  file.addStatements(`export type AppTheme = ${themeType};`);
+    // Add this typescript to the file
+    file.addStatements(`export type AppTheme = ${themeType};`);
+  }
+  if (config.options.mode === 'unistyles') {
+    const themeType = getJsonType(config.theme);
+
+    // Add this typescript to the file
+    file.addStatements(`export type AppTheme = ${themeType};`);
+  }
 
   file.addVariableStatement({
     declarationKind: VariableDeclarationKind.Const,
@@ -30,9 +40,10 @@ export function generateVanillaThemeFile(
   // TODO: remove this since it's only applicable for unistyles?
   // but actually I don't know if this file needs a vanilla/unistyles distinction
   // Export a "themes" object with multiple themes
-  if (config.additionalThemes) {
+  if (config.options.mode === 'unistyles') {
     const varDec = file.addVariableStatement({
       declarationKind: VariableDeclarationKind.Const,
+      isExported: true,
       declarations: [
         {
           name: 'themes',
@@ -56,6 +67,15 @@ export function generateVanillaThemeFile(
         kind: StructureKind.PropertyAssignment,
       }))
     );
+
+    file.addTypeAlias({
+      name: 'ThemesType',
+      type: 'typeof themes',
+    });
+
+    file.addStatements(`declare module 'react-native-unistyles' {
+  export interface UnistylesThemes extends ThemesType {}
+}`);
   }
 
   if (config.breakpoints) {

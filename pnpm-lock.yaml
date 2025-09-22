@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       get-json-type:
-        specifier: ^1.1.0
-        version: 1.1.0
+        specifier: ^1.2.0
+        version: 1.2.0
       quicktype-core:
         specifier: ^23.2.6
         version: 23.2.6
@@ -1066,8 +1066,8 @@ packages:
     resolution: {integrity: sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==}
     engines: {node: 6.* || 8.* || >= 10.*}
 
-  get-json-type@1.1.0:
-    resolution: {integrity: sha512-aJEeDZFjPqFCnhuawNQa9UKQOnQIfYhMwyefDyUDm3xSQR74gEelKmVLxeO5RBMJNjiGfunN8Fie8x/ZlvSd/Q==}
+  get-json-type@1.2.0:
+    resolution: {integrity: sha512-M3UvlxReVS/vRx1jeKkKzlcjF7tvjOjdtmQYJc6WVlHTQ+gOVdJsLwB5J0fLdO4afC8n6K3IZG9tQqUXXcxvSQ==}
     engines: {node: '>=22.19.0'}
 
   get-package-type@0.1.0:
@@ -2961,7 +2961,7 @@ snapshots:
 
   get-caller-file@2.0.5: {}
 
-  get-json-type@1.1.0: {}
+  get-json-type@1.2.0: {}
 
   get-package-type@0.1.0: {}
 

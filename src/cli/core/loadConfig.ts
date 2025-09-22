@@ -71,20 +71,22 @@ function findConfigFile(configPath?: string): string | null {
   return null;
 }
 
-const themeSchema = z.object({
-  colors: z.record(z.string(), z.record(z.string(), z.string())),
-  spacing: z.record(z.string(), z.number()),
-  radius: z.record(z.string(), z.number()),
-  shadow: z.record(z.string(), z.string()),
-  text: z.record(
-    z.string(),
-    z.object({
-      fontSize: z.number(),
-      lineHeight: z.number().optional(),
-      letterSpacing: z.number().optional(),
-    })
-  ),
-});
+const themeSchema = z
+  .object({
+    colors: z.record(z.string(), z.record(z.string(), z.string())),
+    spacing: z.record(z.string(), z.number()),
+    radius: z.record(z.string(), z.number()),
+    shadow: z.record(z.string(), z.string()),
+    text: z.record(
+      z.string(),
+      z.object({
+        fontSize: z.number(),
+        lineHeight: z.number().optional(),
+        letterSpacing: z.number().optional(),
+      })
+    ),
+  })
+  .loose();
 
 const extendedThemeSchema = z.object({
   extend: themeSchema.partial(),
@@ -105,7 +107,6 @@ const configSchema = z
       })
       .prefault({}),
   })
-  .loose()
   .refine(
     (data) => {
       // If additionalThemes exists, mode must be "unistyles"

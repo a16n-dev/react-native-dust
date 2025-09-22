@@ -1,6 +1,6 @@
 import { writeGeneratedLibFiles } from './uiWriter';
-import { generateVanillaThemeFile } from '../templates/generateVanillaThemeFile';
-import { generateVanillaTokensFile } from '../templates/generateVanillaTokensFile';
+import { generateThemeFile } from '../templates/generateThemeFile';
+import { generateTokensFile } from '../templates/generateTokensFile';
 import { GeneratedProject } from '../templates/getGeneratedSource';
 import { generateBarrelFile } from '../templates/generateBarrelFile';
 import { codegenOptions } from './codegenTypes';
@@ -10,8 +10,8 @@ export async function constructCodegenProject(opts: codegenOptions) {
   const project = new GeneratedProject();
 
   // Add project
-  generateVanillaThemeFile(project, opts);
-  await generateVanillaTokensFile(project, opts);
+  generateThemeFile(project, opts);
+  generateTokensFile(project, opts);
   generateBarrelFile(project);
 
   return project;

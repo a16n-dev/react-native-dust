@@ -6,8 +6,7 @@ import { ParsedTheme } from '../loadConfig';
  * Generates utility style tokens for the provided theme.
  */
 export function getThemeTokens(
-  themes: Record<string, ParsedTheme>,
-  whitelist?: string[]
+  themes: Record<string, ParsedTheme>
 ): styleToken[] {
   const theme = themes[Object.keys(themes)[0]];
 
@@ -15,8 +14,6 @@ export function getThemeTokens(
   const tokens: styleToken[] = [];
 
   const addToken = (key: string, values: styleTokenValueProperty[]) => {
-    if (whitelist && !whitelist.includes(key)) return;
-
     tokens.push({ key, values });
   };
 
