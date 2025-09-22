@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { generateBarrelFile } from './generateBarrelFile';
-import { GeneratedProject } from './getGeneratedSource';
+import { GeneratedProject } from './generatedProject';
 
 describe('generateBarrelFile', () => {
   test('output does not change unexpectedly', () => {

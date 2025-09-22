@@ -5,15 +5,14 @@ exports[`constructCodegenProject > should construct the expected output for the 
   {
     "content": "export * from "./theme";
 export * from "./tokens";
+export * from "./utilities";
 ",
-    "name": "index.ts",
+    "name": "./index.ts",
   },
   {
-    "content": "interface AppTheme {
-    colors: any;
-}
+    "content": "export type AppTheme = { colors: {  }; radius: {  }; shadow: {  }; spacing: {  }; text: {  } };
 
-export const theme = {
+export const theme: AppTheme = {
       "colors": {},
       "radius": {},
       "shadow": {},
@@ -21,13 +20,101 @@ export const theme = {
       "text": {}
     };
 ",
-    "name": "theme.ts",
+    "name": "./theme.ts",
   },
   {
     "content": "import { StyleSheet } from "react-native";
 import { theme } from "./theme";
+
+export const t = StyleSheet.create({
+      w_full: { width: "100%" },
+      h_full: { height: "100%" },
+      h_0: { height: 0 },
+      w_0: { width: 0 },
+      flex_row: { flexDirection: "row" },
+      flex_row_reverse: { flexDirection: "row-reverse" },
+      flex_col: { flexDirection: "column" },
+      flex_col_reverse: { flexDirection: "column-reverse" },
+      items_start: { alignItems: "flex-start" },
+      items_center: { alignItems: "center" },
+      items_end: { alignItems: "flex-end" },
+      items_stretch: { alignItems: "stretch" },
+      items_baseline: { alignItems: "baseline" },
+      justify_start: { justifyContent: "flex-start" },
+      justify_center: { justifyContent: "center" },
+      justify_end: { justifyContent: "flex-end" },
+      justify_between: { justifyContent: "space-between" },
+      justify_around: { justifyContent: "space-around" },
+      justify_evenly: { justifyContent: "space-evenly" },
+      flex_wrap: { flexWrap: "wrap" },
+      flex_nowrap: { flexWrap: "nowrap" },
+      flex_1: { flex: 1 },
+      flex_grow_0: { flexGrow: 0 },
+      flex_grow_1: { flexGrow: 1 },
+      flex_shrink_0: { flexShrink: 0 },
+      flex_shrink_1: { flexShrink: 1 },
+      self_stretch: { alignSelf: "stretch" },
+      self_start: { alignSelf: "flex-start" },
+      self_center: { alignSelf: "center" },
+      self_end: { alignSelf: "flex-end" },
+      self_baseline: { alignSelf: "baseline" },
+      flex_center: { alignItems: "center", justifyContent: "center" },
+      absolute: { position: "absolute" },
+      relative: { position: "relative" },
+      inset_0: { top: 0, right: 0, bottom: 0, left: 0 },
+      absolute_fill: { position: "absolute", top: 0, right: 0, bottom: 0, left: 0 },
+      border: { borderWidth: 1 },
+      border_0: { borderWidth: 0 },
+      border_t: { borderTopWidth: 1 },
+      border_b: { borderBottomWidth: 1 },
+      border_l: { borderLeftWidth: 1 },
+      border_r: { borderRightWidth: 1 },
+      rounded_0: { borderRadius: 0 },
+      rounded_t_0: { borderTopLeftRadius: 0, borderTopRightRadius: 0 },
+      rounded_b_0: { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 },
+      rounded_l_0: { borderTopLeftRadius: 0, borderBottomLeftRadius: 0 },
+      rounded_r_0: { borderTopRightRadius: 0, borderBottomRightRadius: 0 },
+      rounded_tl_0: { borderTopLeftRadius: 0 },
+      rounded_tr_0: { borderTopRightRadius: 0 },
+      rounded_bl_0: { borderBottomLeftRadius: 0 },
+      rounded_br_0: { borderBottomRightRadius: 0 },
+      text_center: { textAlign: "center" },
+      text_left: { textAlign: "left" },
+      text_right: { textAlign: "right" },
+      text_justify: { textAlign: "justify" },
+      overflow_hidden: { overflow: "hidden" },
+      overflow_visible: { overflow: "visible" },
+      opacity_0: { opacity: 0 },
+      opacity_10: { opacity: 0.1 },
+      opacity_25: { opacity: 0.25 },
+      opacity_30: { opacity: 0.3 },
+      opacity_40: { opacity: 0.4 },
+      opacity_50: { opacity: 0.5 },
+      opacity_60: { opacity: 0.6 },
+      opacity_70: { opacity: 0.7 },
+      opacity_75: { opacity: 0.75 },
+      opacity_80: { opacity: 0.8 },
+      opacity_90: { opacity: 0.9 },
+      opacity_100: { opacity: 1 },
+      aspect_square: { aspectRatio: 1 },
+      aspect_16_9: { aspectRatio: 16 / 9 },
+      aspect_9_16: { aspectRatio: 9 / 16 },
+      aspect_4_3: { aspectRatio: 4 / 3 },
+      aspect_3_4: { aspectRatio: 3 / 4 }
+    });
 ",
-    "name": "tokens.ts",
+    "name": "./tokens.ts",
+  },
+  {
+    "content": "import { Platform } from "react-native";
+
+export const isIOS = Platform.OS === 'ios';
+export function ios<T>(arg: T): T | undefined { return isIOS ? arg : undefined; }
+
+export const isAndroid = Platform.OS === 'android';
+export function android<T>(arg: T): T | undefined { return isAndroid ? arg : undefined; }
+",
+    "name": "./utilities.ts",
   },
 ]
 `;
@@ -43,40 +130,136 @@ exports[`constructCodegenProject > should construct the expected output for the 
     "text": {}
 };
 ",
-    "name": "theme.js",
+    "name": "./theme.js",
   },
   {
-    "content": "export declare const theme: {
+    "content": "export type AppTheme = {
     colors: {};
     radius: {};
     shadow: {};
     spacing: {};
     text: {};
 };
+export declare const theme: AppTheme;
 ",
-    "name": "theme.d.ts",
+    "name": "./theme.d.ts",
   },
   {
-    "content": "export {};
+    "content": "import { StyleSheet } from "react-native";
+export const t = StyleSheet.create({
+    w_full: { width: "100%" },
+    h_full: { height: "100%" },
+    h_0: { height: 0 },
+    w_0: { width: 0 },
+    flex_row: { flexDirection: "row" },
+    flex_row_reverse: { flexDirection: "row-reverse" },
+    flex_col: { flexDirection: "column" },
+    flex_col_reverse: { flexDirection: "column-reverse" },
+    items_start: { alignItems: "flex-start" },
+    items_center: { alignItems: "center" },
+    items_end: { alignItems: "flex-end" },
+    items_stretch: { alignItems: "stretch" },
+    items_baseline: { alignItems: "baseline" },
+    justify_start: { justifyContent: "flex-start" },
+    justify_center: { justifyContent: "center" },
+    justify_end: { justifyContent: "flex-end" },
+    justify_between: { justifyContent: "space-between" },
+    justify_around: { justifyContent: "space-around" },
+    justify_evenly: { justifyContent: "space-evenly" },
+    flex_wrap: { flexWrap: "wrap" },
+    flex_nowrap: { flexWrap: "nowrap" },
+    flex_1: { flex: 1 },
+    flex_grow_0: { flexGrow: 0 },
+    flex_grow_1: { flexGrow: 1 },
+    flex_shrink_0: { flexShrink: 0 },
+    flex_shrink_1: { flexShrink: 1 },
+    self_stretch: { alignSelf: "stretch" },
+    self_start: { alignSelf: "flex-start" },
+    self_center: { alignSelf: "center" },
+    self_end: { alignSelf: "flex-end" },
+    self_baseline: { alignSelf: "baseline" },
+    flex_center: { alignItems: "center", justifyContent: "center" },
+    absolute: { position: "absolute" },
+    relative: { position: "relative" },
+    inset_0: { top: 0, right: 0, bottom: 0, left: 0 },
+    absolute_fill: { position: "absolute", top: 0, right: 0, bottom: 0, left: 0 },
+    border: { borderWidth: 1 },
+    border_0: { borderWidth: 0 },
+    border_t: { borderTopWidth: 1 },
+    border_b: { borderBottomWidth: 1 },
+    border_l: { borderLeftWidth: 1 },
+    border_r: { borderRightWidth: 1 },
+    rounded_0: { borderRadius: 0 },
+    rounded_t_0: { borderTopLeftRadius: 0, borderTopRightRadius: 0 },
+    rounded_b_0: { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 },
+    rounded_l_0: { borderTopLeftRadius: 0, borderBottomLeftRadius: 0 },
+    rounded_r_0: { borderTopRightRadius: 0, borderBottomRightRadius: 0 },
+    rounded_tl_0: { borderTopLeftRadius: 0 },
+    rounded_tr_0: { borderTopRightRadius: 0 },
+    rounded_bl_0: { borderBottomLeftRadius: 0 },
+    rounded_br_0: { borderBottomRightRadius: 0 },
+    text_center: { textAlign: "center" },
+    text_left: { textAlign: "left" },
+    text_right: { textAlign: "right" },
+    text_justify: { textAlign: "justify" },
+    overflow_hidden: { overflow: "hidden" },
+    overflow_visible: { overflow: "visible" },
+    opacity_0: { opacity: 0 },
+    opacity_10: { opacity: 0.1 },
+    opacity_25: { opacity: 0.25 },
+    opacity_30: { opacity: 0.3 },
+    opacity_40: { opacity: 0.4 },
+    opacity_50: { opacity: 0.5 },
+    opacity_60: { opacity: 0.6 },
+    opacity_70: { opacity: 0.7 },
+    opacity_75: { opacity: 0.75 },
+    opacity_80: { opacity: 0.8 },
+    opacity_90: { opacity: 0.9 },
+    opacity_100: { opacity: 1 },
+    aspect_square: { aspectRatio: 1 },
+    aspect_16_9: { aspectRatio: 16 / 9 },
+    aspect_9_16: { aspectRatio: 9 / 16 },
+    aspect_4_3: { aspectRatio: 4 / 3 },
+    aspect_3_4: { aspectRatio: 3 / 4 }
+});
 ",
-    "name": "tokens.js",
+    "name": "./tokens.js",
   },
   {
-    "content": "export {};
+    "content": "export declare const t: any;
 ",
-    "name": "tokens.d.ts",
+    "name": "./tokens.d.ts",
+  },
+  {
+    "content": "import { Platform } from "react-native";
+export const isIOS = Platform.OS === 'ios';
+export function ios(arg) { return isIOS ? arg : undefined; }
+export const isAndroid = Platform.OS === 'android';
+export function android(arg) { return isAndroid ? arg : undefined; }
+",
+    "name": "./utilities.js",
+  },
+  {
+    "content": "export declare const isIOS: boolean;
+export declare function ios<T>(arg: T): T | undefined;
+export declare const isAndroid: boolean;
+export declare function android<T>(arg: T): T | undefined;
+",
+    "name": "./utilities.d.ts",
   },
   {
     "content": "export * from "./theme";
 export * from "./tokens";
+export * from "./utilities";
 ",
-    "name": "index.js",
+    "name": "./index.js",
   },
   {
     "content": "export * from "./theme";
 export * from "./tokens";
+export * from "./utilities";
 ",
-    "name": "index.d.ts",
+    "name": "./index.d.ts",
   },
 ]
 `;

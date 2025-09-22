@@ -1,6 +1,6 @@
 import { defaultTokens } from '../core/utilityClassTokens/defaultTokens';
 import { getThemeTokens } from '../core/utilityClassTokens/getThemeTokens';
-import { GeneratedProject } from './getGeneratedSource';
+import { GeneratedProject } from './generatedProject';
 import { constructThemes } from '../core/constructThemes';
 import { codegenOptions } from '../core/codegenTypes';
 import { VariableDeclarationKind } from 'ts-morph';

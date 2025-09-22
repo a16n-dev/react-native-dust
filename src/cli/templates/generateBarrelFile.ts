@@ -1,4 +1,4 @@
-import { GeneratedProject } from './getGeneratedSource';
+import { GeneratedProject } from './generatedProject';
 
 /**
  * Adds a barrel file to the given generated project. This should reexport all the

@@ -1,5 +1,5 @@
 import { ts, VariableDeclarationKind, StructureKind } from 'ts-morph';
-import { GeneratedProject } from './getGeneratedSource';
+import { GeneratedProject } from './generatedProject';
 import { codegenOptions } from '../core/codegenTypes';
 import { getJsonType } from 'get-json-type';
 import { constructThemes } from '../core/constructThemes';

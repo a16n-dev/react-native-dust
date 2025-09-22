@@ -1,6 +1,6 @@
 import { styleToken, styleTokenValueProperty } from './types';
 import { uniq } from 'es-toolkit';
-import { ParsedTheme } from '../loadConfig';
+import { ParsedTheme } from '../config/configSchema';
 
 /**
  * Generates utility style tokens for the provided theme.

@@ -1,8 +1,6 @@
-import { loadConfig } from '../core/loadConfig';
-import { collectUsedUtilityStyles } from '../core/collectUsedUtilityStyles';
-import { constructCodegenProject, runCodegen } from '../core/runCodegen';
-import { getProjectRoot, writeGeneratedExportFiles } from '../core/uiWriter';
-import { CLI_DIR_ROOT, LIB_DIR_ROOT } from '../root';
+import { constructCodegenProject } from '../core/runCodegen';
+import { writeGeneratedExportFiles } from '../core/fileSystemHelpers';
+import { loadConfig } from '../core/config/loadConfig';
 
 /**
  * Allows the user to export the generated lib into their project as TS source files

@@ -1,7 +1,7 @@
 import { writeFileSync, existsSync } from 'fs';
 import { resolve } from 'path';
-import { loadConfig } from '../core/loadConfig';
 import { runCodegen } from '../core/runCodegen';
+import { loadConfig } from '../core/config/loadConfig';
 
 export async function initCommand() {
   const configPath = resolve(process.cwd(), 'dust.config.js');
@@ -11,6 +11,7 @@ export async function initCommand() {
     return;
   }
 
+  // TODO: migrate this to use ts-morph
   const configContent = `// Dust configuration file
 // @ts-check
 

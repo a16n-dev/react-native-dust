@@ -1,4 +1,4 @@
-import { ParsedConfig } from './loadConfig';
+import { ParsedConfig } from './config/configSchema';
 
 export interface codegenOptions {
   config: ParsedConfig;

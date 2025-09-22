@@ -1,11 +1,11 @@
-import { writeGeneratedLibFiles } from './uiWriter';
+import { writeGeneratedLibFiles } from './fileSystemHelpers';
 import { generateThemeFile } from '../templates/generateThemeFile';
 import { generateTokensFile } from '../templates/generateTokensFile';
-import { GeneratedProject } from '../templates/getGeneratedSource';
+import { GeneratedProject } from '../templates/generatedProject';
 import { generateBarrelFile } from '../templates/generateBarrelFile';
 import { codegenOptions } from './codegenTypes';
-import { ParsedConfig } from './loadConfig';
 import { generateUtilitiesFile } from '../templates/generateUtilitiesFile';
+import { ParsedConfig } from './config/configSchema';
 
 export async function constructCodegenProject(opts: codegenOptions) {
   const project = new GeneratedProject();

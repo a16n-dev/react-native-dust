@@ -1,6 +1,9 @@
 import { toMerged } from 'es-toolkit';
-import { ParsedExtendedTheme, ParsedTheme } from './loadConfig';
+import { ParsedExtendedTheme, ParsedTheme } from './config/configSchema';
 
+/**
+ * Resolves extended themes by merging them with the default theme
+ */
 export function constructThemes(
   defaultTheme: ParsedTheme,
   additionalThemes?: Record<string, ParsedTheme | ParsedExtendedTheme>

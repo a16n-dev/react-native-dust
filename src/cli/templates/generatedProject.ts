@@ -2,7 +2,7 @@ import { Project, SourceFile, ts } from 'ts-morph';
 import ModuleKind = ts.ModuleKind;
 import ScriptTarget = ts.ScriptTarget;
 import ModuleResolutionKind = ts.ModuleResolutionKind;
-import { getProjectRoot } from '../core/uiWriter';
+import { getProjectRoot } from '../core/fileSystemHelpers';
 
 const ROOT_DIR = getProjectRoot();
 
