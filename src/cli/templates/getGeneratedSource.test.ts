@@ -1,14 +1,17 @@
 import { expect, test } from 'vitest';
-import { createSourceFile, getGeneratedSource } from './getGeneratedSource';
 import { VariableDeclarationKind } from 'ts-morph';
+import { GeneratedProject } from './getGeneratedSource';
 
 test('Source files can be created without error', () => {
-  const file = createSourceFile('example.ts');
+  const project = new GeneratedProject();
+  const file = project.addSourceFile('example.ts');
   expect(file).toBeDefined();
 });
 
 test('generating output of a basic file produces the intended output', () => {
-  const file = createSourceFile('example.ts');
+  const project = new GeneratedProject();
+
+  const file = project.addSourceFile('example.ts');
 
   file.addVariableStatement({
     declarationKind: VariableDeclarationKind.Const,
@@ -16,12 +19,9 @@ test('generating output of a basic file produces the intended output', () => {
     declarations: [{ name: 'example', initializer: "'Hello world'" }],
   });
 
-  const output = getGeneratedSource(file);
+  const output = project.getGeneratedFiles();
 
-  // Expect both .js and .d.ts
+  // Expect both a single .js and .d.ts file
   expect(output).toHaveLength(2);
-
-  // Snapshot both files to ensure the names & content don't change unexpectedly
-  expect(output[0]).toMatchSnapshot();
-  expect(output[1]).toMatchSnapshot();
+  expect(output).toMatchSnapshot();
 });

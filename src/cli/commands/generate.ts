@@ -1,8 +1,8 @@
-import { loadConfig } from "../core/loadConfig";
-import { generateStyles } from "../core/generateStyles";
+import { loadConfig } from '../core/loadConfig';
+import { runCodegen } from '../core/runCodegen';
 
 export async function generateCommand(configPath?: string) {
   const config = loadConfig(configPath);
 
-  await generateStyles(config);
+  await runCodegen(config);
 }

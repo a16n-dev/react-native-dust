@@ -13,6 +13,7 @@ export type DustTheme = {
     }
   >;
   [key: string]: any;
+  extend?: never;
 };
 
 export type ExtendedDustTheme = { extend: Partial<DustTheme> };
@@ -32,6 +33,6 @@ export type Config = {
      * - 'vanilla': Single theme support, plain stylesheet output, no runtime dependencies
      * - 'unistyles': Multiple themes support, safe area margin/padding utility classes. Requires unistyles.
      */
-    mode?: "vanilla" | "unistyles";
+    mode?: 'vanilla' | 'unistyles';
   };
 };

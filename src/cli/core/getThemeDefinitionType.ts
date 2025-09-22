@@ -4,6 +4,7 @@ import {
   jsonInputForTargetLanguage,
 } from 'quicktype-core';
 import { Config } from '../../config';
+import { constructThemes } from './utilityClassTokens/constructThemes';
 
 async function generateTypeInterfaceFromObjects(
   objs: any[],
@@ -40,15 +41,18 @@ async function generateTypeInterfaceFromObjects(
  * will be marked as optional in the generated types
  */
 export async function getThemeDefinition(config: Config): Promise<string> {
-  const allThemeObjects = Object.values(config.themes);
+  const allThemeObjects = constructThemes(
+    config.theme,
+    config.additionalThemes
+  );
 
   const appThemeInterface = await generateTypeInterfaceFromObjects(
-    allThemeObjects,
+    Object.values(allThemeObjects),
     'AppTheme'
   );
 
   if (config.options?.mode === 'unistyles') {
-    const themeNames = Object.keys(config.themes);
+    const themeNames = Object.keys(allThemeObjects);
 
     const themeEntries = themeNames
       .map((name) => `  ${name}: AppTheme;`)

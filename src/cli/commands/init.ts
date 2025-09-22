@@ -1,13 +1,13 @@
-import { writeFileSync, existsSync } from "fs";
-import { resolve } from "path";
-import { loadConfig } from "../core/loadConfig";
-import { generateStyles } from "../core/generateStyles";
+import { writeFileSync, existsSync } from 'fs';
+import { resolve } from 'path';
+import { loadConfig } from '../core/loadConfig';
+import { runCodegen } from '../core/runCodegen';
 
 export async function initCommand() {
-  const configPath = resolve(process.cwd(), "dust.config.js");
+  const configPath = resolve(process.cwd(), 'dust.config.js');
 
   if (existsSync(configPath)) {
-    console.log("dust.config.js already exists");
+    console.log('dust.config.js already exists');
     return;
   }
 
@@ -49,8 +49,8 @@ export default {
 `;
 
   writeFileSync(configPath, configContent);
-  console.log("Created dust.config.js");
+  console.log('Created dust.config.js');
 
-  const config = await loadConfig();
-  await generateStyles(config);
+  const config = loadConfig();
+  await runCodegen(config);
 }

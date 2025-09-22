@@ -11,7 +11,7 @@
   "license": "MIT",
   "sideEffects": false,
   "bin": {
-    "dust": "dist/cli/index.js"
+    "dust": "./dist/cli/index.js"
   },
   "exports": {
     "./config": {
@@ -24,8 +24,9 @@
     }
   },
   "scripts": {
-    "build": "rm -rf dist/ && tsc",
-    "dev": "tsc --watch"
+    "build": "rm -rf dist/ && tsc --project tsconfig.build-cli.json && tsc --project tsconfig.build-config.json",
+    "dev": "tsc --watch",
+    "test": "vitest"
   },
   "devDependencies": {
     "@types/babel__traverse": "^7.28.0",

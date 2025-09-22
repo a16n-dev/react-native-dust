@@ -1,0 +1,18 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`generateBarrelFile > output does not change unexpectedly 1`] = `
+[
+  {
+    "content": "export * from "./theme";
+export * from "./tokens";
+",
+    "name": "/index.js",
+  },
+  {
+    "content": "export * from "./theme";
+export * from "./tokens";
+",
+    "name": "/index.d.ts",
+  },
+]
+`;
