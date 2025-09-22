@@ -1,0 +1,82 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`constructCodegenProject > should construct the expected output for the first sample configuration 1`] = `
+[
+  {
+    "content": "export * from "./theme";
+export * from "./tokens";
+",
+    "name": "index.ts",
+  },
+  {
+    "content": "interface AppTheme {
+    colors: any;
+}
+
+export const theme = {
+      "colors": {},
+      "radius": {},
+      "shadow": {},
+      "spacing": {},
+      "text": {}
+    };
+",
+    "name": "theme.ts",
+  },
+  {
+    "content": "import { StyleSheet } from "react-native";
+import { theme } from "./theme";
+",
+    "name": "tokens.ts",
+  },
+]
+`;
+
+exports[`constructCodegenProject > should construct the expected output for the first sample configuration 2`] = `
+[
+  {
+    "content": "export const theme = {
+    "colors": {},
+    "radius": {},
+    "shadow": {},
+    "spacing": {},
+    "text": {}
+};
+",
+    "name": "theme.js",
+  },
+  {
+    "content": "export declare const theme: {
+    colors: {};
+    radius: {};
+    shadow: {};
+    spacing: {};
+    text: {};
+};
+",
+    "name": "theme.d.ts",
+  },
+  {
+    "content": "export {};
+",
+    "name": "tokens.js",
+  },
+  {
+    "content": "export {};
+",
+    "name": "tokens.d.ts",
+  },
+  {
+    "content": "export * from "./theme";
+export * from "./tokens";
+",
+    "name": "index.js",
+  },
+  {
+    "content": "export * from "./theme";
+export * from "./tokens";
+",
+    "name": "index.d.ts",
+  },
+]
+`;

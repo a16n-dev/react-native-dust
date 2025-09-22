@@ -1,28 +1,29 @@
-import { existsSync } from "fs";
-import { resolve } from "path";
-import { createJiti } from "jiti";
-import { Config } from "../../config";
-import { z } from "zod";
+import { existsSync } from 'fs';
+import { resolve } from 'path';
+import { createJiti } from 'jiti';
+import { z } from 'zod';
 
 /**
  * These are the locations where we expect to find a config file by default, relative to the root of the project.
  */
 const DEFAULT_CONFIG_FILES = [
-  "dust.config.ts",
-  "dust.config.js",
-  "dust.config.json",
+  'dust.config.ts',
+  'dust.config.js',
+  'dust.config.json',
 ];
 
 /**
  * This loads the config for the dust CLI. If no config path is provided, this function will attempt to read a config
- * file at the default locations - dust.config.(json|js|ts)
+ * file at the default locations - dust.config.(json|js|ts).
+ *
+ * It will also validate that the config matches the expected type,
  */
-export function loadConfig(configPath?: string): Config {
+export function loadConfig(configPath?: string): ParsedConfig {
   const resolvedPath = findConfigFile(configPath);
 
   if (!resolvedPath) {
     if (!configPath) {
-      console.error("Error: No config file found. Looked for:");
+      console.error('Error: No config file found. Looked for:');
       DEFAULT_CONFIG_FILES.forEach((file) => console.error(`  - ${file}`));
     } else {
       console.error(`Error: Config file not found at ${resolve(configPath)}`);
@@ -35,33 +36,18 @@ export function loadConfig(configPath?: string): Config {
     const jiti = createJiti(__filename);
     const config = jiti(resolvedPath);
 
-    const rawConfigJson: Config = config.default || config;
+    const rawConfigJson = config.default || config;
 
     // Validate the config
     const parseResult = configSchema.safeParse(rawConfigJson);
 
     if (parseResult.error) {
-      console.error("Invalid config file: ");
-      console.error(z.treeifyError(parseResult.error));
+      console.error('Invalid config file: ');
+      console.error(z.prettifyError(parseResult.error));
       process.exit(1);
     }
 
-    const configJson = parseResult.data;
-
-    configJson?.options?.mode;
-
-    // Multiple themes are only supported when mode: 'unistyles' is set
-    if (
-      Object.keys(configJson.themes).length > 1 &&
-      configJson.options?.mode !== "unistyles"
-    ) {
-      console.error(
-        "Invalid config file: Multiple themes are only supported when options.mode is set to 'unistyles'.",
-      );
-      process.exit(1);
-    }
-
-    return configJson;
+    return parseResult.data;
   } catch (error) {
     console.error(`Error loading config file: ${error}`);
     process.exit(1);
@@ -85,33 +71,59 @@ function findConfigFile(configPath?: string): string | null {
   return null;
 }
 
+const themeSchema = z
+  .object({
+    colors: z.record(z.string(), z.record(z.string(), z.string())),
+    spacing: z.record(z.string(), z.number()),
+    radius: z.record(z.string(), z.number()),
+    shadow: z.record(z.string(), z.string()),
+    text: z.record(
+      z.string(),
+      z.object({
+        fontSize: z.number(),
+        lineHeight: z.number().optional(),
+        letterSpacing: z.number().optional(),
+      })
+    ),
+  })
+  .loose();
+
+const extendedThemeSchema = z.object({
+  extend: themeSchema.partial(),
+});
+
 const configSchema = z
   .object({
     include: z.array(z.string()),
-    themes: z.record(
-      z.string(),
-      z.object({
-        colors: z.record(z.string(), z.record(z.string(), z.string())),
-        spacing: z.record(z.string(), z.number()),
-        radius: z.record(z.string(), z.number()),
-        shadow: z.record(z.string(), z.string()),
-        text: z.record(
-          z.string(),
-          z.object({
-            fontSize: z.number(),
-            lineHeight: z.number().optional(),
-            letterSpacing: z.number().optional(),
-            fontWeight: z.union([z.string(), z.number()]).optional(),
-          }),
-        ),
-      }),
-    ),
+    theme: themeSchema,
+    additionalThemes: z
+      .record(z.string(), z.union([themeSchema, extendedThemeSchema]))
+      .optional(),
     breakpoints: z.record(z.string(), z.number()).optional(),
     options: z
       .object({
         targetsWeb: z.boolean().optional(),
-        mode: z.enum(["vanilla", "unistyles"]).default("vanilla"),
+        mode: z.enum(['vanilla', 'unistyles']).default('vanilla'),
       })
-      .optional(),
+      .prefault({}),
   })
-  .loose();
+  .refine(
+    (data) => {
+      // If additionalThemes exists, mode must be "unistyles"
+      if (data.additionalThemes && data.options.mode !== 'unistyles')
+        return false;
+      return true;
+    },
+    {
+      message: "additionalThemes can only be present when mode is 'unistyles'",
+      path: ['additionalThemes'],
+    }
+  );
+
+export type ParsedConfig = z.infer<typeof configSchema>;
+export type ParsedTheme = z.infer<typeof themeSchema>;
+export type ParsedExtendedTheme = z.infer<typeof extendedThemeSchema>;
+
+export type InputConfig = z.input<typeof configSchema>;
+export type InputTheme = z.input<typeof themeSchema>;
+export type InputExtendedTheme = z.input<typeof extendedThemeSchema>;

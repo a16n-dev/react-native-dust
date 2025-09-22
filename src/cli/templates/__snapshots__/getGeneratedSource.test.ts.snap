@@ -1,0 +1,16 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`generating output of a basic file produces the intended output 1`] = `
+[
+  {
+    "content": "export const example = 'Hello world';
+",
+    "name": "example.js",
+  },
+  {
+    "content": "export declare const example = "Hello world";
+",
+    "name": "example.d.ts",
+  },
+]
+`;

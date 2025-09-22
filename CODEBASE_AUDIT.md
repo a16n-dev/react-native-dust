@@ -207,13 +207,13 @@ dust/
 ## Recommended Action Plan
 
 ### **Immediate (Next Sprint):**
-1. **Add comprehensive test suite** - Critical for reliability
+1. **Add comprehensive test suite** - Critical for reliability [IN PROGRESS]
 2. **Implement robust error handling** - Improve user experience
-3. **Add CLI progress indicators** - Better feedback for users
+3. **Add CLI progress indicators** - Better feedback for users [WONT DO]
 
 ### **Short Term (Next Month):**
-4. **Migrate to AST-based code generation** - Better maintainability
-5. **Add configuration schema validation** - Prevent user errors
+4. **Migrate to AST-based code generation** - Better maintainability [IN PROGRESS]
+5. **Add configuration schema validation** - Prevent user errors [DONE]
 6. **Improve documentation with JSDoc** - Better developer experience
 
 ### **Medium Term (Next Quarter):**

@@ -1,0 +1,19 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Generates a type inline correctly 1`] = `
+"export interface Example {
+    colors: Colors;
+}
+
+export interface Colors {
+    blue: Blue;
+    red:  Blue;
+}
+
+export interface Blue {
+    light:   string;
+    default: string;
+    dark:    string;
+}
+"
+`;

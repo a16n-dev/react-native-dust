@@ -1,11 +1,11 @@
-import { loadConfig } from "../core/loadConfig";
-import { collectUsedUtilityStyles } from "../core/analyse";
-import { generateStyles } from "../core/generateStyles";
+import { loadConfig } from '../core/loadConfig';
+import { collectUsedUtilityStyles } from '../core/collectUsedUtilityStyles';
+import { runCodegen } from '../core/runCodegen';
 
 export async function buildCommand(configPath?: string) {
   const config = loadConfig(configPath);
 
   const whitelist = await collectUsedUtilityStyles(config);
 
-  await generateStyles(config, whitelist);
+  await runCodegen(config, whitelist);
 }
