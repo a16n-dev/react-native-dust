@@ -1,15 +1,15 @@
-import fg from "fast-glob";
-import { parse } from "@babel/parser";
-import traverse from "@babel/traverse";
-import { readFileSync } from "fs";
-import { Config } from "../../config";
+import fg from 'fast-glob';
+import { parse } from '@babel/parser';
+import traverse from '@babel/traverse';
+import { readFileSync } from 'fs';
+import { Config } from '../../config';
 
 async function getListOfSourceFiles(includePaths: string[]) {
   const paths = await fg(includePaths);
 
   if (paths.length === 0) {
     console.error(
-      'No source files found. Please check the "include" patterns in your dust.config file.',
+      'No source files found. Please check the "include" patterns in your dust.config file.'
     );
     process.exit(1);
   }
@@ -18,10 +18,10 @@ async function getListOfSourceFiles(includePaths: string[]) {
 }
 
 function analyzeFile(filePath: string): string[] {
-  const code = readFileSync(filePath, "utf-8");
+  const code = readFileSync(filePath, 'utf-8');
 
   // Fast string check for import first
-  if (!code.includes("react-native-dust/tokens")) {
+  if (!code.includes('react-native-dust/tokens')) {
     return [];
   }
 
@@ -30,18 +30,18 @@ function analyzeFile(filePath: string): string[] {
 
   try {
     const ast = parse(code, {
-      sourceType: "module",
-      plugins: ["jsx", "typescript", "decorators-legacy"],
+      sourceType: 'module',
+      plugins: ['jsx', 'typescript', 'decorators-legacy'],
     });
 
     traverse(ast, {
       ImportDeclaration(path) {
-        if (path.node.source.value === "react-native-dust/tokens") {
+        if (path.node.source.value === 'react-native-dust/tokens') {
           const tImport = path.node.specifiers.find(
             (spec) =>
-              spec.type === "ImportSpecifier" &&
-              spec.imported.type === "Identifier" &&
-              spec.imported.name === "t",
+              spec.type === 'ImportSpecifier' &&
+              spec.imported.type === 'Identifier' &&
+              spec.imported.name === 't'
           );
           if (tImport) {
             hasThemeImport = true;
@@ -52,10 +52,10 @@ function analyzeFile(filePath: string): string[] {
       MemberExpression(path) {
         if (
           hasThemeImport &&
-          path.node.object.type === "Identifier" &&
-          path.node.object.name === "t"
+          path.node.object.type === 'Identifier' &&
+          path.node.object.name === 't'
         ) {
-          if (path.node.property.type === "Identifier") {
+          if (path.node.property.type === 'Identifier') {
             accessedProperties.add(path.node.property.name);
           }
         }

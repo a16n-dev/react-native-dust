@@ -1,9 +1,9 @@
-import { Config } from "../../config";
-import { writeLibFile } from "./uiWriter";
-import { generateTheme } from "../templates/generateTheme";
-import { generateTokens, getTokensCount } from "../templates/generateTokens";
-import { generateBarrel } from "../templates/generateBarrel";
-import { getThemeDefinition } from "./getThemeDefinitionType";
+import { Config } from '../../config';
+import { writeLibFile } from './uiWriter';
+import { generateTheme } from '../templates/generateTheme';
+import { generateTokens, getTokensCount } from '../templates/generateTokens';
+import { generateBarrel } from '../templates/generateBarrel';
+import { getThemeDefinition } from './getThemeDefinitionType';
 
 function formatFileSize(bytes: number): string {
   if (bytes < 1024) return `${bytes}b`;
@@ -14,45 +14,45 @@ function formatFileSize(bytes: number): string {
 async function generateThemesFile(config: Config) {
   const { js, dts } = generateTheme(config);
 
-  await writeLibFile("theme.js", js, true);
+  await writeLibFile('theme.js', js, true);
 
   const themeDefinition = await getThemeDefinition(config);
-  await writeLibFile("theme.d.ts", themeDefinition);
+  await writeLibFile('theme.d.ts', themeDefinition);
 }
 
 async function generateTokensFile(
   config: Config,
-  whitelist?: string[],
+  whitelist?: string[]
 ): Promise<void> {
   const { js, dts } = generateTokens(config, whitelist);
 
   const tokensCount = getTokensCount(config, whitelist);
-  const jsFileSize = Buffer.byteLength(js, "utf8");
+  const jsFileSize = Buffer.byteLength(js, 'utf8');
 
   if (whitelist) {
     console.log(
-      `Generating minified tokens file (${tokensCount} tokens / ${formatFileSize(jsFileSize)})`,
+      `Generating minified tokens file (${tokensCount} tokens / ${formatFileSize(jsFileSize)})`
     );
   } else {
     console.log(
-      `Generating complete tokens file (${tokensCount} tokens / ${formatFileSize(jsFileSize)})`,
+      `Generating complete tokens file (${tokensCount} tokens / ${formatFileSize(jsFileSize)})`
     );
   }
 
-  await writeLibFile("tokens.js", js, true);
-  await writeLibFile("tokens.d.ts", dts);
+  await writeLibFile('tokens.js', js, true);
+  await writeLibFile('tokens.d.ts', dts);
 }
 
 async function generateBarrelFile() {
   const { js, dts } = generateBarrel();
 
-  await writeLibFile("index.js", js, true);
-  await writeLibFile("index.d.ts", dts);
+  await writeLibFile('index.js', js, true);
+  await writeLibFile('index.d.ts', dts);
 }
 
 export async function generateStyles(
   config: Config,
-  whitelist?: string[],
+  whitelist?: string[]
 ): Promise<void> {
   await generateThemesFile(config);
   await generateTokensFile(config, whitelist);

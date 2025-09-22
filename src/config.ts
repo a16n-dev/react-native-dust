@@ -15,13 +15,16 @@ export type DustTheme = {
   [key: string]: any;
 };
 
+export type ExtendedDustTheme = { extend: Partial<DustTheme> };
+
 export type Config = {
   include: string[];
-  themes: Record<string, DustTheme>;
+  theme: DustTheme;
+  additionalThemes?: Record<string, DustTheme | ExtendedDustTheme>;
   breakpoints?: Record<string, number>;
   options?: {
     /**
-     * If true, will generate a set of web-only tokens, such as web__fixed.
+     * If true, will generate a set of web-only tokens, such as web_fixed.
      */
     targetsWeb?: boolean;
     /**

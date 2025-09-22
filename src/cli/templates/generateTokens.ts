@@ -2,14 +2,12 @@ import { Project, VariableDeclarationKind } from "ts-morph";
 import { Config } from "../../config";
 import { getDefaultTokens } from "../core/utilityClassTokens/getDefaultTokens";
 import { getThemeTokens } from "../core/utilityClassTokens/getThemeTokens";
-import { styleToken, styleTokenValueProperty } from "../core/utilityClassTokens/types";
+import {
+  styleToken,
+  styleTokenValueProperty,
+} from "../core/utilityClassTokens/types";
 
-export interface GeneratedFiles {
-  js: string;
-  dts: string;
-}
-
-export function generateTokens(config: Config, whitelist?: string[]): GeneratedFiles {
+export function generateTokens(config: Config, whitelist?: string[]) {
   const project = new Project({ useInMemoryFileSystem: true });
   const jsFile = project.createSourceFile("tokens.js", "");
   const dtsFile = project.createSourceFile("tokens.d.ts", "");
@@ -37,10 +35,14 @@ export function generateTokens(config: Config, whitelist?: string[]): GeneratedF
   }
 
   // Generate tokens object
-  const styleProperties = tokens.map(({ key, values }) => {
-    const props = values.map(([prop, val]: styleTokenValueProperty) => `${prop}: ${val}`).join(", ");
-    return `${key}: { ${props} }`;
-  }).join(",\n  ");
+  const styleProperties = tokens
+    .map(({ key, values }) => {
+      const props = values
+        .map(([prop, val]: styleTokenValueProperty) => `${prop}: ${val}`)
+        .join(", ");
+      return `${key}: { ${props} }`;
+    })
+    .join(",\n  ");
 
   if (isUnistyles) {
     const tokensInitializer = `StyleSheet.create((theme, runtime) => ({\n  ${styleProperties}\n}))`;

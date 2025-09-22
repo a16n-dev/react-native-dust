@@ -6,7 +6,7 @@ export interface GeneratedFiles {
   dts: string;
 }
 
-export function generateTheme(config: Config): GeneratedFiles {
+export function generateThemeFile(config: Config): GeneratedFiles {
   const project = new Project({ useInMemoryFileSystem: true });
   const jsFile = project.createSourceFile("theme.js", "");
   const dtsFile = project.createSourceFile("theme.d.ts", "");
@@ -18,27 +18,38 @@ export function generateTheme(config: Config): GeneratedFiles {
     jsFile.addVariableStatement({
       declarationKind: VariableDeclarationKind.Const,
       isExported: true,
-      declarations: [{ name: "themes", initializer: JSON.stringify(config.themes, null, 2) }],
+      declarations: [
+        { name: "themes", initializer: JSON.stringify(config.themes, null, 2) },
+      ],
     });
   } else {
     const firstTheme = config.themes[Object.keys(config.themes)[0]];
     jsFile.addVariableStatement({
       declarationKind: VariableDeclarationKind.Const,
       isExported: true,
-      declarations: [{ name: "theme", initializer: JSON.stringify(firstTheme, null, 2) }],
+      declarations: [
+        { name: "theme", initializer: JSON.stringify(firstTheme, null, 2) },
+      ],
     });
   }
 
   jsFile.addVariableStatement({
     declarationKind: VariableDeclarationKind.Const,
     isExported: true,
-    declarations: [{ name: "breakpoints", initializer: JSON.stringify(config.breakpoints ?? {}, null, 2) }],
+    declarations: [
+      {
+        name: "breakpoints",
+        initializer: JSON.stringify(config.breakpoints ?? {}, null, 2),
+      },
+    ],
   });
 
   // Generate TypeScript declarations
   if (isUnistyles) {
     const themeNames = Object.keys(config.themes);
-    const themeEntries = themeNames.map((name) => `  ${name}: AppTheme;`).join("\n");
+    const themeEntries = themeNames
+      .map((name) => `  ${name}: AppTheme;`)
+      .join("\n");
 
     dtsFile.addVariableStatement({
       hasDeclareKeyword: true,

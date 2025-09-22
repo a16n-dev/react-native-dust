@@ -1,23 +1,34 @@
-import { Project } from "ts-morph";
+import { ModuleKind, Project, ScriptTarget } from "ts-morph";
+import { generatedSource } from "./getGeneratedSource";
 
-export interface GeneratedFiles {
-  js: string;
-  dts: string;
-}
-
-export function generateBarrel(): GeneratedFiles {
-  const project = new Project({ useInMemoryFileSystem: true });
-  const jsFile = project.createSourceFile("index.js", "");
-  const dtsFile = project.createSourceFile("index.d.ts", "");
+/**
+ * This file template generates a barrel file of all exports to be exported
+ * under the main package entry point.
+ */
+export function generateBarrelFile(): generatedSource {
+  const project = new Project({
+    useInMemoryFileSystem: true,
+    compilerOptions: {
+      target: ScriptTarget.ES2019,
+      module: ModuleKind.CommonJS,
+      declaration: true,
+    },
+  });
+  const file = project.createSourceFile("index.ts", "");
 
   // Add exports to both files
-  [jsFile, dtsFile].forEach((file) => {
-    file.addExportDeclaration({ moduleSpecifier: "./theme" });
-    file.addExportDeclaration({ moduleSpecifier: "./tokens" });
-  });
+
+  file.addExportDeclaration({ moduleSpecifier: "./theme" });
+  file.addExportDeclaration({ moduleSpecifier: "./tokens" });
+
+  // get the .js and .d.ts files
 
   return {
-    js: jsFile.getFullText(),
-    dts: dtsFile.getFullText(),
-  };
+    js:
+  }
+
+  // return {
+  //   js: jsFile.getFullText(),
+  //   dts: dtsFile.getFullText(),
+  // };
 }

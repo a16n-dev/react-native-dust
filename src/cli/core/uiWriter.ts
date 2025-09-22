@@ -1,13 +1,13 @@
-import { writeFileSync, mkdirSync, existsSync } from "fs";
-import { resolve, dirname } from "path";
-import prettier from "prettier";
+import { writeFileSync, mkdirSync, existsSync } from 'fs';
+import { resolve, dirname } from 'path';
+import prettier from 'prettier';
 
 /**
  * This initialises the directory that all generated code files will be written to
  */
 function setupLibDir(): string {
   const packageRoot = findPackageRoot(__dirname);
-  const dir = resolve(packageRoot, "dist/lib");
+  const dir = resolve(packageRoot, 'dist/lib');
 
   mkdirSync(dir, { recursive: true });
 
@@ -17,7 +17,7 @@ function setupLibDir(): string {
 export async function writeLibFile(
   filename: string,
   content: string,
-  minify?: boolean,
+  minify?: boolean
 ): Promise<void> {
   const uiDir = setupLibDir();
   const filePath = resolve(uiDir, filename);
@@ -45,18 +45,18 @@ export async function writeLibFile(
 }
 
 function getParserForFile(filename: string): string {
-  const ext = filename.split(".").pop()?.toLowerCase();
+  const ext = filename.split('.').pop()?.toLowerCase();
   switch (ext) {
-    case "js":
-    case "jsx":
-      return "babel";
-    case "ts":
-    case "tsx":
-      return "typescript";
-    case "json":
-      return "json";
+    case 'js':
+    case 'jsx':
+      return 'babel';
+    case 'ts':
+    case 'tsx':
+      return 'typescript';
+    case 'json':
+      return 'json';
     default:
-      return "babel";
+      return 'babel';
   }
 }
 
@@ -65,20 +65,20 @@ function minifyJS(code: string): string {
   return (
     code
       // Remove single-line comments but preserve line breaks for multi-line context
-      .replace(/\/\/.*$/gm, "")
+      .replace(/\/\/.*$/gm, '')
       // Remove multi-line comments
-      .replace(/\/\*[\s\S]*?\*\//g, "")
+      .replace(/\/\*[\s\S]*?\*\//g, '')
       // Remove extra whitespace but preserve necessary spaces
-      .replace(/\s+/g, " ")
+      .replace(/\s+/g, ' ')
       // Clean up specific patterns
-      .replace(/;\s+/g, ";")
-      .replace(/{\s+/g, "{")
-      .replace(/\s+}/g, "}")
-      .replace(/,\s+/g, ",")
-      .replace(/\(\s+/g, "(")
-      .replace(/\s+\)/g, ")")
-      .replace(/\[\s+/g, "[")
-      .replace(/\s+]/g, "]")
+      .replace(/;\s+/g, ';')
+      .replace(/{\s+/g, '{')
+      .replace(/\s+}/g, '}')
+      .replace(/,\s+/g, ',')
+      .replace(/\(\s+/g, '(')
+      .replace(/\s+\)/g, ')')
+      .replace(/\[\s+/g, '[')
+      .replace(/\s+]/g, ']')
       // Remove leading/trailing whitespace
       .trim()
   );
@@ -87,10 +87,10 @@ function minifyJS(code: string): string {
 function findPackageRoot(startDir: string): string {
   let currentDir = startDir;
   while (currentDir !== dirname(currentDir)) {
-    if (existsSync(resolve(currentDir, "package.json"))) {
+    if (existsSync(resolve(currentDir, 'package.json'))) {
       return currentDir;
     }
     currentDir = dirname(currentDir);
   }
-  throw new Error("Could not find package.json");
+  throw new Error('Could not find package.json');
 }
