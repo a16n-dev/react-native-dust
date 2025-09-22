@@ -1,6 +1,7 @@
 import { loadConfig } from '../core/loadConfig';
 import { collectUsedUtilityStyles } from '../core/collectUsedUtilityStyles';
 import { constructCodegenProject, runCodegen } from '../core/runCodegen';
+import { writeGeneratedExportFiles } from '../core/uiWriter';
 
 /**
  * Allows the user to export the generated lib into their project as TS source files
@@ -13,4 +14,6 @@ export async function exportCommand(configPath?: string) {
   const result = constructCodegenProject({ config });
 
   const sourceFiles = result.getSourceFiles();
+
+  await writeGeneratedExportFiles(sourceFiles);
 }

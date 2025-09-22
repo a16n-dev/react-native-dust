@@ -88,6 +88,40 @@ function minifyJS(code: string): string {
   );
 }
 
+/**
+ * This initialises the directory that exported files will be written to (user's project root)
+ */
+async function setupExportDir() {
+  const dir = resolve(process.cwd(), 'export');
+
+  await mkdir(dir, { recursive: true });
+
+  return dir;
+}
+
+export async function writeGeneratedExportFiles(files: GeneratedFile[]) {
+  for (const file of files) {
+    await writeExportFile(file.name, file.content);
+  }
+}
+
+export async function writeExportFile(
+  filename: string,
+  content: string
+): Promise<void> {
+  const exportDir = await setupExportDir();
+  const filePath = resolve(exportDir, filename);
+
+  const finalContent = await prettier.format(content, {
+    filepath: filePath,
+    parser: getParserForFile(filename),
+  });
+
+  await writeFile(filePath, finalContent);
+
+  console.log(`Wrote export file "${filename}" to ${filePath}`);
+}
+
 function findPackageRoot(startDir: string): string {
   let currentDir = startDir;
   while (currentDir !== dirname(currentDir)) {
