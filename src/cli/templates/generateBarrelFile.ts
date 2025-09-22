@@ -10,4 +10,5 @@ export function generateBarrelFile(project: GeneratedProject) {
   // Add exports
   file.addExportDeclaration({ moduleSpecifier: './theme' });
   file.addExportDeclaration({ moduleSpecifier: './tokens' });
+  file.addExportDeclaration({ moduleSpecifier: './utilities' });
 }

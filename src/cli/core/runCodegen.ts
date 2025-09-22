@@ -5,6 +5,7 @@ import { GeneratedProject } from '../templates/getGeneratedSource';
 import { generateBarrelFile } from '../templates/generateBarrelFile';
 import { codegenOptions } from './codegenTypes';
 import { ParsedConfig } from './loadConfig';
+import { generateUtilitiesFile } from '../templates/generateUtilitiesFile';
 
 export async function constructCodegenProject(opts: codegenOptions) {
   const project = new GeneratedProject();
@@ -12,6 +13,7 @@ export async function constructCodegenProject(opts: codegenOptions) {
   // Add project
   generateThemeFile(project, opts);
   generateTokensFile(project, opts);
+  generateUtilitiesFile(project, opts);
   generateBarrelFile(project);
 
   return project;
