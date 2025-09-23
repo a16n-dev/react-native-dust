@@ -6,6 +6,8 @@ import { defaultUnistylesRuntimeTokens } from '../core/utilityClassTokens/defaul
 import { defaultWebTokens } from '../core/utilityClassTokens/defaultWebTokens.js';
 import { VariableDeclarationKind } from 'ts-morph';
 import type { codegenOptions } from '../core/codegenTypes.js';
+import { logger } from '../logger/logger.js';
+import { c } from '../logger/format.js';
 
 export function generateTokensFile(
   project: GeneratedProject,
@@ -27,6 +29,8 @@ export function generateTokensFile(
   const allTokens = !whitelist
     ? tokens
     : tokens.filter((token) => whitelist.includes(token.key));
+
+  logger.info(c.purple.bold(allTokens.length) + ` tokens generated`);
 
   const styleObjectEntries = allTokens.map((token) => {
     const properties = token.values

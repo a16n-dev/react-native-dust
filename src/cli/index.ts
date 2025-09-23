@@ -5,6 +5,7 @@ import { initCommand } from './commands/init.js';
 import { generateCommand } from './commands/generate.js';
 import { buildCommand } from './commands/build.js';
 import { exportCommand } from './commands/export.js';
+import { debug } from './logger/logger.js';
 
 const program = new Command();
 
@@ -23,6 +24,8 @@ program
   .option('-c, --config <file>', 'Specify config file (.js/.json/.ts)')
   .option('-d, --debug', 'Enable debug logging')
   .action(async (options) => {
+    if (options.debug) debug.setEnabled(true);
+
     await generateCommand(options.config);
   });
 
@@ -34,6 +37,8 @@ program
   .option('-c, --config <file>', 'Specify config file (.js/.json/.ts)')
   .option('-d, --debug', 'Enable debug logging')
   .action(async (options) => {
+    if (options.debug) debug.setEnabled(true);
+
     await buildCommand(options.config);
   });
 

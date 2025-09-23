@@ -3,13 +3,23 @@ import { parse } from '@babel/parser';
 import { readFileSync } from 'fs';
 import traverse from '@babel/traverse';
 import type { ParsedConfig } from './config/configSchema.js';
+import { logger } from '../logger/logger.js';
+import { c } from '../logger/format.js';
+import chalk from 'chalk';
 
 async function getListOfSourceFiles(includePaths: string[]) {
   const paths = await fg(includePaths);
 
   if (paths.length === 0) {
-    console.error(
-      'No source files found. Please check the "include" patterns in your dust.config file.'
+    logger.error(
+      c.red(
+        'No source files found. Please check the "include" patterns in your dust.config file.'
+      )
+    );
+    logger.error(
+      c.grey(
+        'Dust searched the following paths: "' + includePaths.join(', ') + '"'
+      )
     );
     process.exit(1);
   }
@@ -21,7 +31,8 @@ function analyzeFile(filePath: string): string[] {
   const code = readFileSync(filePath, 'utf-8');
 
   // Fast string check for import first
-  if (!code.includes('react-native-dust/tokens')) {
+  if (!code.includes('react-native-dust')) {
+    logger.debug(c.grey(filePath));
     return [];
   }
 
@@ -36,7 +47,7 @@ function analyzeFile(filePath: string): string[] {
 
     traverse.default(ast, {
       ImportDeclaration(path) {
-        if (path.node.source.value === 'react-native-dust/tokens') {
+        if (path.node.source.value === 'react-native-dust') {
           const tImport = path.node.specifiers.find(
             (spec) =>
               spec.type === 'ImportSpecifier' &&
@@ -65,13 +76,21 @@ function analyzeFile(filePath: string): string[] {
     console.warn(`Could not parse ${filePath}:`, error);
   }
 
-  return Array.from(accessedProperties);
+  const arr = Array.from(accessedProperties);
+
+  logger.debug(filePath + c.green(` ${arr.length} tokens`));
+
+  return arr;
 }
 
 export async function collectUsedUtilityStyles(
   config: ParsedConfig
 ): Promise<string[]> {
   const files = await getListOfSourceFiles(config.include);
+
+  logger.debug(
+    chalk.bold(`Scanning ${files.length} files to collect used tokens:`)
+  );
 
   const allAccessedProperties = new Set<string>();
 
@@ -82,5 +101,10 @@ export async function collectUsedUtilityStyles(
     }
   }
 
-  return Array.from(allAccessedProperties);
+  const result = Array.from(allAccessedProperties);
+
+  logger.debug(`Found the following ${result.length} used tokens:`);
+  logger.debug(c.purple(result.join(', ')));
+
+  return result;
 }

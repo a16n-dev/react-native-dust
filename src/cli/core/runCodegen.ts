@@ -6,6 +6,8 @@ import { generateUtilitiesFile } from '../templates/generateUtilitiesFile.js';
 import { generateBarrelFile } from '../templates/generateBarrelFile.js';
 import type { ParsedConfig } from './config/configSchema.js';
 import { writeGeneratedLibFiles } from './fileSystemHelpers.js';
+import { logger } from '../logger/logger.js';
+import { c } from '../logger/format.js';
 
 export async function constructCodegenProject(opts: codegenOptions) {
   const project = new GeneratedProject();
@@ -32,7 +34,13 @@ export async function runCodegen(
     // TODO: If this error is hit, it indicates a bug in the codegen rather than user error
     // We should probably get the user to file a bug report, or maybe get this to fire off
     // a network request somewhere to log the error automatically
-    console.error(errors);
+    logger.error(
+      c.red('Error: Failed to generate dynamic code due to type errors')
+    );
+    logger.error(errors);
+    logger.error(
+      'The above error is likely due to a bug in the library rather than your code or configuration. Please report the issue here: https://github.com/a16n-dev/react-native-dust/issues'
+    );
     process.exit(1);
   }
 

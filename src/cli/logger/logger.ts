@@ -11,7 +11,7 @@ export const debug = {
   isEnabled: false,
   setEnabled(enabled: boolean) {
     if (enabled) {
-      console.log(c.blue('Debug logging enabled'));
+      console.log(c.brown.bold('Debug logging enabled'));
     }
     this.isEnabled = enabled;
   },
@@ -31,7 +31,7 @@ const log = (level: LogLevel, message: string): void => {
       console.info(message);
       break;
     case LogLevel.DEBUG:
-      console.debug(message);
+      console.debug(c.brown('[DEBUG] ') + message);
       break;
   }
 };

@@ -4,6 +4,8 @@ import prettier from 'prettier';
 import { existsSync } from 'fs';
 import { CLI_DIR_ROOT } from '../root.js';
 import type { GeneratedFile } from '../templates/generatedProject.js';
+import { logger } from '../logger/logger.js';
+import { c } from '../logger/format.js';
 
 /**
  * This initialises the directory that all generated code files will be written to
@@ -38,7 +40,7 @@ export async function writeLibFile(
 
   await writeFile(filePath, finalContent);
 
-  console.log(`Wrote lib file "${filename}" to ${filePath}`);
+  logger.debug(`Wrote file ` + c.orange(filename) + ' ' + c.blue(filePath));
 }
 
 function getParserForFile(filename: string): string {

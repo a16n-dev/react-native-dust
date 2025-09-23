@@ -6,3 +6,4 @@ TODOs:
 - [ ] More robust build process, possibly with tsdown
 - [ ] Better system for sending CLI output, and reinstate the debug mode
 - [ ] Breakpoint utility helper function
+- [ ] `validate` command to validate dust config
