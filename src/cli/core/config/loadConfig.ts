@@ -42,6 +42,8 @@ export function loadConfig(configPath?: string): ParsedConfig {
 
     const rawConfigJson = config.default || config;
 
+    logger.debug(c.grey(JSON.stringify(rawConfigJson, null, 2)));
+
     // Validate the config
     const parseResult = configSchema.safeParse(rawConfigJson);
 
@@ -63,6 +65,7 @@ export function loadConfig(configPath?: string): ParsedConfig {
 function findConfigFile(configPath?: string): string | null {
   // If a specific path was provided, use it as-is
   if (configPath) {
+    logger.debug(`Loading custom config from ${c.blue(resolve(configPath))}`);
     return resolve(configPath);
   }
 
@@ -70,6 +73,7 @@ function findConfigFile(configPath?: string): string | null {
   for (const config of DEFAULT_CONFIG_FILES) {
     const resolvedPath = resolve(config);
     if (existsSync(resolvedPath)) {
+      logger.debug(`Loading config file at: ${c.blue(resolvedPath)}`);
       return resolvedPath;
     }
   }
