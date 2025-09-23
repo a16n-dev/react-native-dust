@@ -15,8 +15,10 @@ export async function constructCodegenProject(opts: codegenOptions) {
   // Add project
   generateThemeFile(project, opts);
   generateTokensFile(project, opts);
-  generateUtilitiesFile(project, opts);
-  generateBarrelFile(project);
+  if (opts.config.options.generatePlatformHelpers) {
+    generateUtilitiesFile(project, opts);
+  }
+  generateBarrelFile(project, opts);
 
   return project;
 }

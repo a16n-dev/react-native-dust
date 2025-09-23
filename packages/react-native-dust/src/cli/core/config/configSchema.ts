@@ -33,6 +33,9 @@ export const configSchema = z
       .object({
         targetsWeb: z.boolean().optional(),
         mode: z.enum(['vanilla', 'unistyles']).default('vanilla'),
+        tokenAllowList: z.array(z.string()).default([]),
+        tokenBlockList: z.array(z.string()).default([]),
+        generatePlatformHelpers: z.boolean().default(true),
       })
       .prefault({}),
   })
