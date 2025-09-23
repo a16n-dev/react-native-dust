@@ -4,7 +4,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "pnpm -F react-native-dust dev"
+    "dev": "pnpm -F react-native-dust dev",
+    "check": "pnpm -r check",
+    "build": "pnpm -r build"
   },
   "devDependencies": {
     "eslint": "^9.36.0",
