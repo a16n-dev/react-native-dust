@@ -1,8 +1,8 @@
-import { ts, VariableDeclarationKind, StructureKind } from 'ts-morph';
-import { GeneratedProject } from './generatedProject';
-import { codegenOptions } from '../core/codegenTypes';
+import { GeneratedProject } from './generatedProject.js';
 import { getJsonType } from 'get-json-type';
-import { constructThemes } from '../core/constructThemes';
+import { StructureKind, ts, VariableDeclarationKind } from 'ts-morph';
+import { constructThemes } from '../core/constructThemes.js';
+import type { codegenOptions } from '../core/codegenTypes.js';
 
 export function generateThemeFile(
   project: GeneratedProject,

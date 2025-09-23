@@ -1,9 +1,9 @@
 import { writeFile, mkdir, readFile } from 'fs/promises';
 import { resolve } from 'path';
 import prettier from 'prettier';
-import { GeneratedFile } from '../templates/generatedProject';
 import { existsSync } from 'fs';
-import { CLI_DIR_ROOT } from '../root';
+import { CLI_DIR_ROOT } from '../root.js';
+import type { GeneratedFile } from '../templates/generatedProject.js';
 
 /**
  * This initialises the directory that all generated code files will be written to

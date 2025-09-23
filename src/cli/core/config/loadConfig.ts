@@ -2,7 +2,10 @@ import { existsSync } from 'fs';
 import { resolve } from 'path';
 import { createJiti } from 'jiti';
 import { z } from 'zod';
-import { configSchema, ParsedConfig } from './configSchema';
+import { configSchema, type ParsedConfig } from './configSchema.js';
+import { logger } from '../../logger/logger.js';
+import { c } from '../../logger/format.js';
+import { fileURLToPath } from 'url';
 
 /**
  * These are the locations where we expect to find a config file by default, relative to the root of the project.
@@ -34,7 +37,7 @@ export function loadConfig(configPath?: string): ParsedConfig {
 
   try {
     // jiti can load both .js and .ts files seamlessly
-    const jiti = createJiti(__filename);
+    const jiti = createJiti(fileURLToPath(import.meta.url));
     const config = jiti(resolvedPath);
 
     const rawConfigJson = config.default || config;
@@ -47,6 +50,8 @@ export function loadConfig(configPath?: string): ParsedConfig {
       console.error(z.prettifyError(parseResult.error));
       process.exit(1);
     }
+
+    logger.info(c.grey(`Config loaded from ${resolvedPath}`));
 
     return parseResult.data;
   } catch (error) {

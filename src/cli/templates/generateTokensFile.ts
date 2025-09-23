@@ -1,11 +1,11 @@
-import { defaultTokens } from '../core/utilityClassTokens/defaultTokens';
-import { getThemeTokens } from '../core/utilityClassTokens/getThemeTokens';
-import { GeneratedProject } from './generatedProject';
-import { constructThemes } from '../core/constructThemes';
-import { codegenOptions } from '../core/codegenTypes';
+import { GeneratedProject } from './generatedProject.js';
+import { defaultTokens } from '../core/utilityClassTokens/defaultTokens.js';
+import { constructThemes } from '../core/constructThemes.js';
+import { getThemeTokens } from '../core/utilityClassTokens/getThemeTokens.js';
+import { defaultUnistylesRuntimeTokens } from '../core/utilityClassTokens/defaultUnistylesRuntimeTokens.js';
+import { defaultWebTokens } from '../core/utilityClassTokens/defaultWebTokens.js';
 import { VariableDeclarationKind } from 'ts-morph';
-import { defaultUnistylesRuntimeTokens } from '../core/utilityClassTokens/defaultUnistylesRuntimeTokens';
-import { defaultWebTokens } from '../core/utilityClassTokens/defaultWebTokens';
+import type { codegenOptions } from '../core/codegenTypes.js';
 
 export function generateTokensFile(
   project: GeneratedProject,

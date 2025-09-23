@@ -1,7 +1,7 @@
 import { writeFileSync, existsSync } from 'fs';
 import { resolve } from 'path';
-import { runCodegen } from '../core/runCodegen';
-import { loadConfig } from '../core/config/loadConfig';
+import { loadConfig } from '../core/config/loadConfig.js';
+import { runCodegen } from '../core/runCodegen.js';
 
 export async function initCommand() {
   const configPath = resolve(process.cwd(), 'dust.config.js');

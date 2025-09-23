@@ -1,4 +1,4 @@
-import { ParsedConfig } from './config/configSchema';
+import type { ParsedConfig } from './config/configSchema.js';
 
 export interface codegenOptions {
   config: ParsedConfig;

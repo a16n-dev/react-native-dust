@@ -1,6 +1,6 @@
-import { constructCodegenProject } from '../core/runCodegen';
-import { writeGeneratedExportFiles } from '../core/fileSystemHelpers';
-import { loadConfig } from '../core/config/loadConfig';
+import { constructCodegenProject } from '../core/runCodegen.js';
+import { loadConfig } from '../core/config/loadConfig.js';
+import { writeGeneratedExportFiles } from '../core/fileSystemHelpers.js';
 
 /**
  * Allows the user to export the generated lib into their project as TS source files

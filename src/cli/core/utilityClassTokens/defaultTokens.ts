@@ -1,4 +1,4 @@
-import { styleToken } from './types';
+import type { styleToken } from './types.js';
 
 export const defaultTokens: styleToken[] = [
   // Default sizing tokens

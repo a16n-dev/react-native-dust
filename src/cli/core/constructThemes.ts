@@ -1,5 +1,8 @@
 import { toMerged } from 'es-toolkit';
-import { ParsedExtendedTheme, ParsedTheme } from './config/configSchema';
+import type {
+  ParsedExtendedTheme,
+  ParsedTheme,
+} from './config/configSchema.js';
 
 /**
  * Resolves extended themes by merging them with the default theme

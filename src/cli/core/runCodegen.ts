@@ -1,11 +1,11 @@
-import { writeGeneratedLibFiles } from './fileSystemHelpers';
-import { generateThemeFile } from '../templates/generateThemeFile';
-import { generateTokensFile } from '../templates/generateTokensFile';
-import { GeneratedProject } from '../templates/generatedProject';
-import { generateBarrelFile } from '../templates/generateBarrelFile';
-import { codegenOptions } from './codegenTypes';
-import { generateUtilitiesFile } from '../templates/generateUtilitiesFile';
-import { ParsedConfig } from './config/configSchema';
+import { generateThemeFile } from '../templates/generateThemeFile.js';
+import type { codegenOptions } from './codegenTypes.js';
+import { GeneratedProject } from '../templates/generatedProject.js';
+import { generateTokensFile } from '../templates/generateTokensFile.js';
+import { generateUtilitiesFile } from '../templates/generateUtilitiesFile.js';
+import { generateBarrelFile } from '../templates/generateBarrelFile.js';
+import type { ParsedConfig } from './config/configSchema.js';
+import { writeGeneratedLibFiles } from './fileSystemHelpers.js';
 
 export async function constructCodegenProject(opts: codegenOptions) {
   const project = new GeneratedProject();

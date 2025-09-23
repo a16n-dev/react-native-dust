@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 import { VariableDeclarationKind } from 'ts-morph';
-import { GeneratedProject } from './generatedProject';
+import { GeneratedProject } from './generatedProject.js';
 
 test('Source files can be created without error', () => {
   const project = new GeneratedProject();

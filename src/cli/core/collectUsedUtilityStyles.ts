@@ -1,8 +1,8 @@
 import fg from 'fast-glob';
 import { parse } from '@babel/parser';
-import traverse from '@babel/traverse';
 import { readFileSync } from 'fs';
-import { ParsedConfig } from './config/configSchema';
+import traverse from '@babel/traverse';
+import type { ParsedConfig } from './config/configSchema.js';
 
 async function getListOfSourceFiles(includePaths: string[]) {
   const paths = await fg(includePaths);
@@ -34,7 +34,7 @@ function analyzeFile(filePath: string): string[] {
       plugins: ['jsx', 'typescript', 'decorators-legacy'],
     });
 
-    traverse(ast, {
+    traverse.default(ast, {
       ImportDeclaration(path) {
         if (path.node.source.value === 'react-native-dust/tokens') {
           const tImport = path.node.specifiers.find(

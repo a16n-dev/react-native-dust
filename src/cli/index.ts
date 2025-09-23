@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
-import { generateCommand } from './commands/generate';
-import { buildCommand } from './commands/build';
-import { initCommand } from './commands/init';
-import { exportCommand } from './commands/export';
+import { initCommand } from './commands/init.js';
+import { generateCommand } from './commands/generate.js';
+import { buildCommand } from './commands/build.js';
+import { exportCommand } from './commands/export.js';
 
 const program = new Command();
 

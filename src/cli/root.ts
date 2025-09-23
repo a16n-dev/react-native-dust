@@ -1,4 +1,4 @@
-import { resolve } from 'path';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-export const CLI_DIR_ROOT = __dirname;
-export const LIB_DIR_ROOT = resolve(CLI_DIR_ROOT, '..', 'lib');
+export const CLI_DIR_ROOT = path.dirname(fileURLToPath(import.meta.url));

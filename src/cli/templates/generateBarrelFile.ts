@@ -1,4 +1,4 @@
-import { GeneratedProject } from './generatedProject';
+import { GeneratedProject } from './generatedProject.js';
 
 /**
  * Adds a barrel file to the given generated project. This should reexport all the

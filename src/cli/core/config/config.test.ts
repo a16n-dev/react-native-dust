@@ -1,6 +1,10 @@
 import { expectTypeOf, test } from 'vitest';
-import { InputConfig, InputExtendedTheme, InputTheme } from './configSchema';
-import { Config, DustTheme, ExtendedDustTheme } from '../../../config';
+import type { Config, DustTheme, ExtendedDustTheme } from '../../../config.js';
+import type {
+  InputConfig,
+  InputExtendedTheme,
+  InputTheme,
+} from './configSchema.js';
 
 test('config type Config should be compatible with zod schema type', () => {
   expectTypeOf<Config>().toExtend<InputConfig>();
