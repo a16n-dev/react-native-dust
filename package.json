@@ -1,58 +1,14 @@
 {
-  "name": "react-native-dust",
-  "version": "0.1.0",
-  "description": "Utility stylesheet generator for React Native with unistyles",
-  "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/a16n-dev/react-native-dust.git"
-  },
-  "license": "MIT",
-  "sideEffects": false,
-  "bin": {
-    "dust": "./dist/cli/index.js"
-  },
-  "exports": {
-    "./config": {
-      "types": "./dist/config.d.ts",
-      "default": "./dist/config.js"
-    },
-    ".": {
-      "types": "./dist/lib/index.d.ts",
-      "default": "./dist/lib/index.js"
-    }
-  },
+  "name": "@react-native-dust/monorepo",
+  "packageManager": "pnpm@9.15.4",
+  "version": "1.0.0",
+  "private": true,
   "scripts": {
-    "build": "rm -rf dist/ && tsc --project tsconfig.build-cli.json && tsc --project tsconfig.build-config.json",
-    "dev": "tsc --watch",
-    "test": "vitest"
+    "dev": "pnpm -F react-native-dust dev"
   },
   "devDependencies": {
-    "@types/babel__traverse": "^7.28.0",
-    "typescript": "^5.9.2",
-    "vitest": "^3.2.4"
-  },
-  "optionalDependencies": {
-    "@babel/parser": "^7.28.4",
-    "@babel/traverse": "^7.28.4",
-    "@types/node": "^24.3.0",
-    "commander": "^14.0.0",
-    "es-toolkit": "^1.39.10",
-    "fast-glob": "^3.3.3",
-    "get-json-type": "^1.2.0",
-    "jiti": "^2.5.1",
+    "eslint": "^9.36.0",
     "prettier": "^3.6.2",
-    "ts-morph": "^27.0.0",
-    "zod": "^4.1.11"
-  },
-  "optionalPeerDependencies": {
-    "react-native-unistyles": "^3",
-    "react-native-web": "^0.19.8"
-  },
-  "packageManager": "pnpm@9.15.4+sha512.b2dc20e2fc72b3e18848459b37359a32064663e5627a51e4c74b2c29dd8e8e0491483c3abb40789cfd578bf362fb6ba8261b05f0387d76792ed6e23ea3b1b6a0",
-  "dependencies": {
-    "chalk": "^5.6.2"
+    "typescript": "^5.9.2"
   }
 }
