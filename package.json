@@ -42,15 +42,16 @@
     "fast-glob": "^3.3.3",
     "jiti": "^2.5.1",
     "prettier": "^3.6.2",
+    "get-json-type": "^1.2.0",
+    "ts-morph": "^27.0.0",
     "zod": "^4.1.11"
   },
-  "peerDependencies": {
-    "react-native-unistyles": "^3"
+  "optionalPeerDependencies": {
+    "react-native-unistyles": "^3",
+    "react-native-web": "^0.19.8"
   },
   "packageManager": "pnpm@9.15.4+sha512.b2dc20e2fc72b3e18848459b37359a32064663e5627a51e4c74b2c29dd8e8e0491483c3abb40789cfd578bf362fb6ba8261b05f0387d76792ed6e23ea3b1b6a0",
   "dependencies": {
-    "get-json-type": "^1.2.0",
-    "quicktype-core": "^23.2.6",
-    "ts-morph": "^27.0.0"
+
   }
 }

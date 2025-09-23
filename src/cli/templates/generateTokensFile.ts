@@ -5,6 +5,7 @@ import { constructThemes } from '../core/constructThemes';
 import { codegenOptions } from '../core/codegenTypes';
 import { VariableDeclarationKind } from 'ts-morph';
 import { defaultUnistylesRuntimeTokens } from '../core/utilityClassTokens/defaultUnistylesRuntimeTokens';
+import { defaultWebTokens } from '../core/utilityClassTokens/defaultWebTokens';
 
 export function generateTokensFile(
   project: GeneratedProject,
@@ -18,6 +19,9 @@ export function generateTokensFile(
   tokens.push(...getThemeTokens(allThemes));
   if (config.options.mode === 'unistyles') {
     tokens.push(...defaultUnistylesRuntimeTokens);
+  }
+  if (config.options.targetsWeb) {
+    tokens.push(...defaultWebTokens);
   }
 
   const allTokens = !whitelist

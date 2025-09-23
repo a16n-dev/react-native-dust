@@ -212,7 +212,7 @@ dust/
 3. **Add CLI progress indicators** - Better feedback for users [WONT DO]
 
 ### **Short Term (Next Month):**
-4. **Migrate to AST-based code generation** - Better maintainability [IN PROGRESS]
+4. **Migrate to AST-based code generation** - Better maintainability [DONE]
 5. **Add configuration schema validation** - Prevent user errors [DONE]
 6. **Improve documentation with JSDoc** - Better developer experience
 
