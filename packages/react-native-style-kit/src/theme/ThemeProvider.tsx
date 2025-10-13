@@ -1,5 +1,6 @@
 import type { PropsWithChildren } from 'react';
 import {
+  type StyleKitBreakpoints,
   type StyleKitTheme,
   ThemeContext,
   type ThemeContextValue,
@@ -7,11 +8,17 @@ import {
 
 export interface ThemeProviderProps extends PropsWithChildren {
   theme: StyleKitTheme;
+  breakpoints?: StyleKitBreakpoints;
 }
 
-export function ThemeProvider({ theme, children }: ThemeProviderProps) {
+export function ThemeProvider({
+  theme,
+  breakpoints,
+  children,
+}: ThemeProviderProps) {
   const value: ThemeContextValue = {
     theme,
+    breakpoints,
   };
 
   return (

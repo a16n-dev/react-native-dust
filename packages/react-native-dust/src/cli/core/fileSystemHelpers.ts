@@ -1,4 +1,4 @@
-import { writeFile, mkdir, readFile } from 'fs/promises';
+import { writeFile, mkdir } from 'fs/promises';
 import { resolve } from 'path';
 import prettier from 'prettier';
 import { existsSync } from 'fs';
@@ -20,15 +20,13 @@ async function setupLibDir() {
 
 export async function writeGeneratedLibFiles(files: GeneratedFile[]) {
   for (const file of files) {
-    const shouldMinify = file.name.endsWith('.js');
-    await writeLibFile(file.name, file.content, shouldMinify);
+    await writeLibFile(file.name, file.content);
   }
 }
 
 export async function writeLibFile(
   filename: string,
-  content: string,
-  minify?: boolean
+  content: string
 ): Promise<void> {
   const libDir = await setupLibDir();
   const filePath = resolve(libDir, filename);
@@ -96,12 +94,16 @@ export async function writeExportFile(
 
 // Find the root package.json for the project this CLI is being run in
 export function getProjectRoot() {
-  let currentDir = process.cwd();
+  const currentDir = process.cwd();
 
-  while (true) {
-    const packageJsonPath = resolve(currentDir, 'package.json');
-    if (existsSync(packageJsonPath)) {
-      return currentDir;
-    }
+  const packageJsonPath = resolve(currentDir, 'package.json');
+  if (!existsSync(packageJsonPath)) {
+    logger.error(
+      c.red(
+        "Could not find the current project. Make sure you're running this command from the same directory as your package.json file."
+      )
+    );
+    process.exit(1);
   }
+  return currentDir;
 }

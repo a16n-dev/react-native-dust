@@ -5,12 +5,17 @@
   "private": true,
   "scripts": {
     "dev": "pnpm -F react-native-dust dev",
-    "check": "pnpm -r check",
-    "build": "pnpm -r build"
+    "check:all": "pnpm -r check",
+    "build:all": "pnpm -r build",
+    "lint:all": "pnpm -r lint"
   },
-  "devDependencies": {
+  "dependencies": {
     "eslint": "^9.36.0",
+    "get-json-type": "1.2.0",
+    "globals": "^16.4.0",
     "prettier": "^3.6.2",
-    "typescript": "^5.9.2"
+    "tsdown": "^0.15.6",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.44.1"
   }
 }

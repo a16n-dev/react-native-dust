@@ -1,7 +1,6 @@
 import { GeneratedProject } from './generatedProject.js';
 import { getJsonType } from 'get-json-type';
-import { StructureKind, ts, VariableDeclarationKind } from 'ts-morph';
-import { constructThemes } from '../core/constructThemes.js';
+import { VariableDeclarationKind } from 'ts-morph';
 import type { codegenOptions } from '../core/codegenTypes.js';
 
 export function generateThemeFile(
@@ -37,40 +36,12 @@ export function generateThemeFile(
     ],
   });
 
-  // TODO: remove this since it's only applicable for unistyles?
-  // but actually I don't know if this file needs a vanilla/unistyles distinction
-  // Export a "themes" object with multiple themes
   if (config.options.mode === 'unistyles') {
-    const varDec = file.addVariableStatement({
-      declarationKind: VariableDeclarationKind.Const,
-      isExported: true,
-      declarations: [
-        {
-          name: 'themes',
-          type: 'Record<string, AppTheme>',
-          initializer: '{}',
-        },
-      ],
-    });
-
-    const allThemes = constructThemes(config.theme, config.additionalThemes);
-
-    const initializer = varDec
-      .getDeclarations()[0]
-      .getInitializerIfKindOrThrow(ts.SyntaxKind.ObjectLiteralExpression);
-
-    initializer.addProperties(
-      Object.entries(allThemes).map(([name, themeJson]) => ({
-        name,
-        initializer:
-          name === 'default' ? `theme` : JSON.stringify(themeJson, null, 2),
-        kind: StructureKind.PropertyAssignment,
-      }))
-    );
-
+    // This adds a dummy interface override for `react-native-unistyles` so that
+    // the types in the codegen project work as expected
     file.addTypeAlias({
       name: 'ThemesType',
-      type: 'typeof themes',
+      type: '{ default: AppTheme }',
     });
 
     file.addStatements(`declare module 'react-native-unistyles' {

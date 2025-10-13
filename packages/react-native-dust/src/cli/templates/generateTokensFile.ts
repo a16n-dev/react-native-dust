@@ -1,6 +1,5 @@
 import { GeneratedProject } from './generatedProject.js';
 import { defaultTokens } from '../core/utilityClassTokens/defaultTokens.js';
-import { constructThemes } from '../core/constructThemes.js';
 import { getThemeTokens } from '../core/utilityClassTokens/getThemeTokens.js';
 import { defaultUnistylesRuntimeTokens } from '../core/utilityClassTokens/defaultUnistylesRuntimeTokens.js';
 import { defaultWebTokens } from '../core/utilityClassTokens/defaultWebTokens.js';
@@ -17,8 +16,7 @@ export function generateTokensFile(
 
   const tokens = [...defaultTokens];
 
-  const allThemes = constructThemes(config.theme, config.additionalThemes);
-  tokens.push(...getThemeTokens(allThemes));
+  tokens.push(...getThemeTokens(config.theme));
   if (config.options.mode === 'unistyles') {
     tokens.push(...defaultUnistylesRuntimeTokens);
   }

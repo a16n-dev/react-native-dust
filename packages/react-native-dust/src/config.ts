@@ -15,8 +15,6 @@ export type DustTheme = {
   extend?: never;
 };
 
-export type ExtendedDustTheme = { extend: Partial<DustTheme> };
-
 export type Config = {
   /**
    * An array of glob patterns or directory paths to include in the code generation process.
@@ -24,7 +22,6 @@ export type Config = {
    */
   include: string[];
   theme: DustTheme;
-  additionalThemes?: Record<string, DustTheme | ExtendedDustTheme>;
   breakpoints?: Record<string, number>;
   options?: {
     /**

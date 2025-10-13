@@ -1,15 +1,10 @@
-import { uniq } from 'es-toolkit';
 import type { styleToken, styleTokenValueProperty } from './types.js';
 import type { ParsedTheme } from '../config/configSchema.js';
 
 /**
  * Generates utility style tokens for the provided theme.
  */
-export function getThemeTokens(
-  themes: Record<string, ParsedTheme>
-): styleToken[] {
-  const theme = themes[Object.keys(themes)[0]];
-
+export function getThemeTokens(theme: ParsedTheme): styleToken[] {
   // define a data structure to hold structured information about the tokens
   const tokens: styleToken[] = [];
 
@@ -22,14 +17,8 @@ export function getThemeTokens(
     defaultType: 'string' | 'number' = 'string',
     quoteStrings = false
   ) => {
-    const possibleValues = uniq(Object.values(themes).map(accessor));
-    if (possibleValues.length === 1) {
-      const value = possibleValues[0];
-      return quoteStrings && defaultType === 'string'
-        ? `"${value}"`
-        : `${value}`;
-    }
-    return defaultType;
+    const value = accessor(theme);
+    return quoteStrings && defaultType === 'string' ? `"${value}"` : `${value}`;
   };
 
   // 1. Process theme colors

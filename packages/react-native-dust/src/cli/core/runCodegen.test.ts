@@ -1,20 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import type { ParsedConfig } from './config/configSchema.js';
 import { constructCodegenProject } from './runCodegen.js';
-
-const TEST_VANILLA_CONFIG: ParsedConfig = {
-  include: ['src'],
-  options: {
-    mode: 'vanilla',
-  },
-  theme: {
-    colors: {},
-    radius: {},
-    shadow: {},
-    spacing: {},
-    text: {},
-  },
-};
+import { TEST_VANILLA_CONFIG } from '../testUtils/exampleConfigs.js';
 
 describe('constructCodegenProject', () => {
   test('should construct the expected output for the first sample configuration', async () => {

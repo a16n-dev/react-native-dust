@@ -10,7 +10,7 @@
     "declaration": true,
     "sourceMap": false,
     "moduleResolution": "node16",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "jsx": "react-jsx"
   },
-
 }

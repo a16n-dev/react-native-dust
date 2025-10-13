@@ -27,7 +27,9 @@
   "scripts": {
     "build": "rm -rf dist/ && tsc",
     "dev": "tsc --watch",
-    "test": "vitest"
+    "test": "vitest",
+    "check": "tsc --noEmit",
+    "lint": "eslint . "
   },
   "devDependencies": {
     "@types/babel__traverse": "^7.28.0",
