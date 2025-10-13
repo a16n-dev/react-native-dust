@@ -9,20 +9,12 @@ export function generateThemeFile(
 ) {
   const file = project.addSourceFile('theme.ts');
 
-  if (config.options.mode === 'vanilla') {
-    const themeType = getJsonType(config.theme, {
-      useLiteralTypes: true,
-    });
+  const themeType = getJsonType(config.theme, {
+    useLiteralTypes: true,
+  });
 
-    // Add this typescript to the file
-    file.addStatements(`export type AppTheme = ${themeType};`);
-  }
-  if (config.options.mode === 'unistyles') {
-    const themeType = getJsonType(config.theme);
-
-    // Add this typescript to the file
-    file.addStatements(`export type AppTheme = ${themeType};`);
-  }
+  // Add this typescript to the file
+  file.addStatements(`export type AppTheme = ${themeType};`);
 
   file.addVariableStatement({
     declarationKind: VariableDeclarationKind.Const,
@@ -46,6 +38,15 @@ export function generateThemeFile(
 
     file.addStatements(`declare module 'react-native-unistyles' {
   export interface UnistylesThemes extends ThemesType {}
+}`);
+  }
+
+  if (config.options.mode === 'style-kit') {
+    // This adds a dummy interface override for `react-native-style-kit` so that
+    // the types in the codegen project work as expected
+
+    file.addStatements(`declare module 'react-native-style-kit' {
+  export interface StyleKitTheme extends AppTheme {}
 }`);
   }
 

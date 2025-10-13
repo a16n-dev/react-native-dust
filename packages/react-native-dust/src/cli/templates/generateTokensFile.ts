@@ -1,7 +1,7 @@
 import { GeneratedProject } from './generatedProject.js';
 import { defaultTokens } from '../core/utilityClassTokens/defaultTokens.js';
 import { getThemeTokens } from '../core/utilityClassTokens/getThemeTokens.js';
-import { defaultUnistylesRuntimeTokens } from '../core/utilityClassTokens/defaultUnistylesRuntimeTokens.js';
+import { safeAreaTokens } from '../core/utilityClassTokens/defaultUnistylesRuntimeTokens.js';
 import { defaultWebTokens } from '../core/utilityClassTokens/defaultWebTokens.js';
 import { VariableDeclarationKind } from 'ts-morph';
 import type { codegenOptions } from '../core/codegenTypes.js';
@@ -17,8 +17,11 @@ export function generateTokensFile(
   const tokens = [...defaultTokens];
 
   tokens.push(...getThemeTokens(config.theme));
-  if (config.options.mode === 'unistyles') {
-    tokens.push(...defaultUnistylesRuntimeTokens);
+  if (
+    config.options.mode === 'unistyles' ||
+    config.options.mode === 'style-kit'
+  ) {
+    tokens.push(...safeAreaTokens);
   }
   if (config.options.targetsWeb) {
     tokens.push(...defaultWebTokens);
@@ -70,6 +73,22 @@ export function generateTokensFile(
         {
           name: 't',
           initializer: `StyleSheet.create((theme, runtime) => ({\n  ${styleObjectEntries.join(',\n  ')}\n}))`,
+        },
+      ],
+    });
+  } else if (config.options.mode === 'style-kit') {
+    file.addImportDeclaration({
+      moduleSpecifier: 'react-native-style-kit',
+      namedImports: ['makeUseStyles'],
+    });
+
+    file.addVariableStatement({
+      declarationKind: VariableDeclarationKind.Const,
+      isExported: true,
+      declarations: [
+        {
+          name: 'useTokens',
+          initializer: `makeUseStyles()((theme, runtime) => ({\n  ${styleObjectEntries.join(',\n  ')}\n}))`,
         },
       ],
     });

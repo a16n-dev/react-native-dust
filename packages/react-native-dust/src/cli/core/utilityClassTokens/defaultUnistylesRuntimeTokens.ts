@@ -1,6 +1,6 @@
 import type { styleToken } from './types.js';
 
-export const defaultUnistylesRuntimeTokens: styleToken[] = [
+export const safeAreaTokens: styleToken[] = [
   // Safe area padding tokens
   {
     key: 'p_safe',
