@@ -1,0 +1,36 @@
+{
+  "name": "react-native-style-kit",
+  "version": "0.1.0",
+  "description": "toolkit for theming and variants in React Native",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/a16n-dev/react-native-dust.git"
+  },
+  "license": "MIT",
+  "sideEffects": false,
+  "scripts": {
+    "dev": "tsdown --watch",
+    "build": "tsdown",
+    "test": "vitest",
+    "check": "tsc --noEmit",
+    "lint": "eslint . "
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-native": ">=0.82"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.2"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.cts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
+  }
+}
