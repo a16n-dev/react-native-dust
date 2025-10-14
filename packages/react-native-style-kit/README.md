@@ -9,6 +9,27 @@ A very minimal styling API for react native that provides:
 
 This library is intended to provide a set of foundational tools for building design systems & component libraries while remaining as unopinionated as possible. 
 
+## Installation
+
+Start by installing the package
+```bash
+pnpm install react-native-style-kit
+```
+
+Then you'll need to wrap your app in `<StyleKitProvider>`. This provides global values such as theme, safe areas, etc... to style hooks:
+
+```tsx
+import { StyleKitProvider } from 'react-native-style-kit';
+
+const Main = () => {
+  return (
+    <StyleKitProvider>
+      <App />
+    </StyleKitProvider>
+  );
+}
+```
+
 ## Concepts
 
 ### Creating styles
@@ -16,7 +37,20 @@ This library is intended to provide a set of foundational tools for building des
 Styles are created via the `makeUseStyles()` which is a replacement for `StyleSheet.create()`. This function returns a hook you can call within your component to access the styles.
 
 ```tsx
+import { makeUseStyles } from 'react-native-style-kit';
 
+const useStyles = makeUseStyles()(() => ({
+  root: {
+    backgroundColor: 'white',
+    padding: 16,
+  }
+}));
+
+const Button = () => {
+    const styles = useStyles();
+    
+    return <Pressable style={styles.root}/>
+}
 ```
 
 ### Theming
@@ -68,7 +102,7 @@ declare module 'react-native-style-kit' {
 
 ### Variants
 
-Within your style definition, you can define variants for each style that apply different styles based on some set of props.
+Use the `makeUseVariantStyles()` functions to create styles with variants. 
 
 ```tsx
 import { makeUseStyles } from 'react-native-style-kit';

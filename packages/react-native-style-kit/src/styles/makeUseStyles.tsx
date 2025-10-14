@@ -13,48 +13,163 @@ import { useContext, useMemo } from 'react';
 
 type RNStyle = ViewStyle | TextStyle | ImageStyle;
 
-type StyleDefinition<T> = {
-  [P in keyof T]: RNStyle;
+type MaybeBoolToStringKeys<B> = B extends boolean
+  ? 'true' | 'false'
+  : NonNullable<B>;
+
+type VariantType = Record<string, string | number | boolean | undefined | null>;
+
+type VariantStyle<V extends VariantType> =
+  V extends Record<string, never>
+    ? unknown
+    : {
+        variants?: {
+          [K in keyof V]?: {
+            [Vv in MaybeBoolToStringKeys<V[K]>]?: RNStyle;
+          };
+        };
+        compoundVariants?: Array<Partial<V> & { style: RNStyle }>;
+      };
+
+type StyleDefinition<T, Variants extends VariantType> = {
+  [P in keyof T]: RNStyle & VariantStyle<Variants>;
 };
 
 // Remove variant/compoundVariant keys from the resulting style
-type ReturnStyleDefinition<T> = StyleDefinition<T>;
+type ReturnStyleDefinition<T> = {
+  [P in keyof T]: {
+    [K in Exclude<keyof T[P], 'variants' | 'compoundVariants'>]: T[P][K];
+  };
+};
 
 type useStyles<T> = () => ReturnStyleDefinition<T>;
+type useStylesWithVariants<T, Variants extends VariantType> = (
+  variants: Variants
+) => ReturnStyleDefinition<T>;
 
-export function makeUseStyles() {
-  return function innerMakeUseStyles<T extends StyleDefinition<T>>(
+export function makeUseStyles<
+  Variants extends VariantType = Record<string, never>,
+>() {
+  return function innerMakeUseStyles<T extends StyleDefinition<T, Variants>>(
     styleDefinition: (
       theme: StyleKitTheme,
       runtime: StyleKitRuntime
-    ) => T & StyleDefinition<any>
-  ): useStyles<T> {
+    ) => T & StyleDefinition<any, Variants>
+  ): Variants extends Record<string, never>
+    ? useStyles<T>
+    : useStylesWithVariants<T, Variants> {
     // Create a cache to store previously computed styles. This ensures that if
     // an instance of `useStyles` is used across multiple components,
     // we don't recalculate styles unnecessarily.
     const cache = new WeakMap();
 
-    return (): ReturnStyleDefinition<T> => {
+    const useStyles = (variants?: Variants): ReturnStyleDefinition<T> => {
       const ctx = useContext(StyleKitContext);
 
       if (!ctx)
         throw new Error('useStyles must be used within a StyleKitProvider');
 
-      // Avoid recalculating unless runtime changes
       return useMemo(() => {
-        if (cache.has(ctx)) {
-          return cache.get(ctx);
+        if (variants) {
+          // Use the cache JUST for applying theme - variants get applied after cache
+          let withTheme: T & StyleDefinition<any, Variants>;
+          if (cache.has(ctx)) {
+            withTheme = cache.get(ctx);
+          } else {
+            withTheme = styleDefinition(
+              ctx.theme as StyleKitTheme,
+              ctx.runtime
+            );
+            cache.set(ctx, withTheme);
+          }
+
+          const withVariants = applyStyleVariants(withTheme, variants);
+          return StyleSheet.create(withVariants);
+        } else {
+          // Otherwise with no variants
+          if (cache.has(ctx)) {
+            return cache.get(ctx);
+          }
+
+          const withTheme = styleDefinition(
+            ctx.theme as StyleKitTheme,
+            ctx.runtime
+          );
+          const asStyleSheet = StyleSheet.create(withTheme);
+          cache.set(ctx, asStyleSheet);
+          return asStyleSheet;
+        }
+      }, [ctx, ...(variants ? Object.values(variants) : [])]);
+    };
+
+    return useStyles as any;
+  };
+}
+
+/**
+ * Mutates the styles object provided by applying the variant styles
+ */
+function applyStyleVariants<T, Variants extends VariantType>(
+  withTheme: T & StyleDefinition<any, Variants>,
+  appliedVariants: Variants
+) {
+  const result: any = {};
+  for (const key in withTheme) {
+    const { variants, compoundVariants, ...baseStyle } = withTheme[
+      key
+    ] as unknown as {
+      variants?: {
+        [K in keyof Variants]?: {
+          [Vv in MaybeBoolToStringKeys<Variants[K]>]?: RNStyle;
+        };
+      };
+      compoundVariants: Array<Partial<Variants> & { style: RNStyle }>;
+    };
+    result[key] = baseStyle;
+
+    if (variants) {
+      // deal with variants by applying the correct styles
+      for (const variantKey in variants) {
+        for (const variantValue in variants[variantKey]) {
+          // If "variantValue" is the same
+
+          const appliedVariantValue =
+            typeof appliedVariants[variantKey] === 'boolean'
+              ? appliedVariants[variantKey]
+                ? 'true'
+                : 'false'
+              : String(appliedVariants[variantKey]);
+
+          if (appliedVariantValue === variantValue) {
+            // Apply the styles set
+            Object.assign(
+              result[key],
+              (variants[variantKey] as any)[variantValue]
+            );
+          }
+        }
+      }
+    }
+
+    if (compoundVariants) {
+      compoundVariants.forEach((variant) => {
+        let allMatch = true;
+
+        for (const variantKey in variant) {
+          if (variantKey === 'style') continue;
+
+          if (appliedVariants[variantKey] !== variant[variantKey]) {
+            allMatch = false;
+            break;
+          }
         }
 
-        const styles = StyleSheet.create(
-          styleDefinition(ctx.theme as StyleKitTheme, ctx.runtime)
-        );
+        if (allMatch) {
+          Object.assign(result[key], variant.style);
+        }
+      });
+    }
+  }
 
-        // Store the computed styles in the cache
-        cache.set(ctx, styles);
-
-        return styles;
-      }, [ctx]);
-    };
-  };
+  return result;
 }

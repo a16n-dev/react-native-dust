@@ -1,6 +1,5 @@
 // Styles
 export { makeUseStyles } from './styles/makeUseStyles.js';
-export { makeUseVariantStyles } from './styles/makeUseVariantStyles.js';
 
 // Theme
 export { StyleKitProvider } from './theme/StyleKitProvider.js';
