@@ -19,21 +19,25 @@ type MaybeBoolToStringKeys<B> = B extends boolean
 
 type VariantType = Record<string, string | number | boolean | undefined | null>;
 
-type VariantStyle<V extends VariantType> =
-  V extends Record<string, never>
-    ? unknown
-    : {
-        variants?: {
-          [K in keyof V]?: {
-            [Vv in MaybeBoolToStringKeys<V[K]>]?: RNStyle;
-          };
-        };
-        compoundVariants?: Array<Partial<V> & { style: RNStyle }>;
-      };
-
-type StyleDefinition<T, Variants extends VariantType> = {
-  [P in keyof T]: RNStyle & VariantStyle<Variants>;
+type VariantStyle<V extends VariantType> = {
+  variants?: {
+    [K in keyof V]?: {
+      [Vv in MaybeBoolToStringKeys<V[K]>]?: RNStyle;
+    };
+  };
+  compoundVariants?: Array<Partial<V> & { style: RNStyle }>;
 };
+
+type StyleDefinition<
+  T,
+  Variants extends VariantType,
+> = keyof Variants extends never
+  ? {
+      [P in keyof T]: RNStyle;
+    }
+  : {
+      [P in keyof T]: RNStyle & VariantStyle<Variants>;
+    };
 
 // Remove variant/compoundVariant keys from the resulting style
 type ReturnStyleDefinition<T> = {
@@ -50,14 +54,25 @@ type useStylesWithVariants<T, Variants extends VariantType> = (
 export function makeUseStyles<
   Variants extends VariantType = Record<string, never>,
 >() {
+  // This inner function exists so that Variants can be explicitly set as a generic
+  // while still inferring the correct type T for the styles themselves
   return function innerMakeUseStyles<T extends StyleDefinition<T, Variants>>(
     styleDefinition: (
       theme: StyleKitTheme,
-      runtime: StyleKitRuntime
+      rt: StyleKitRuntime
     ) => T & StyleDefinition<any, Variants>
-  ): Variants extends Record<string, never>
+  ): keyof Variants extends never
     ? useStyles<T>
     : useStylesWithVariants<T, Variants> {
+    if (styleDefinition.length === 0) {
+      // The passed style definition function does not expect any arguments,
+      // which means it does not depend on theme or runtime, so we can compute it once statically
+      const staticStyles = StyleSheet.create(
+        styleDefinition({} as any, {} as any)
+      );
+      return (): ReturnStyleDefinition<T> => staticStyles;
+    }
+
     // Create a cache to store previously computed styles. This ensures that if
     // an instance of `useStyles` is used across multiple components,
     // we don't recalculate styles unnecessarily.
@@ -107,7 +122,7 @@ export function makeUseStyles<
 }
 
 /**
- * Mutates the styles object provided by applying the variant styles
+ * Applies any variants defined in the styles
  */
 function applyStyleVariants<T, Variants extends VariantType>(
   withTheme: T & StyleDefinition<any, Variants>,
@@ -173,3 +188,7 @@ function applyStyleVariants<T, Variants extends VariantType>(
 
   return result;
 }
+
+const useStyles = makeUseStyles()(() => ({
+  root: {},
+}));
