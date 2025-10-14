@@ -3,11 +3,14 @@ export { makeUseStyles } from './styles/makeUseStyles.js';
 export { makeUseVariantStyles } from './styles/makeUseVariantStyles.js';
 
 // Theme
-export {
-  ThemeProvider,
-  type ThemeProviderProps,
-} from './theme/ThemeProvider.js';
+export { StyleKitProvider } from './theme/StyleKitProvider.js';
 export { useTheme } from './theme/useTheme.js';
 
 // Theme type
-export { type StyleKitTheme } from './theme/ThemeContext.js';
+export {
+  type StyleKitTheme,
+  type StyleKitBreakpoints,
+} from './theme/StyleKitContext.js';
+
+// Breakpoints
+export { useBreakpoints } from './styles/useBreakpoints.js';

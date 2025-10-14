@@ -1,8 +1,8 @@
 import { useCallback, useContext } from 'react';
 import {
   type StyleKitBreakpoints,
-  ThemeContext,
-} from '../theme/ThemeContext.js';
+  StyleKitContext,
+} from '../theme/StyleKitContext.js';
 
 type ZeroBreakpoint<T> = {
   [K in keyof T]: T[K] extends 0 ? K : never;
@@ -17,7 +17,7 @@ type hasZeroBreakpoint<T> = [ZeroBreakpoint<StyleKitBreakpoints>] extends [
     : false;
 
 export function useBreakpoints() {
-  const ctx = useContext(ThemeContext);
+  const ctx = useContext(StyleKitContext);
 
   if (!ctx) {
     throw new Error('useBreakpoints must be used within a ThemeProvider');

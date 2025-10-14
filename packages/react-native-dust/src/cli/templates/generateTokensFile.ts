@@ -40,6 +40,8 @@ export function generateTokensFile(
     return `${token.key}: { ${properties} }`;
   });
 
+  const styleObjectTypeEntries = `{ ${allTokens.map((token) => `${token.key}: any`).join(';')} }`;
+
   if (config.options.mode === 'vanilla') {
     file.addImportDeclaration({
       moduleSpecifier: 'react-native',

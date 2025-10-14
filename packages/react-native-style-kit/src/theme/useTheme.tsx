@@ -1,10 +1,10 @@
-import { ThemeContext } from './ThemeContext.js';
+import { StyleKitContext, type StyleKitTheme } from './StyleKitContext.js';
 import { useContext } from 'react';
 
-export function useTheme() {
-  const ctx = useContext(ThemeContext);
+export function useTheme(): StyleKitTheme {
+  const ctx = useContext(StyleKitContext);
 
-  if (!ctx) throw new Error('useTheme must be used within a ThemeProvider');
+  if (!ctx) throw new Error('useTheme must be used within a StyleKitProvider');
 
-  return ctx.theme;
+  return ctx.theme as StyleKitTheme;
 }

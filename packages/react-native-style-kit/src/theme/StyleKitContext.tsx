@@ -21,15 +21,15 @@ export interface StyleKitRuntime {
   };
 }
 
-export interface ThemeContextValue {
+export interface StyleKitContextValue {
   // Theme that is currently applied
-  theme: StyleKitTheme;
+  theme: unknown;
   // Runtime values like screen dimensions and safe area insets
   runtime: StyleKitRuntime;
   // Set of defined breakpoints
-  breakpoints?: StyleKitBreakpoints;
+  breakpoints?: unknown;
   // The current breakpoint based on screen width
-  breakpoint?: keyof StyleKitBreakpoints;
+  breakpoint?: string;
 }
 
-export const ThemeContext = createContext<ThemeContextValue | null>(null);
+export const StyleKitContext = createContext<StyleKitContextValue | null>(null);

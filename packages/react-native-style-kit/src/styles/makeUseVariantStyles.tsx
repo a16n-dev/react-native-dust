@@ -1,9 +1,14 @@
-import { type ImageStyle, type TextStyle, type ViewStyle } from 'react-native';
 import {
+  type ImageStyle,
+  StyleSheet,
+  type TextStyle,
+  type ViewStyle,
+} from 'react-native';
+import {
+  StyleKitContext,
   type StyleKitRuntime,
   type StyleKitTheme,
-  ThemeContext,
-} from '../theme/ThemeContext.js';
+} from '../theme/StyleKitContext.js';
 import { useContext, useMemo } from 'react';
 
 type RNStyle = ViewStyle | TextStyle | ImageStyle;
@@ -51,18 +56,26 @@ export function makeUseVariantStyles<
   ): Variants extends Record<string, never>
     ? useStyles<T>
     : useStylesWithVariants<T, Variants> {
-    const useStyles = (variants?: Variants): ReturnStyleDefinition<T> => {
-      const ctx = useContext(ThemeContext);
+    // Create a cache to store previously computed styles. This ensures that if
+    // an instance of `useStyles` is used across multiple components,
+    // we don't recalculate styles unnecessarily.
+    const cache = new WeakMap();
+
+    const useStyles = (variants: Variants): ReturnStyleDefinition<T> => {
+      const ctx = useContext(StyleKitContext);
 
       if (!ctx)
-        throw new Error('useStyles must be used within a ThemeProvider');
+        throw new Error('useStyles must be used within a StyleKitProvider');
 
       // Avoid recalculating unless theme or variants change
       return useMemo(() => {
-        const withTheme = styleDefinition(ctx.theme, ctx.runtime);
-
-        if (!variants) {
-          return withTheme as ReturnStyleDefinition<T>;
+        //
+        let withTheme: T & StyleDefinition<any, Variants>;
+        if (cache.has(ctx)) {
+          withTheme = cache.get(ctx);
+        } else {
+          withTheme = styleDefinition(ctx.theme as StyleKitTheme, ctx.runtime);
+          cache.set(ctx, withTheme);
         }
 
         for (const key in withTheme) {
@@ -112,12 +125,8 @@ export function makeUseVariantStyles<
           }
         }
 
-        return withTheme;
-      }, [
-        ctx.theme,
-        ctx.runtime,
-        ...(variants ? Object.values(variants) : []),
-      ]);
+        return StyleSheet.create(withTheme);
+      }, [ctx, ...Object.values(variants)]);
     };
 
     return useStyles as any;

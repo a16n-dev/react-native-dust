@@ -43,7 +43,6 @@ export async function runCodegen(
     logger.error(
       'The above error is likely due to a bug in the library rather than your code or configuration. Please report the issue here: https://github.com/a16n-dev/react-native-dust/issues'
     );
-    process.exit(1);
   }
 
   await writeGeneratedLibFiles(outputFiles);
