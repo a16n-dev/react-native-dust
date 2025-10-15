@@ -2,22 +2,22 @@
 
 Styling API for React Native, engineered as a foundational layer for building design systems and component libraries. What you get:
 
-- 🧩 Component variants/compound variants inspired by CVA
+- 🧩 Variants/compound variants inspired by CVA
 - 🎨 Theming & theme switching
 - 📱 Breakpoint-based styles
 - 📏 Access to runtime values (safe area insets, screen dimensions) in stylesheets
-- 📦 No babel/metro plugin required
 
-All with no babel/metro plugins, and full interoperability with any 3rd party library or component.
+All with no babel/metro plugins, full compatibility with 3rd party components, and a focus on performance.
 
 ## Installation
 
-Start by installing the package
+You know the drill 😄
 ```bash
 pnpm install react-native-style-kit
 ```
 
-If you want to use theme or runtime values in your stylesheets, you'll need to wrap your app in `<StyleKitProvider>`
+
+You're ready to go! Although if you want to access theme or runtime values in your stylesheets, you'll need to wrap your app in `<StyleKitProvider>`:
 
 ```tsx
 import { StyleKitProvider } from 'react-native-style-kit';
@@ -159,8 +159,9 @@ const useStyles = makeUseStyles<ButtonVariants>()(() => ({
     ]  
   }
 }));
-
 ```
+
+> Note: Compound variants are applied in the order they are defined, so later definitions will override earlier ones. Compound variants also take precedence over regular variants.
 
 ### Runtime values
 
@@ -185,4 +186,4 @@ const Button = () => {
 ### Performance
 `react-native-style-kit` is designed to be as performant as possible without leveraging any compile-time optimisations. Only styles that depend on theme or runtime values subscribe to state updates (although in practice these are not likely to change often). 
 
-Styles are memoized and cached to ensure they are only recalculated when absolutely necessary. Computed styles are also passed to `StyleSheet.create()` to take advantage of its own optimisations.
+Styles are memoized and cached to ensure they are only recalculated when absolutely necessary. Computed styles are also passed to `StyleSheet.create()` to take advantage of the optimisations provided by React Native.
