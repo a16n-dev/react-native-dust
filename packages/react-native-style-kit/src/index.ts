@@ -1,15 +1,15 @@
 // Styles
-export { makeUseStyles } from './styles/makeUseStyles.js';
+export { makeUseStyles } from './makeUseStyles.js';
 
 // Theme
-export { StyleKitProvider } from './theme/StyleKitProvider.js';
-export { useTheme } from './theme/useTheme.js';
+export { StyleKitProvider } from './StyleKitProvider.js';
+export { useTheme } from './useTheme.js';
 
 // Theme type
 export {
   type StyleKitTheme,
   type StyleKitBreakpoints,
-} from './theme/StyleKitContext.js';
+} from './StyleKitContext.js';
 
 // Breakpoints
-export { useBreakpoints } from './styles/useBreakpoints.js';
+export { useBreakpoints } from './useBreakpoints.js';

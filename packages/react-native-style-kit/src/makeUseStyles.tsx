@@ -4,13 +4,14 @@ import {
   type TextStyle,
   type ViewStyle,
 } from 'react-native';
+
+import { useContext, useMemo } from 'react';
 import {
   StyleKitContext,
   type StyleKitContextValue,
   type StyleKitRuntime,
   type StyleKitTheme,
-} from '../theme/StyleKitContext.js';
-import { useContext, useMemo } from 'react';
+} from './StyleKitContext.js';
 
 type RNStyle = ViewStyle | TextStyle | ImageStyle;
 
@@ -52,7 +53,7 @@ type useStylesWithVariants<T, Variants extends VariantType> = (
 
 type StyleDefinitionMaybeFunction<
   Variants extends VariantType,
-  T extends StyleDefinition<T, Variants>,
+  T extends StyleDefinition<any, Variants>,
 > =
   | ((
       theme: StyleKitTheme,

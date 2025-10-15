@@ -2,7 +2,7 @@ import { useCallback, useContext } from 'react';
 import {
   type StyleKitBreakpoints,
   StyleKitContext,
-} from '../theme/StyleKitContext.js';
+} from './StyleKitContext.js';
 
 type ZeroBreakpoint<T> = {
   [K in keyof T]: T[K] extends 0 ? K : never;

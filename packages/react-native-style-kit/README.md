@@ -1,14 +1,14 @@
 # React Native Style Kit
 
-A very minimal styling API for react native that provides:
+Styling API for React Native, engineered as a foundational layer for building design systems and component libraries. What you get:
 
 - 🧩 Component variants/compound variants inspired by CVA
 - 🎨 Theming & theme switching
-- 📱 Breakpoints
-- 📏 Access to safe area insets
+- 📱 Breakpoint-based styles
+- 📏 Access to runtime values (safe area insets, screen dimensions) in stylesheets
 - 📦 No babel/metro plugin required
 
-This library is intended to provide a set of foundational tools for building design systems & component libraries. It purposefully avoids any interoperability layer to maximise compatibility with 3rd party libraries & components.
+All with no babel/metro plugins, and full interoperability with any 3rd party library or component.
 
 ## Installation
 
@@ -17,7 +17,7 @@ Start by installing the package
 pnpm install react-native-style-kit
 ```
 
-Then you'll need to wrap your app in `<StyleKitProvider>`. This provides global values such as theme, safe areas, etc... to style hooks:
+If you want to use theme or runtime values in your stylesheets, you'll need to wrap your app in `<StyleKitProvider>`
 
 ```tsx
 import { StyleKitProvider } from 'react-native-style-kit';
@@ -35,11 +35,12 @@ const Main = () => {
 
 ### Creating styles
 
-Styles are created via the `makeUseStyles()` which is a drop-in replacement for `StyleSheet.create()`. This function returns a hook you can call within your component to access the styles.
+Styles are created via `makeUseStyles()` which is a drop-in replacement for `StyleSheet.create()`. This function returns a hook you can call within your component to access the styles.
 
 ```tsx
 import { makeUseStyles } from 'react-native-style-kit';
 
+// Note the double parentheses "()({...})" this is important
 const useStyles = makeUseStyles()({
   root: {
     backgroundColor: 'white',
@@ -89,7 +90,13 @@ const Button = () => {
 }
 ```
 
-If you're using TypeScript, you can augment the theme type globally
+You can also access the theme directly with the `useTheme()` hook.
+
+```tsx
+import { useTheme } from 'react-native-style-kit';
+```
+
+If you're using TypeScript, you'll need to augment the theme type to match the type of your theme
 ```tsx
 
 type ThemeType = typeof theme;
