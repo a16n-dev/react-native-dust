@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import {
   StyleKitContext,
+  type StyleKitContextValue,
   type StyleKitRuntime,
   type StyleKitTheme,
 } from '../theme/StyleKitContext.js';
@@ -28,16 +29,14 @@ type VariantStyle<V extends VariantType> = {
   compoundVariants?: Array<Partial<V> & { style: RNStyle }>;
 };
 
-type StyleDefinition<
-  T,
-  Variants extends VariantType,
-> = keyof Variants extends never
-  ? {
-      [P in keyof T]: RNStyle;
-    }
-  : {
-      [P in keyof T]: RNStyle & VariantStyle<Variants>;
-    };
+type StyleDefinition<T, Variants extends VariantType> =
+  Variants extends Record<string, never>
+    ? {
+        [P in keyof T]: RNStyle;
+      }
+    : {
+        [P in keyof T]: RNStyle & VariantStyle<Variants>;
+      };
 
 // Remove variant/compoundVariant keys from the resulting style
 type ReturnStyleDefinition<T> = {
@@ -51,26 +50,48 @@ type useStylesWithVariants<T, Variants extends VariantType> = (
   variants: Variants
 ) => ReturnStyleDefinition<T>;
 
+type StyleDefinitionMaybeFunction<
+  Variants extends VariantType,
+  T extends StyleDefinition<T, Variants>,
+> =
+  | ((
+      theme: StyleKitTheme,
+      rt: StyleKitRuntime
+    ) => T & StyleDefinition<any, Variants>)
+  | (T & StyleDefinition<any, Variants>);
+
 export function makeUseStyles<
   Variants extends VariantType = Record<string, never>,
 >() {
   // This inner function exists so that Variants can be explicitly set as a generic
   // while still inferring the correct type T for the styles themselves
   return function innerMakeUseStyles<T extends StyleDefinition<T, Variants>>(
-    styleDefinition: (
-      theme: StyleKitTheme,
-      rt: StyleKitRuntime
-    ) => T & StyleDefinition<any, Variants>
-  ): keyof Variants extends never
+    styleDefinition: StyleDefinitionMaybeFunction<Variants, T>
+  ): Variants extends Record<string, never>
     ? useStyles<T>
     : useStylesWithVariants<T, Variants> {
-    if (styleDefinition.length === 0) {
-      // The passed style definition function does not expect any arguments,
-      // which means it does not depend on theme or runtime, so we can compute it once statically
-      const staticStyles = StyleSheet.create(
-        styleDefinition({} as any, {} as any)
-      );
-      return (): ReturnStyleDefinition<T> => staticStyles;
+    // Definition does not depend on context so we can use a simple implementation
+    if (typeof styleDefinition !== 'function' || styleDefinition.length === 0) {
+      const useStyles = (variants?: Variants): ReturnStyleDefinition<T> => {
+        return useMemo(() => {
+          if (variants) {
+            const withCtx = applyContext(
+              styleDefinition,
+              {} as StyleKitContextValue
+            );
+
+            const withVariants = applyStyleVariants(withCtx, variants);
+            return StyleSheet.create(withVariants);
+          } else {
+            const withCtx = applyContext(
+              styleDefinition,
+              {} as StyleKitContextValue
+            );
+            return StyleSheet.create(withCtx);
+          }
+        }, [...(variants ? Object.values(variants) : [])]);
+      };
+      return useStyles as any;
     }
 
     // Create a cache to store previously computed styles. This ensures that if
@@ -87,18 +108,15 @@ export function makeUseStyles<
       return useMemo(() => {
         if (variants) {
           // Use the cache JUST for applying theme - variants get applied after cache
-          let withTheme: T & StyleDefinition<any, Variants>;
+          let withCtx: T & StyleDefinition<any, Variants>;
           if (cache.has(ctx)) {
-            withTheme = cache.get(ctx);
+            withCtx = cache.get(ctx);
           } else {
-            withTheme = styleDefinition(
-              ctx.theme as StyleKitTheme,
-              ctx.runtime
-            );
-            cache.set(ctx, withTheme);
+            withCtx = applyContext(styleDefinition, ctx);
+            cache.set(ctx, withCtx);
           }
 
-          const withVariants = applyStyleVariants(withTheme, variants);
+          const withVariants = applyStyleVariants(withCtx, variants);
           return StyleSheet.create(withVariants);
         } else {
           // Otherwise with no variants
@@ -106,11 +124,8 @@ export function makeUseStyles<
             return cache.get(ctx);
           }
 
-          const withTheme = styleDefinition(
-            ctx.theme as StyleKitTheme,
-            ctx.runtime
-          );
-          const asStyleSheet = StyleSheet.create(withTheme);
+          const withCtx = applyContext(styleDefinition, ctx);
+          const asStyleSheet = StyleSheet.create(withCtx);
           cache.set(ctx, asStyleSheet);
           return asStyleSheet;
         }
@@ -125,12 +140,12 @@ export function makeUseStyles<
  * Applies any variants defined in the styles
  */
 function applyStyleVariants<T, Variants extends VariantType>(
-  withTheme: T & StyleDefinition<any, Variants>,
+  styles: T & StyleDefinition<any, Variants>,
   appliedVariants: Variants
 ) {
   const result: any = {};
-  for (const key in withTheme) {
-    const { variants, compoundVariants, ...baseStyle } = withTheme[
+  for (const key in styles) {
+    const { variants, compoundVariants, ...baseStyle } = styles[
       key
     ] as unknown as {
       variants?: {
@@ -189,6 +204,16 @@ function applyStyleVariants<T, Variants extends VariantType>(
   return result;
 }
 
-const useStyles = makeUseStyles()(() => ({
-  root: {},
-}));
+function applyContext<
+  T extends StyleDefinition<T, Variants>,
+  Variants extends VariantType,
+>(
+  definition: StyleDefinitionMaybeFunction<Variants, T>,
+  ctx: StyleKitContextValue
+): T & StyleDefinition<any, Variants> {
+  if (typeof definition !== 'function') {
+    return definition;
+  }
+
+  return definition(ctx.theme as StyleKitTheme, ctx.runtime);
+}
