@@ -12,7 +12,12 @@ import {
   type StyleKitRuntime,
   type StyleKitTheme,
 } from './StyleKitContext.js';
+import type { breakpointFn } from './makeBreakpointFunction.js';
 
+/**
+ * Section #1: Utility types
+ * These are all utility types required for later.
+ */
 type RNStyle = ViewStyle | TextStyle | ImageStyle;
 
 type MaybeBoolToStringKeys<B> = B extends boolean
@@ -51,90 +56,130 @@ type useStylesWithVariants<T, Variants extends VariantType> = (
   variants: Variants
 ) => ReturnStyleDefinition<T>;
 
+/**
+ * The object passed to style functions to access theme, runtime, breakpoints etc
+ */
+type StyleFunctionContext = {
+  theme: StyleKitTheme;
+  rt: StyleKitRuntime;
+  bp: breakpointFn;
+};
+
 type StyleDefinitionMaybeFunction<
   Variants extends VariantType,
   T extends StyleDefinition<any, Variants>,
 > =
-  | ((
-      theme: StyleKitTheme,
-      rt: StyleKitRuntime
-    ) => T & StyleDefinition<any, Variants>)
+  | ((ctx: StyleFunctionContext) => T & StyleDefinition<any, Variants>)
   | (T & StyleDefinition<any, Variants>);
+
+/**
+ * The makeUseStyles function is overloaded to allow for optional currying if the
+ * user wants to explicitly set the variants generic
+ * ```ts
+ * makeUseStyle({...}) // This works
+ *
+ * makeUseStyle()({...}) // This also works
+ * ```
+ */
+export function makeUseStyles<T extends StyleDefinition<any, any>>(
+  styleDefinition: StyleDefinitionMaybeFunction<Record<string, never>, T>
+): useStyles<T>;
 
 export function makeUseStyles<
   Variants extends VariantType = Record<string, never>,
->() {
+>(): <T extends StyleDefinition<any, Variants>>(
+  styleDefinition: StyleDefinitionMaybeFunction<Variants, T>
+) => Variants extends Record<string, never>
+  ? useStyles<T>
+  : useStylesWithVariants<T, Variants>;
+
+export function makeUseStyles(
+  maybeStyleDefinition?: StyleDefinitionMaybeFunction<any, any>
+) {
+  // if the user passed a style definition here don't curry the inner function.
+  if (maybeStyleDefinition) {
+    return buildUseStylesHook(maybeStyleDefinition);
+  }
+
   // This inner function exists so that Variants can be explicitly set as a generic
   // while still inferring the correct type T for the styles themselves
-  return function innerMakeUseStyles<T extends StyleDefinition<T, Variants>>(
-    styleDefinition: StyleDefinitionMaybeFunction<Variants, T>
-  ): Variants extends Record<string, never>
-    ? useStyles<T>
-    : useStylesWithVariants<T, Variants> {
-    // Definition does not depend on context so we can use a simple implementation
-    if (typeof styleDefinition !== 'function' || styleDefinition.length === 0) {
-      const useStyles = (variants?: Variants): ReturnStyleDefinition<T> => {
-        return useMemo(() => {
-          if (variants) {
-            const withCtx = applyContext(
-              styleDefinition,
-              {} as StyleKitContextValue
-            );
+  return function innerMakeUseStyle(
+    styleDefinition: StyleDefinitionMaybeFunction<any, any>
+  ) {
+    return buildUseStylesHook(styleDefinition) as any;
+  };
+}
 
-            const withVariants = applyStyleVariants(withCtx, variants);
-            return StyleSheet.create(withVariants);
-          } else {
-            const withCtx = applyContext(
-              styleDefinition,
-              {} as StyleKitContextValue
-            );
-            return StyleSheet.create(withCtx);
-          }
-        }, [...(variants ? Object.values(variants) : [])]);
-      };
-      return useStyles as any;
-    }
-
-    // Create a cache to store previously computed styles. This ensures that if
-    // an instance of `useStyles` is used across multiple components,
-    // we don't recalculate styles unnecessarily.
-    const cache = new WeakMap();
-
+/**
+ * Takes in a style definition and builds the `useStyles` hook.
+ */
+function buildUseStylesHook<
+  T extends StyleDefinition<T, Variants>,
+  Variants extends VariantType,
+>(styleDefinition: StyleDefinitionMaybeFunction<Variants, T>) {
+  // Definition does not depend on context so we can use a simple implementation
+  if (typeof styleDefinition !== 'function' || styleDefinition.length === 0) {
     const useStyles = (variants?: Variants): ReturnStyleDefinition<T> => {
-      const ctx = useContext(StyleKitContext);
-
-      if (!ctx)
-        throw new Error('useStyles must be used within a StyleKitProvider');
-
       return useMemo(() => {
         if (variants) {
-          // Use the cache JUST for applying theme - variants get applied after cache
-          let withCtx: T & StyleDefinition<any, Variants>;
-          if (cache.has(ctx)) {
-            withCtx = cache.get(ctx);
-          } else {
-            withCtx = applyContext(styleDefinition, ctx);
-            cache.set(ctx, withCtx);
-          }
+          const withCtx = applyContext(
+            styleDefinition,
+            {} as StyleKitContextValue
+          );
 
           const withVariants = applyStyleVariants(withCtx, variants);
           return StyleSheet.create(withVariants);
         } else {
-          // Otherwise with no variants
-          if (cache.has(ctx)) {
-            return cache.get(ctx);
-          }
-
-          const withCtx = applyContext(styleDefinition, ctx);
-          const asStyleSheet = StyleSheet.create(withCtx);
-          cache.set(ctx, asStyleSheet);
-          return asStyleSheet;
+          const withCtx = applyContext(
+            styleDefinition,
+            {} as StyleKitContextValue
+          );
+          return StyleSheet.create(withCtx);
         }
-      }, [ctx, ...(variants ? Object.values(variants) : [])]);
+      }, [...(variants ? Object.values(variants) : [])]);
     };
-
     return useStyles as any;
+  }
+
+  // Create a cache to store previously computed styles. This ensures that if
+  // an instance of `useStyles` is used across multiple components,
+  // we don't recalculate styles unnecessarily.
+  const cache = new WeakMap();
+
+  const useStyles = (variants?: Variants): ReturnStyleDefinition<T> => {
+    const ctx = useContext(StyleKitContext);
+
+    if (!ctx)
+      throw new Error('useStyles must be used within a StyleKitProvider');
+
+    return useMemo(() => {
+      if (variants) {
+        // Use the cache JUST for applying theme - variants get applied after cache
+        let withCtx: T & StyleDefinition<any, Variants>;
+        if (cache.has(ctx)) {
+          withCtx = cache.get(ctx);
+        } else {
+          withCtx = applyContext(styleDefinition, ctx);
+          cache.set(ctx, withCtx);
+        }
+
+        const withVariants = applyStyleVariants(withCtx, variants);
+        return StyleSheet.create(withVariants);
+      } else {
+        // Otherwise with no variants
+        if (cache.has(ctx)) {
+          return cache.get(ctx);
+        }
+
+        const withCtx = applyContext(styleDefinition, ctx);
+        const asStyleSheet = StyleSheet.create(withCtx);
+        cache.set(ctx, asStyleSheet);
+        return asStyleSheet;
+      }
+    }, [ctx, ...(variants ? Object.values(variants) : [])]);
   };
+
+  return useStyles as any;
 }
 
 /**
@@ -216,5 +261,9 @@ function applyContext<
     return definition;
   }
 
-  return definition(ctx.theme as StyleKitTheme, ctx.runtime);
+  return definition({
+    theme: ctx.theme as StyleKitTheme,
+    bp: ctx.breakpointFn,
+    rt: ctx.runtime,
+  });
 }

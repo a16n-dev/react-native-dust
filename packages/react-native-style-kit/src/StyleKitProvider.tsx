@@ -1,4 +1,4 @@
-import { useMemo, type PropsWithChildren } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import {
   useSafeAreaFrame,
   useSafeAreaInsets,
@@ -9,8 +9,9 @@ import {
   type StyleKitContextValue,
   type StyleKitTheme,
 } from './StyleKitContext.js';
+import { makeBreakpointFn } from './makeBreakpointFunction.js';
 
-export type StyleKitProviderProps = PropsWithChildren &
+export type StyleKitProviderProps = { children: ReactNode } &
   // Theme must be defined if types provided
   (keyof StyleKitTheme extends never
     ? { theme?: StyleKitTheme }
@@ -28,10 +29,12 @@ export function StyleKitProvider({
   const insets = useSafeAreaInsets();
   const screen = useSafeAreaFrame();
 
-  const value: StyleKitContextValue = useMemo(
-    () => ({
+  const value: StyleKitContextValue = useMemo(() => {
+    const breakpointFn = makeBreakpointFn(screen.width, breakpoints as any);
+
+    return {
       theme,
-      breakpoints,
+      breakpointFn,
       runtime: {
         insets,
         screen: {
@@ -39,9 +42,8 @@ export function StyleKitProvider({
           height: screen.height,
         },
       },
-    }),
-    [theme, breakpoints, insets, screen.width, screen.height]
-  );
+    };
+  }, [theme, breakpoints, insets, screen.width, screen.height]);
 
   return (
     <StyleKitContext.Provider value={value}>

@@ -1,4 +1,5 @@
 import { createContext } from 'react';
+import type { breakpointFn } from './makeBreakpointFunction.js';
 
 // This type is intended to be overwritten by the user of the library
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -27,9 +28,7 @@ export interface StyleKitContextValue {
   // Runtime values like screen dimensions and safe area insets
   runtime: StyleKitRuntime;
   // Set of defined breakpoints
-  breakpoints?: unknown;
-  // The current breakpoint based on screen width
-  breakpoint?: string;
+  breakpointFn: breakpointFn;
 }
 
 export const StyleKitContext = createContext<StyleKitContextValue | null>(null);
