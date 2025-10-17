@@ -4,7 +4,7 @@ Styling API for React Native, engineered as a foundational layer for building de
 
 - 🧩 Variants/compound variants inspired by CVA
 - 🎨 Theming & theme switching
-- 📱 Breakpoint-based styles
+- 📱 Breakpoint logic
 - 📏 Access to runtime values (safe area insets, screen dimensions) in stylesheets
 
 All with no babel/metro plugins, full compatibility with 3rd party components, and a focus on performance.
@@ -17,7 +17,7 @@ pnpm install react-native-style-kit
 ```
 
 
-You're ready to go! Although if you want to access theme or runtime values in your stylesheets, you'll need to wrap your app in `<StyleKitProvider>`:
+You're almost ready to go! You'll also need to wrap your app in `<StyleKitProvider>` (more on this later)
 
 ```tsx
 import { StyleKitProvider } from 'react-native-style-kit';
@@ -40,8 +40,8 @@ Styles are created via `makeUseStyles()` which is a drop-in replacement for `Sty
 ```tsx
 import { makeUseStyles } from 'react-native-style-kit';
 
-// Note the double parentheses "()({...})" this is important
-const useStyles = makeUseStyles()({
+
+const useStyles = makeUseStyles({
   root: {
     backgroundColor: 'white',
     padding: 16,
@@ -57,26 +57,32 @@ const Button = () => {
 
 ### Theming
 
-Wrap your app with theme provider, and pass it a theme object
+Define a theme, then pass it to your `StyleKitProvider`. If you're using TypeScript, also augment the theme type to get the correct typings across your app.
 ```tsx
-import { ThemeProvider } from 'react-native-style-kit';
 
 const theme = {...};
 
+type ThemeType = typeof theme;
+
+declare module 'react-native-style-kit' {
+  interface StyleKitTheme extends ThemeType {}
+}
+
 const Main = () => {
   return (
-    <ThemeProvider theme={theme}>
+    <StyleKitProvider theme={theme}>
       <App />
-    </ThemeProvider>
+    </StyleKitProvider>
   );
 }
 ```
 
-You can then create styles that access the theme by passing a function to`makeUseStyles()`
+
+You can then create styles that access the theme by passing a function to`makeUseStyles()` instead of an object
 ```tsx
 import { makeUseStyles } from 'react-native-style-kit';
 
-const useStyles = makeUseStyles()((theme) => ({
+const useStyles = makeUseStyles(({ theme }) => ({
   root: {
     backgroundColor: theme.colors.background,
     padding: theme.spacing.md,
@@ -94,22 +100,23 @@ You can also access the theme directly with the `useTheme()` hook.
 
 ```tsx
 import { useTheme } from 'react-native-style-kit';
-```
 
-If you're using TypeScript, you'll need to augment the theme type to match the type of your theme
-```tsx
-
-type ThemeType = typeof theme;
-
-declare module 'react-native-style-kit' {
-    interface StyleKitTheme extends ThemeType {}
+const Button = () => {
+  const theme = useTheme();
+    
+  return <Pressable 
+    style={(pressed) => ({ 
+      backgroundColor: pressed ? theme.colors.highlight : theme.colors.background 
+    })}
+  />
 }
+
 ```
 
 
 ### Variants
 
-To add variants, define a type for your variants, and pass it as a generic to `makeUseStyles()`. You can then define variant-specific styles within the `variants` key of your style definition.
+To use variants, first define a type for your variants, and pass it as a generic to `makeUseStyles()`. You can then define variant-specific styles within the `variants` key of your style definition.
 
 Then, in the `useStyles()` hook within your component, pass it an object with the current variant values.
 
@@ -165,12 +172,12 @@ const useStyles = makeUseStyles<ButtonVariants>()(() => ({
 
 ### Runtime values
 
-You can also access runtime values such as screen dimensions or safe area insets within your stylesheets.
+You can also access runtime values such as screen dimensions or safe area insets within your stylesheets, through the `rt` value passed to the style function
 
 ```tsx
 import { makeUseStyles } from 'react-native-style-kit';
 
-const useStyles = makeUseStyles()((_, rt) => ({
+const useStyles = makeUseStyles(({rt}) => ({
   root: {
     paddingTop: rt.insets.top,
   }
