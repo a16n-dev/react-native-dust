@@ -127,6 +127,7 @@ interface ButtonVariants {
     variant: 'outlined' | 'filled';
 }
 
+// Note the double parentheses here "()({...})" required for TypeScript to infer the types correctly
 const useStyles = makeUseStyles<ButtonVariants>()({
   root: {
     variants: {
